@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.annotation.HttpMethodConstraint;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,5 +27,12 @@ public class ExceptionAdvice {
         } else {
             return null;
         }
+    }
+
+    //TODO Exception 코드 재수정하여 Return
+    @ExceptionHandler(UtilJdbcConnectionException.class)
+    public String jdbcException(SQLException e) {
+
+        return e.getMessage();
     }
 }
