@@ -23,3 +23,6 @@ usermod -l $2 $1
 mv $1 $2
 ln -Tfs /home/$2/Public /var/www/html/$1
 mv /var/www/html/$1 /var/www/html/$2
+
+## 매개변수 받아 ssh 사용자 삭제 >> 모든 정보 삭제(디렉토리만) , 데이터 베이스는 따로 관리 필요
+sudo deluser -remove-all-files $1

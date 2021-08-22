@@ -1,23 +1,14 @@
-config:
-  sshusername: "user"
-  sshhost: "172.23.32.1"
-  sshPort: 22
-  sshPassword: "test1234"
-  databaseUrl: "jdbc:mysql://localhost:3306/mysql"
-  databaseId: "root"
-  databasePwd: "wjqrmsrma!wl6311"
-
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/test01?useUnicode=true&characterEncoding=utf8
     username: root
-    password: test1234
+    password : wjqrmsrma!wl6311
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       show-sql: true
     properties:
       hibernate.format_sql: true

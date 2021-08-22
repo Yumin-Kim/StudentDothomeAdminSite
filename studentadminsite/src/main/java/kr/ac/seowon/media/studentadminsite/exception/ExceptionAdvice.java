@@ -30,9 +30,8 @@ public class ExceptionAdvice {
     }
 
     //TODO Exception 코드 재수정하여 Return
-    @ExceptionHandler(UtilJdbcConnectionException.class)
-    public String jdbcException(SQLException e) {
-
+    @ExceptionHandler({UtilJdbcConnectionException.class,StudnetException.class,SSHException.class})
+    public String jdbcException(Exception e) {
         return e.getMessage();
     }
 }

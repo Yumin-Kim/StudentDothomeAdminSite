@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/hello")
+@RequestMapping("/admin/hello")
 @Transactional
 public class HelloController {
 
