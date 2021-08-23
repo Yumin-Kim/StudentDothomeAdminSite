@@ -1,0 +1,157 @@
+package kr.ac.seowon.media.studentadminsite.api;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
+import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
+import kr.ac.seowon.media.studentadminsite.service.AdminRootService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
+
+import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(controllers = {AdminRootInfoAPIController.class})
+class AdminRootInfoAPIControllerTest {
+
+    @MockBean
+    AdminRootService adminRootService;
+
+    @Autowired
+    WebApplicationContext wac;
+
+    MockMvc mockMvc;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeEach
+    void configure() {
+        // TODO 테스트 간에 한글 깨짐 방지
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .alwaysDo(print())
+                .build();
+    }
+
+    @Test
+    @DisplayName("admin 생성 controller")
+    void createAdmin_controller() throws Exception {
+        //given
+        AdminReq.AdminDto adminDto = new AdminReq.AdminDto("name", "hashcode", "123123", "password");
+        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber());
+        given(adminRootService.createAdmin(any()))
+                .willReturn(basicAdmin);
+        //when
+        mockMvc.perform(post("/api/admin/rootinfo")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(adminDto))
+        )
+                //then
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("data.name", is(adminDto.getName())))
+                .andExpect(jsonPath("data.hashCode", is(adminDto.getHashCode())));
+    }
+
+    @Test
+    @DisplayName("admin 생성 controller validation Exception")
+    void createAdmin_controller_error() throws Exception {
+        //given
+        AdminReq.AdminDto adminDto = new AdminReq.AdminDto(null, "hashcode", "", "");
+        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber());
+
+        given(adminRootService.createAdmin(any()))
+                .willReturn(basicAdmin);
+        mockMvc.perform(post("/api/admin/rootinfo")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(adminDto))
+        )
+                //then
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("data.password[0]", is("password가 공백입니다")))
+                .andExpect(jsonPath("data.phoneNumber[0]", is("phoneNumber가 공백입니다")))
+                .andExpect(jsonPath("data.name[0]", is("name이 존재 하지 않습니다.")));
+    }
+
+    @Test
+    @DisplayName("admin 로그인시 controller validtion Exception")
+    void loginAdmin_controller_validation() throws Exception{
+        //given
+        AdminReq.AdminDto adminDto = new AdminReq.AdminDto("asd", "hashcode", "qwe", "qwe");
+        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber());
+        given(adminRootService.loginAdmin(any()))
+                .willReturn(basicAdmin);
+        //when
+        mockMvc.perform(post("/api/admin/rootinfo/login")
+                .param("name", "name")
+                .param("password", "")
+        )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("message", is("입력한 정보를 다시 확인해주세요")))
+                .andExpect(jsonPath("data.password[0]", is("password가 공백입니다")));
+
+        //then
+    }
+
+
+    @Test
+    @DisplayName("admin 계정 수정 controller validtion Exception")
+    void modifyAdmin_controller_validation() throws Exception{
+        //given
+        AdminReq.AdminDto adminDto = new AdminReq.AdminDto(null, null, null, null);
+        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber());
+        given(adminRootService.loginAdmin(any()))
+                .willReturn(basicAdmin);
+        //when
+        mockMvc.perform(put("/api/admin/rootinfo")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(basicAdmin))
+        )
+                //then
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("admin 페이징")
+    void findAllPagingAdmin_controller() throws Exception{
+        //given
+        ArrayList<AdminDao.BasicAdmin> collect = new ArrayList<>();
+        for (int i = 0 ; i < 20; i++) {
+            AdminReq.AdminDto adminDto = new AdminReq.AdminDto("name"+i, "hashcode", "123123", "password");
+            AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber());
+            collect.add(basicAdmin);
+        }
+        AdminDao.BasicPagingAdmin basicPagingAdmin = new AdminDao.BasicPagingAdmin(collect, 0, 5, 20, 100);
+        given(adminRootService.findAllPagingV1(any()))
+                .willReturn(basicPagingAdmin);
+        //when
+        mockMvc.perform(get("/api/admin/rootinfo/adminall")
+                .param("page", "0")
+                .param("size", "20")
+                .param("sort", "name,asc")
+        )
+                .andDo(print());
+
+        //then
+    }
+
+}

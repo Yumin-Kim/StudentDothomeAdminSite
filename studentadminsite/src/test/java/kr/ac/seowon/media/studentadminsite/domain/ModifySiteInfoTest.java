@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @Rollback(false)
-class SiteInfoTest {
+class ModifySiteInfoTest {
 
     @Test
     @DisplayName("siteInfo Test")

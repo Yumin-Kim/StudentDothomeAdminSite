@@ -1,7 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.utils;
 
 import com.jcraft.jsch.*;
-import kr.ac.seowon.media.studentadminsite.dto.Req;
+import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import kr.ac.seowon.media.studentadminsite.exception.SSHException;
 import kr.ac.seowon.media.studentadminsite.exception.StudnetException;
 import lombok.SneakyThrows;
@@ -37,7 +37,7 @@ public class SshConnection {
 
     //TODO SSH 프로토콜로 접근하여 데이터 베이스 명과 디렉토리 명 변경 로직,
     @SneakyThrows(SSHException.class)
-    public void modifyStudentInfo(Req.SiteInfo siteinfo) {
+    public void modifyStudentInfo(StudentReq.ModifySiteInfo siteinfo) {
         try {
             // 8. 채널을 SSH용 채널 객체로 캐스팅한다
             ChannelExec channelExec = (ChannelExec) channel;

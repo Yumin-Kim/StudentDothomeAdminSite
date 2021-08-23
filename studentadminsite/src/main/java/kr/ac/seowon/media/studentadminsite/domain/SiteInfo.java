@@ -1,5 +1,6 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "site_info")
 public class SiteInfo {
 
@@ -24,4 +25,12 @@ public class SiteInfo {
     @OneToOne(mappedBy = "siteInfo",fetch = FetchType.LAZY)
     private Student student;
 
+    protected SiteInfo(String domainName, String databaseName) {
+        this.databaseName = databaseName;
+        this.domainName = domainName;
+    }
+
+    public static SiteInfo createSiteInfo(String domainName, String databaseName) {
+        return new SiteInfo(domainName, databaseName);
+    }
 }

@@ -3,6 +3,7 @@ package kr.ac.seowon.media.studentadminsite.utils;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Component;
 
 import java.beans.ConstructorProperties;

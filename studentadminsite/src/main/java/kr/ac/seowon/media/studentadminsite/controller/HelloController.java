@@ -25,8 +25,8 @@ public class HelloController {
 
     @GetMapping
     public String hello(Model model) throws SQLException {
-        Student student = Student.createStudent("안녕", 2016103+ LocalDateTime.now().getSecond());
-        studentRepository.savec(student).orElseThrow(() -> new SQLIntegrityConstraintViolationException("유니크키 오류"));
+//        Student student = Student.createStudent("안녕", 2016103+ LocalDateTime.now().getSecond());
+//        studentRepository.savec(student).orElseThrow(() -> new SQLIntegrityConstraintViolationException("유니크키 오류"));
         model.addAttribute("name", "Hello Spring & thymeleaf");
         return "hello";
     }

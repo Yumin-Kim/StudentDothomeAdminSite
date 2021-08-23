@@ -23,14 +23,8 @@ class StudentTest {
     @DisplayName("Connection Test code")
     void start_1() throws Exception{
         //given
-        Student student = Student.createStudent("name", 2016012312);
         //when
-        em.persist(student);
-//        em.flush();
-//        em.clear();
-        Student student1 = em.find(Student.class, student.getId());
         //then
-        assertEquals(student1.getName(), student.getName());
     }
 
 
