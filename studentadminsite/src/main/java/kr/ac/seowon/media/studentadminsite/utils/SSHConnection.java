@@ -3,7 +3,7 @@ package kr.ac.seowon.media.studentadminsite.utils;
 import com.jcraft.jsch.*;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import kr.ac.seowon.media.studentadminsite.exception.SSHException;
-import kr.ac.seowon.media.studentadminsite.exception.StudnetException;
+import kr.ac.seowon.media.studentadminsite.exception.StudentException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,15 +11,15 @@ import java.io.ByteArrayOutputStream;
 // 해당 로직은 ssh 로 사용자 , 데이터 베이스 , 디렉토리가 모두 구성 되어 있다 전제하고 진행한다.
 // 데이터 베이스는 사용자 이름과 비밀번호가 지정되어 있다.
 @Slf4j
-public class SshConnection {
+public class SSHConnection {
 
     private Session session = null;
     private Channel channel = null;
 
     @SneakyThrows(SSHException.class)
-    public SshConnection(UtilConfigure utilConfigure) {
+    public SSHConnection(UtilConfigure utilConfigure) {
         log.info(utilConfigure.toString());
-        log.info("try SSH connection");
+        log.info("new SSHConnection() create >>");
         JSch jsch = new JSch();
         try {
             session = jsch.getSession(utilConfigure.getSshusername(), utilConfigure.getSshhost(), utilConfigure.getSshPort());
@@ -31,13 +31,13 @@ public class SshConnection {
             log.info("open sftp channel");
             this.channel = session.openChannel("exec");
         } catch (JSchException e) {
-            throw new SSHException("ssh 접근 오류 발생");
+            throw new SSHException("ssh 연결에 실패 하셨습니다.");
         }
     }
 
     //TODO SSH 프로토콜로 접근하여 데이터 베이스 명과 디렉토리 명 변경 로직,
     @SneakyThrows(SSHException.class)
-    public void modifyStudentInfo(StudentReq.ModifySiteInfo siteinfo) {
+    public void modifyStudentInfo(StudentReq.SiteInfoDto siteinfo) {
         try {
             // 8. 채널을 SSH용 채널 객체로 캐스팅한다
             ChannelExec channelExec = (ChannelExec) channel;
@@ -62,8 +62,7 @@ public class SshConnection {
             String responseString = responseStream.toString();
             log.info("responseString = {}", responseString);
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근 오류 발생");
-
+            throw new SSHException("ssh 접근하였지만 정보 수정에 실패하였습니다.");
         } finally {
             if (channel != null) {
                 channel.disconnect();
@@ -91,7 +90,7 @@ public class SshConnection {
             String responseString = responseStream.toString();
             log.info("response String = {}", responseString);
             if(responseString.equals("")){
-                throw new StudnetException("존재하지 않는 도메인 정보입니다.");
+                throw new StudentException("존재하지 않는 도메인 정보입니다.");
             }
         } catch (JSchException | InterruptedException e) {
             throw new SSHException("ssh 접근 오류 발생");

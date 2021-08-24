@@ -5,7 +5,6 @@ import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -39,19 +38,20 @@ public class Student {
     @JoinColumn(name = "admin_id")
     private Admin admin;
 
-    public Student(String name, Integer studentCode,Boolean inSchool) {
+    public Student(String name, Integer studentCode,Boolean inSchool,Admin admin) {
         this.name = name;
         this.studentCode = studentCode;
         this.isDeleted = false;
         if (inSchool != null){
             this.inSchool = inSchool;
         }else{
-            this.inSchool = false;
+            this.inSchool = true;
         }
+        this.admin = admin;
     }
 
-    public static Student createStudent(AdminObserveReq.BasicStudentDto basicStudentDto){
-        return new Student(basicStudentDto.getName(), basicStudentDto.getStudentCode(), null);)
+    public static Student createStudent(AdminObserveReq.BasicStudentDto basicStudentDto, Admin admin){
+        return new Student(basicStudentDto.getName(), basicStudentDto.getStudentCode(), null,admin);
     }
 
     public void modifyStudent(StudentReq.StudentDto studentDto, Admin admin, SiteInfo siteInfo) {
@@ -64,7 +64,11 @@ public class Student {
         if (studentDto.getEmail() != null) {
             email = studentDto.getEmail();
         }
-        this.admin = admin;
-        this.siteInfo = siteInfo;
+        if (admin != null) {
+            this.admin = admin;
+        }
+        if (siteInfo != null) {
+            this.siteInfo = siteInfo;
+        }
     }
 }

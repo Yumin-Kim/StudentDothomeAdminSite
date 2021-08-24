@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(false)
 class AdminRepositoryTest {
 
     @Autowired
@@ -47,7 +46,7 @@ class AdminRepositoryTest {
     @DisplayName("Basic jpa Query Method >> findByName & findByNameAndPassword & admin modify")
     void adminRepo_queryMethod() throws Exception{
         //given
-        AdminReq.AdminDto adminDto = new AdminReq.AdminDto("superUser", null, null, null);
+        AdminReq.AdminDto adminDto = new AdminReq.AdminDto("superUser", null, null, "qweqwe");
         //when
         Admin findByNameAdmin = adminRepository.findByName("admin3").get();
         Admin findByNameAndPasswordAdmin = adminRepository.findByNameAndPassword("admin2", "qweqwe").get();

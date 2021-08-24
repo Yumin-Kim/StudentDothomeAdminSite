@@ -6,7 +6,7 @@ import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.exception.CustomCollectionValidtion;
 import kr.ac.seowon.media.studentadminsite.service.AdminStudentObserveService;
 import kr.ac.seowon.media.studentadminsite.utils.JdbcRootPermition;
-import kr.ac.seowon.media.studentadminsite.utils.SshConnection;
+import kr.ac.seowon.media.studentadminsite.utils.SSHConnection;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,21 +27,25 @@ public class AdminStudentObserveAPIController {
     private final AdminStudentObserveService adminStudentObserveService;
     private final CustomCollectionValidtion concurrentInsertStudentsInfo;
 
-    @PostMapping("/insert")
-    public Res insertBasicInfo(@Valid @RequestBody AdminObserveReq.BasicStudentDto basicStudentDto){
-        adminStudentObserveService.insertStudentInfo(basicStudentDto);
+    @PostMapping("/insert/{adminId}")
+    public Res insertBasicInfo(
+            @PathVariable("adminId") Integer adminId,
+            @Valid @RequestBody AdminObserveReq.BasicStudentDto basicStudentDto
+    ){
+        adminStudentObserveService.insertStudentInfo(adminId,basicStudentDto);
         return Res.isOkByMessage("학생정보를 저장하였습니다.");
     }
 
-    @PostMapping("/concurrentinsert")
+    @PostMapping("/concurrentinsert/{adminId}")
     public Res coucurrentInsertBasicInfo(
+            @PathVariable("adminId") Integer adminId,
             @Valid @RequestBody List<AdminObserveReq.BasicStudentDto> basicStudentDtos,
             BindingResult bindingResult) throws BindException, JsonProcessingException {
         concurrentInsertStudentsInfo.validate(basicStudentDtos, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        adminStudentObserveService.concurrentInsertStudentsInfo(basicStudentDtos);
+        adminStudentObserveService.concurrentInsertStudentsInfo(adminId,basicStudentDtos);
         return Res.isOkByMessage("동시에 학생 정보를 입력하였습니다.");
     }
 
@@ -56,7 +60,7 @@ public class AdminStudentObserveAPIController {
 
     @GetMapping
     public String test(@RequestParam("domainname") String domainName) {
-        SshConnection sshConnection = new SshConnection(utilConfigure);
+        SSHConnection sshConnection = new SSHConnection(utilConfigure);
         sshConnection.deleteDomainInfo(domainName);
         return "test";
     }

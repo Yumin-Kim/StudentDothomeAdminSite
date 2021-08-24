@@ -1,5 +1,6 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
+import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,5 +33,15 @@ public class SiteInfo {
 
     public static SiteInfo createSiteInfo(String domainName, String databaseName) {
         return new SiteInfo(domainName, databaseName);
+    }
+
+
+    public void modifySiteInfo(StudentReq.SiteInfoDto siteInfoDto) {
+        if (siteInfoDto.getDomainName() != null) {
+            domainName = siteInfoDto.getDomainName();
+        }
+        if (siteInfoDto.getDatabaseName() != null) {
+            databaseName = siteInfoDto.getDatabaseName();
+        }
     }
 }

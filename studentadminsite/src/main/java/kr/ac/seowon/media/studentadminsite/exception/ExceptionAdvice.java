@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.annotation.HttpMethodConstraint;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +47,7 @@ public class ExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({StudnetException.class, AdminException.class})
+    @ExceptionHandler({StudentException.class, AdminException.class,AdminObserveException.class,StudentSiteInfoException.class})
     public Res dataNotFoundException(Exception error) {
         return Res.isErrorByMessage(error.getMessage(), HttpStatus.BAD_REQUEST.name());
     }

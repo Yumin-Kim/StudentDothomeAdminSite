@@ -14,4 +14,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> , Stu
     Optional<Student> findByStudentCodeAndName(Integer studentCode, String name);
 
     List<Student> findByStudentCodeIn(List<Integer> studentCodes);
+
+    @EntityGraph(attributePaths = {"siteInfo"})
+    Optional<Student> findSiteInfoById(Integer studentId);
 }

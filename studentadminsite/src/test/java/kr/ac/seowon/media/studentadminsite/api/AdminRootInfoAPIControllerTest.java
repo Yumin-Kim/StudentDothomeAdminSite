@@ -87,7 +87,7 @@ class AdminRootInfoAPIControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("data.password[0]", is("password가 공백입니다")))
                 .andExpect(jsonPath("data.phoneNumber[0]", is("phoneNumber가 공백입니다")))
-                .andExpect(jsonPath("data.name[0]", is("name이 존재 하지 않습니다.")));
+                .andExpect(jsonPath("data.name[0]", is("name이 공백입니다")));
     }
 
     @Test
@@ -121,13 +121,13 @@ class AdminRootInfoAPIControllerTest {
         given(adminRootService.loginAdmin(any()))
                 .willReturn(basicAdmin);
         //when
-        mockMvc.perform(put("/api/admin/rootinfo")
+        mockMvc.perform(put("/api/admin/rootinfo/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(basicAdmin))
         )
                 //then
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk());
     }
 
     @Test
