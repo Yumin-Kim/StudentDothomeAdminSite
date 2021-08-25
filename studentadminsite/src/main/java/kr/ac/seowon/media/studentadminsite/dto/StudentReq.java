@@ -54,6 +54,7 @@ public class StudentReq {
         private String name;
         @Min(value = 200000000, message = "해당 학번 입력이 잘못되었습니다.",groups = {CreateStudent.class,FindStudentCode.class})
         @Max(value = 300000000,message ="해당 학번 입력이 잘못되었습니다." ,groups = {CreateStudent.class,FindStudentCode.class})
+        @NotNull(message = "studentCode입력하지 않았습니다.",groups = {CreateStudent.class,FindStudentCode.class})
         private Integer studentCode;
         @NotBlank(message ="password를 입력하지 않았습니다." ,groups = {CreateStudent.class})
         private String password;

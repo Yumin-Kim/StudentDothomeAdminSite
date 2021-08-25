@@ -79,6 +79,9 @@ public class Student {
         if (modifyStudentDto.getIsDeleted() != null) {
             isDeleted = modifyStudentDto.getIsDeleted();
         }
+        if (modifyStudentDto.getPhoneNumber() !=null) {
+            phoneNumber = modifyStudentDto.getPhoneNumber();
+        }
         if (modifyStudentDto.getName() != null) {
             name = modifyStudentDto.getName();
         }

@@ -99,9 +99,9 @@ public class AdminStudentObserveService {
         }
         findByStudentList
                 .forEach(student ->  {
+                    utils_studentInfoDelete(student);
                     siteInfoRepository.delete(student.getSiteInfo());
                     student.disabledStudent(true);
-                    utils_studentInfoDelete(student);
                 });
     }
 

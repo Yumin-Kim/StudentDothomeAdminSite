@@ -80,6 +80,7 @@ public class SSHConnection {
         try {
             ChannelExec channelExec = (ChannelExec) channel;
             log.info("delete ssh,domain info");
+            log.info("delete domain Info = {}",domain);
             channelExec.setCommand("./deleteStudent.sh " + domain);
             ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
             channel.setOutputStream(responseStream);
