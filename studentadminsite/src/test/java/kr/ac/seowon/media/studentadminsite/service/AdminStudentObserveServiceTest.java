@@ -3,8 +3,8 @@ package kr.ac.seowon.media.studentadminsite.service;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
-import kr.ac.seowon.media.studentadminsite.exception.AdminObserveException;
-import kr.ac.seowon.media.studentadminsite.exception.InsertDuplicateException;
+import kr.ac.seowon.media.studentadminsite.exception.controllerexception.AdminObserveException;
+import kr.ac.seowon.media.studentadminsite.exception.controllerexception.InsertDuplicateException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
 import org.assertj.core.util.Lists;
@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.DuplicateFormatFlagsException;
 import java.util.List;
 import java.util.Optional;
 

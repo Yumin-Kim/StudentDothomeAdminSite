@@ -1,0 +1,32 @@
+package kr.ac.seowon.media.studentadminsite;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+
+    private ApiInfo apiInfo(){
+        return new ApiInfoBuilder()
+                .title("학생 호스팅 API 문서 ")
+                .description("08 25 1차 버전 완료")
+                .build();
+    }
+    @Bean
+    public Docket commonApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("example")
+                .apiInfo(this.apiInfo())
+                .select()
+                .paths(PathSelectors.ant("/**"))
+                .build();
+    }
+}

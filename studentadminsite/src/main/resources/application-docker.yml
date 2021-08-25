@@ -1,3 +1,5 @@
+server:
+  port: 8080
 config:
   sshusername: "user"
   sshhost: "172.17.0.2"
@@ -17,7 +19,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       show-sql: true
     properties:
       hibernate.format_sql: true

@@ -24,7 +24,7 @@ public class Admin extends BaseEntity {
     private String name;
     @Column(name = "passowrd", nullable = false)
     private String password;
-    @Column(name = "admin_hash_code", nullable = false)
+    @Column(name = "hash_code", nullable = false)
     private String hashCode;
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;

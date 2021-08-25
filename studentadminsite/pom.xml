@@ -13,8 +13,8 @@
 	<artifactId>studentadminsite</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>studentadminsite</name>
-	<packaging>jar</packaging>
-<!--	<packaging>war</packaging>-->
+<!--	<packaging>jar</packaging>-->
+	<packaging>war</packaging>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-<!--			<scope>provided</scope>-->
+			<scope>provided</scope>
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->
@@ -87,7 +87,18 @@
 			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 			<version>1.16</version>
 		</dependency>
-
+		<!-- springfox-swagger2 -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<!-- springfox-swager-ui -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>com.github.gavlyukovskiy</groupId>-->
 <!--			<artifactId>p6spy-spring-boot-starter</artifactId>-->

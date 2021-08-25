@@ -71,4 +71,30 @@ public class Student {
             this.siteInfo = siteInfo;
         }
     }
+
+    public void adminPermitModifyStudent(AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
+        if (modifyStudentDto.getInSchool() != null) {
+            inSchool = modifyStudentDto.getInSchool();
+        }
+        if (modifyStudentDto.getIsDeleted() != null) {
+            isDeleted = modifyStudentDto.getIsDeleted();
+        }
+        if (modifyStudentDto.getName() != null) {
+            name = modifyStudentDto.getName();
+        }
+        if (modifyStudentDto.getEmail() != null) {
+            email = modifyStudentDto.getEmail();
+        }
+        if (modifyStudentDto.getPassword() != null) {
+            password = modifyStudentDto.getPassword();
+        }
+    }
+
+    public void disabledStudent(Boolean change) {
+        isDeleted = change;
+        email = null;
+        phoneNumber = null;
+        admin = null;
+        siteInfo = null;
+    }
 }

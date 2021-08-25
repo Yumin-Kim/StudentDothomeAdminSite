@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.exception;
+package kr.ac.seowon.media.studentadminsite.exception.utilexception;
 
 
 public class SSHException extends RuntimeException {

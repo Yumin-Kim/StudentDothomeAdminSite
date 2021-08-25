@@ -30,9 +30,9 @@ class AdminRepositoryTest {
 
     @BeforeEach
     void configure(){
-        Admin admin1 = Admin.createAdmin("admin1", "qweqwe", "asdasd", "123123");
-        Admin admin2 = Admin.createAdmin("admin2", "qweqwe", "asdasd", "123123");
-        Admin admin3 = Admin.createAdmin("admin3", "qweqwe", "asdasd", "123123");
+        Admin admin1 = Admin.createAdmin("admin1", "qweqwe", "asdasdq", "123123");
+        Admin admin2 = Admin.createAdmin("admin2", "qweqwe", "asdasdw", "123123");
+        Admin admin3 = Admin.createAdmin("admin3", "qweqwe", "asdasde", "123123");
         adminRepository.save(admin1);
         adminRepository.save(admin2);
         adminRepository.save(admin3);
@@ -47,6 +47,8 @@ class AdminRepositoryTest {
     void adminRepo_queryMethod() throws Exception{
         //given
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto("superUser", null, null, "qweqwe");
+        String asdasdq = adminRepository.findByHashCode("asdasdq").get().getHashCode();
+        System.out.println("findByHashCode = " + asdasdq);
         //when
         Admin findByNameAdmin = adminRepository.findByName("admin3").get();
         Admin findByNameAndPasswordAdmin = adminRepository.findByNameAndPassword("admin2", "qweqwe").get();

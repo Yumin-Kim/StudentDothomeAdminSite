@@ -2,8 +2,8 @@ package kr.ac.seowon.media.studentadminsite.utils;
 
 import com.jcraft.jsch.*;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
-import kr.ac.seowon.media.studentadminsite.exception.SSHException;
-import kr.ac.seowon.media.studentadminsite.exception.StudentException;
+import kr.ac.seowon.media.studentadminsite.exception.utilexception.SSHException;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,7 +80,7 @@ public class SSHConnection {
         try {
             ChannelExec channelExec = (ChannelExec) channel;
             log.info("delete ssh,domain info");
-            channelExec.setCommand("sudo deluser -remove-all-files " + domain);
+            channelExec.setCommand("./deleteStudent.sh " + domain);
             ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
             channel.setOutputStream(responseStream);
             channel.connect();
@@ -89,11 +89,40 @@ public class SSHConnection {
             }
             String responseString = responseStream.toString();
             log.info("response String = {}", responseString);
-            if(responseString.equals("")){
+            if(!responseString.contains("Done")){
                 throw new StudentException("존재하지 않는 도메인 정보입니다.");
             }
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근 오류 발생");
+            throw new SSHException("ssh 접근하였지만 정보 수정에 실패하였습니다.");
+        } finally {
+            if (channel != null) {
+                channel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
+        }
+    }
+
+    public void createDomain(String domainName , String password) {
+        log.info("createDomainInfo ");
+        try {
+            ChannelExec channelExec = (ChannelExec) channel;
+            log.info("createDomain ssh,domain info");
+            channelExec.setCommand("./createStudent.sh " + domainName + " " + password);
+            ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
+            channel.setOutputStream(responseStream);
+            channel.connect();
+            while (channel.isConnected()) {
+                Thread.sleep(100);
+            }
+            String responseString = responseStream.toString();
+            log.info("response String = {}", responseString);
+            if(!responseString.contains("True")){
+                throw new StudentException("존재하지 않는 도메인 정보입니다.");
+            }
+        } catch (JSchException | InterruptedException e) {
+            throw new SSHException("ssh 접근하였지만 정보 수정에 실패하였습니다.");
         } finally {
             if (channel != null) {
                 channel.disconnect();

@@ -1,6 +1,6 @@
 package kr.ac.seowon.media.studentadminsite.dto;
 
-import kr.ac.seowon.media.studentadminsite.exception.StudentException;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -34,6 +34,12 @@ public class StudentReq {
             }
             if (modifyStudentDto.getDatabaseName() != null) {
                 databaseName = modifyStudentDto.getDatabaseName();
+            }
+        }
+
+        public SiteInfoDto(AllStudentDto allStudentDto) {
+            if (allStudentDto.getDomainName() != null) {
+                    domainName = allStudentDto.getDomainName();
             }
         }
     }
@@ -73,6 +79,50 @@ public class StudentReq {
                 phoneNumber = modifyStudentDto.getPhoneNumber();
             }
         }
+
+        public StudentDto(AllStudentDto allStudentDto) {
+            if (allStudentDto.getEmail() != null) {
+                email = allStudentDto.getEmail();
+            }
+            if (allStudentDto.getName() != null) {
+                name = allStudentDto.getName();
+            }
+            if (allStudentDto.getPassword() != null) {
+                password = allStudentDto.getPassword();
+            }
+            if (allStudentDto.getPhoneNumber() != null) {
+                phoneNumber = allStudentDto.getPhoneNumber();
+            }
+            if (allStudentDto.getHashCode() != null) {
+                hashCode = allStudentDto.getHashCode();
+            }
+            if (allStudentDto.getStudentCode() != null) {
+                studentCode = allStudentDto.getStudentCode();
+            }
+        }
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class AllStudentDto {
+        @NotBlank(message ="name이 입력하지 않았습니다.",groups = {CreateStudent.class,FindStudentCode.class})
+        private String name;
+        @Min(value = 200000000, message = "해당 학번 입력이 잘못되었습니다.",groups = {CreateStudent.class,FindStudentCode.class})
+        @Max(value = 300000000,message ="해당 학번 입력이 잘못되었습니다." ,groups = {CreateStudent.class,FindStudentCode.class})
+        private Integer studentCode;
+        @NotBlank(message ="password를 입력하지 않았습니다." ,groups = {CreateStudent.class})
+        private String password;
+        @NotBlank(message ="email를 입력하지 않았습니다." ,groups = {CreateStudent.class})
+        @Email(message = "이메일 형식을 지켜주세요.",groups = {CreateStudent.class})
+        private String email;
+        @NotBlank(message ="hashCode를 입력하지 않았습니다." ,groups = {CreateStudent.class})
+        private String hashCode;
+        @NotBlank(message ="phoneNumber를 입력하지 않았습니다.",groups = {CreateStudent.class} )
+        private String phoneNumber;
+        @NotBlank(message = "domainName을 입력 해주세요",groups = {CreateStudent.class})
+        private String domainName;
     }
 
     @Getter

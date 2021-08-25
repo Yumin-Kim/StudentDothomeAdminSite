@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.exception;
+package kr.ac.seowon.media.studentadminsite.exception.utilexception;
 
 import lombok.extern.slf4j.Slf4j;
 

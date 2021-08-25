@@ -3,6 +3,13 @@ package kr.ac.seowon.media.studentadminsite.exception;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
+import kr.ac.seowon.media.studentadminsite.exception.controllerexception.AdminObserveException;
+import kr.ac.seowon.media.studentadminsite.exception.controllerexception.InsertDuplicateException;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentSiteInfoException;
+import kr.ac.seowon.media.studentadminsite.exception.utilexception.SSHException;
+import kr.ac.seowon.media.studentadminsite.exception.utilexception.UtilJdbcConnectionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -47,7 +54,7 @@ public class ExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({StudentException.class, AdminException.class,AdminObserveException.class,StudentSiteInfoException.class})
+    @ExceptionHandler({StudentException.class, AdminException.class, AdminObserveException.class, StudentSiteInfoException.class})
     public Res dataNotFoundException(Exception error) {
         return Res.isErrorByMessage(error.getMessage(), HttpStatus.BAD_REQUEST.name());
     }

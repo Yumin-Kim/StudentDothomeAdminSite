@@ -1,6 +1,6 @@
 config:
   sshusername: "user"
-  sshhost: "172.23.32.1"
+  sshhost: "172.31.176.1"
   sshPort: 22
   sshPassword: "test1234"
   databaseUrl: "jdbc:mysql://localhost:3306/mysql"

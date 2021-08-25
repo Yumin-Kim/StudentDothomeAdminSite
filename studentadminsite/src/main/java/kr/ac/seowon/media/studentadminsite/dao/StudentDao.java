@@ -11,18 +11,32 @@ public class StudentDao {
     public static class BasicStudent {
         private Integer id;
         private String name;
+        private Integer StudentCode;
         private String phoneNumber;
         private String email;
         private Boolean inSchool;
-        private StudentSiteInfo studentSiteInfo;
+        private Boolean isDeleted;
+        private StudentSiteInfo siteInfo;
 
         public BasicStudent(Student student) {
             id = student.getId();
             name = student.getName();
-            phoneNumber = student.getPhoneNumber();
-            email = student.getEmail();
-            inSchool = student.getInSchool();
-            studentSiteInfo = new StudentSiteInfo(student.getSiteInfo());
+            StudentCode = student.getStudentCode();
+            if (student.getPhoneNumber() != null) {
+                phoneNumber = student.getPhoneNumber();
+            }
+            if (student.getEmail() != null) {
+                email = student.getEmail();
+            }
+            if (student.getInSchool() !=null) {
+                inSchool = student.getInSchool();
+            }
+            if (student.getIsDeleted() != null) {
+                isDeleted = student.getIsDeleted();
+            }
+            if (student.getSiteInfo() != null) {
+                siteInfo = new StudentSiteInfo(student.getSiteInfo());
+            }
         }
     }
 
@@ -33,8 +47,12 @@ public class StudentDao {
         private String databaseName;
 
         public StudentSiteInfo(SiteInfo siteInfo) {
-            domainName = siteInfo.getDomainName();
-            databaseName = siteInfo.getDatabaseName();
+            if (siteInfo.getDomainName() != null) {
+                domainName = siteInfo.getDomainName();
+            }
+            if (siteInfo.getDatabaseName() != null) {
+                databaseName = siteInfo.getDatabaseName();
+            }
         }
     }
 

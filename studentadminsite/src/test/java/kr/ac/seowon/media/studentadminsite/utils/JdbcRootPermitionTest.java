@@ -1,6 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.utils;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,8 @@ class JdbcRootPermitionTest {
     private final String url = "jdbc:log4jdbc:mysql://localhost:3306/mysql";
     private final String id = "root";
     private final String pwd = "wjqrmsrma!wl6311";
-    private final String dummyUser = "Host";
+    private final String dummyUser = "host";
+    private final String password = "123";
     private final String modifiyUser = "Host20121";
     Connection connection = null;
     Statement statement = null;
@@ -31,6 +33,7 @@ class JdbcRootPermitionTest {
 
 
     @Test
+    @Disabled
     void jdbcTest() throws Exception {
         statement.execute("drop user "+dummyUser+"@'%'");
         statement.execute("drop database "+dummyUser);
@@ -40,11 +43,18 @@ class JdbcRootPermitionTest {
 
     @Test
     @DisplayName("mysql 사용자 생성 테스트 코드")
+    @Disabled
     void createMysqlUserJDBCConnection() throws Exception{
-        statement.execute("create user "+dummyUser+"@'%' identified by '1234'");
+        statement.execute("create user "+dummyUser+"@'%' identified by '"+password+"'");
         statement.execute("create database " + dummyUser);
         statement.execute("grant all privileges on " + dummyUser + ".* to " + dummyUser + "@'%';");
         statement.execute("FLUSH privileges");
+
+
+//        statement.execute("create user " + databaseName + "@'%' identified by '"+password+"'");
+//        statement.execute("create database " + databaseName);
+//        statement.execute("grant all privileges on " + databaseName + ".* to " + databaseName + "@'%';");
+//        statement.execute("FLUSH privileges");
 //        statement.execute("create table "+dummyUser+".member (id int auto_increment , username varchar(255) not null , password varchar(255) not null , primary key(id));");
 //        statement.executeUpdate("insert into "+dummyUser+".member(username , password ) values ('username1' , 'password' )");
         connection.commit();

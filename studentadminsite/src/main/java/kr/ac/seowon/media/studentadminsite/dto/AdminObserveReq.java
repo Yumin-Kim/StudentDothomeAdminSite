@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class AdminObserveReq {
+
     @Getter
     @Setter
     @AllArgsConstructor
@@ -21,4 +22,16 @@ public class AdminObserveReq {
         @NotNull(message = "studentCode를 입력하지 않았습니다.")
         private Integer studentCode;
     }
+
+    @Getter
+    @Setter
+    public static class AdminModifyStudentDto {
+        private String name;
+        private String password;
+        private String email;
+        private String phoneNumber;
+        private Boolean inSchool;
+        private Boolean isDeleted;
+    }
+
 }

@@ -44,11 +44,14 @@ class StudentRepositoryTest {
         //when
         Student student = studentRepository.findByStudentCodeAndName(201610302, "name").get();
         List<Student> findStudents = studentRepository.findByStudentCodeIn(List.of(201610302, 201610301));
+        List<Student> byIdIn = studentRepository.findByIdIn(List.of(1, 100));
         //then
         assertEquals(student.getStudentCode(),201610302);
         assertEquals(student.getInSchool(), true);
         assertEquals(student.getIsDeleted(), false);
         assertEquals(findStudents.size(),2);
+        assertEquals(byIdIn.size(),1);
+
     }
 
 }
