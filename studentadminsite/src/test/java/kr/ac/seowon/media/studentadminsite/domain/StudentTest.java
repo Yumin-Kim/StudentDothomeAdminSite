@@ -1,5 +1,9 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
+import com.querydsl.core.types.Expression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.ac.seowon.media.studentadminsite.domain.QAdmin;
+import kr.ac.seowon.media.studentadminsite.domain.QStudent;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
@@ -15,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import static kr.ac.seowon.media.studentadminsite.domain.QAdmin.admin;
+import static kr.ac.seowon.media.studentadminsite.domain.QStudent.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Rollback(value = false)
@@ -36,12 +42,18 @@ class StudentTest {
         AdminObserveReq.BasicStudentDto basicStudentDto = new AdminObserveReq.BasicStudentDto("yumin", 201632323);
         Admin admin = Admin.createAdmin("name", "1234", "asd", "asd");
         SiteInfo siteInfo = SiteInfo.createSiteInfo("domain", "databaseName");
-        Student student = Student.createStudent(basicStudentDto, admin);
-        StudentReq.StudentDto studentDto = new StudentReq.StudentDto("yumin", 201632323, "qweqwe", "qweqwe", "qwe", "qwe");
-        student.modifyStudent(studentDto,admin,siteInfo);
+        for (int i = 0; i < 100; i++) {
+            AdminObserveReq.BasicStudentDto basicStudentDto1 = new AdminObserveReq.BasicStudentDto("yumin" +i, 201632323+i);
+            Student student2 = Student.createStudent(basicStudentDto1, admin);
+            em.persist(student2);
+        }
+        Student student1 = Student.createStudent(basicStudentDto, admin);
+
+        StudentReq.StudentDto studentDto = new StudentReq.StudentDto("yumin123", 201632323, "qweqwe", "qweqwe", "qwe", "qwe");
+        student1.modifyStudent(studentDto,admin,siteInfo);
         em.persist(admin);
         em.persist(siteInfo);
-        em.persist(student);
+        em.persist(student1);
     }
 
     @Test
@@ -58,6 +70,22 @@ class StudentTest {
         //when
         //then
     }
+
+    @Test
+    @DisplayName("querydsl 테스트 코드")
+    void start_querydsl() throws Exception{
+        //given
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+        Student student = jpaQueryFactory.selectFrom(QStudent.student)
+                .where(QStudent.student.name.eq("yumin"))
+                .fetchOne();
+        //when
+        assertEquals(student.getName(),"yumin");
+        //then
+    }
+
+
+
 
 
 }

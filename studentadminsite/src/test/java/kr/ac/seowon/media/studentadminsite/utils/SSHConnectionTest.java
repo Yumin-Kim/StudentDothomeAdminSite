@@ -17,8 +17,8 @@ class SSHConnectionTest {
     @DisplayName("createDomain")
     void createDomain() throws Exception{
         //given
-        SSHConnection sshConnection = new SSHConnection(utilConfigure);
-        sshConnection.createDomain("springuser","test1234");
+//        SSHConnection sshConnection = new SSHConnection(utilConfigure);
+//        sshConnection.createDomain("springuser","test1234");
         //when
         //then
     }

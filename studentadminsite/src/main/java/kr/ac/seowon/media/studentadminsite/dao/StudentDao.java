@@ -42,6 +42,19 @@ public class StudentDao {
 
     @Getter
     @Setter
+    public static class DefaultStudent{
+        private String name;
+        private Integer studentCode;
+
+
+        public DefaultStudent(Student student) {
+            name = student.getName();
+            studentCode = student.getStudentCode();
+        }
+    }
+
+    @Getter
+    @Setter
     public static class StudentSiteInfo {
         private String domainName;
         private String databaseName;

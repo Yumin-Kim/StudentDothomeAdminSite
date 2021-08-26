@@ -26,7 +26,7 @@ public class StudentAPIController {
 
     @GetMapping("/studentcode")
     public Res findStudentCode(@RequestParam("name") String name, @RequestParam("studentCode") Integer studentCode) {
-        StudentDao.BasicStudent basicStudent = studentService.findStudentCode(name, studentCode);
+        StudentDao.DefaultStudent basicStudent = studentService.findStudentCode(name, studentCode);
         return Res.isOkWithData(basicStudent, "학번 조회 성공");
     }
 

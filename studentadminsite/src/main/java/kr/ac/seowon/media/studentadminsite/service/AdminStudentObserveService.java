@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
@@ -109,6 +110,14 @@ public class AdminStudentObserveService {
         Student student = getStudent(userId);
         student.adminPermitModifyStudent(modifyStudentDto);
         return new StudentDao.BasicStudent(student);
+    }
+
+    public List<StudentDao.BasicStudent> modifyStudentsInfo(List<Integer> userIds, List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos) {
+        List<Student> findStudents = studentRepository.findByIdIn(userIds);
+        if (findStudents.size() != userIds.size()) {
+            throw new AdminObserveException("존재하지 않는 학생이 확인 되었습니다.");
+        }
+        return null;
     }
 
     private Student getStudent(Integer studentId) {

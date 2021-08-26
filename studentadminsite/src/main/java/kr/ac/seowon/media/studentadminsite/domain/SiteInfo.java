@@ -18,7 +18,7 @@ public class SiteInfo {
     @Column(name = "site_info_id")
     private Integer id;
 
-    @Column(name = "domain_name")
+    @Column(name = "domain_name",unique = true)
     private String domainName;
     @Column(name = "database_name")
     private String databaseName;

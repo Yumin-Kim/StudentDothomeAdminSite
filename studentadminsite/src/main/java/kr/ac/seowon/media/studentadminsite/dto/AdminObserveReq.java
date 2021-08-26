@@ -1,6 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +33,22 @@ public class AdminObserveReq {
         private String phoneNumber;
         private Boolean inSchool;
         private Boolean isDeleted;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class SearachCondition {
+        private String name;
+        private Integer studentCode;
+        private String email;
+        private String phoneNumber;
+        private Boolean inSchool;
+        private Boolean isDeleted;
+        private String databaseName;
+        private String domainName;
+        private String AdminName;
     }
 
 }
