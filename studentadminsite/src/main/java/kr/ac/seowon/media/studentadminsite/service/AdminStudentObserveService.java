@@ -2,6 +2,7 @@ package kr.ac.seowon.media.studentadminsite.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.ac.seowon.media.studentadminsite.dao.AdminObserveDao;
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
@@ -16,11 +17,12 @@ import kr.ac.seowon.media.studentadminsite.utils.JdbcRootPermition;
 import kr.ac.seowon.media.studentadminsite.utils.SSHConnection;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
@@ -36,6 +38,16 @@ public class AdminStudentObserveService {
     private final SiteInfoRespository siteInfoRepository;
     private final UtilConfigure utilConfigure;
 
+    public StudentDao.StudentSiteInfo findSelectStudentSiteInfo(Integer studentId) {
+        Student student = getStudent(studentId);
+        if (student.getSiteInfo() != null) {
+            return new StudentDao.StudentSiteInfo(student.getSiteInfo());
+        }
+        else{
+            return null;
+        }
+    }
+
     public void insertStudentInfo(Integer adminId, AdminObserveReq.BasicStudentDto basicStudentDto) {
         Admin observeAdmin = getAdmin(adminId);
         studentRepository.findByStudentCodeAndName(basicStudentDto.getStudentCode(), basicStudentDto.getName())
@@ -45,7 +57,7 @@ public class AdminStudentObserveService {
                     }
                     return null;
                 });
-        Student student = Student.createStudent(basicStudentDto,observeAdmin);
+        Student student = Student.createStudent(basicStudentDto, observeAdmin);
         studentRepository.save(student);
     }
 
@@ -57,7 +69,7 @@ public class AdminStudentObserveService {
         Set<Integer> hashstudentCodes = basicStudentDtos.stream()
                 .map(AdminObserveReq.BasicStudentDto::getStudentCode)
                 .collect(toSet());
-        if(studentCodes.size() != hashstudentCodes.size()) throw new AdminObserveException("중복 되는 학번이 존재합니다");
+        if (studentCodes.size() != hashstudentCodes.size()) throw new AdminObserveException("중복 되는 학번이 존재합니다");
         List<Student> findByStudentCodes = studentRepository.findByStudentCodeIn(studentCodes);
         if (findByStudentCodes.size() != 0) {
             List<Integer> duplicateStudents = findByStudentCodes.stream()
@@ -66,7 +78,7 @@ public class AdminStudentObserveService {
             ObjectMapper objectMapper = new ObjectMapper();
             String convertJsonData = objectMapper.writeValueAsString(duplicateStudents);
             throw new InsertDuplicateException(convertJsonData);
-        }else{
+        } else {
             basicStudentDtos.stream()
                     .map(basicStudentDto -> Student.createStudent(basicStudentDto, observeAdmin))
                     .forEach(student -> studentRepository.save(student));
@@ -75,9 +87,10 @@ public class AdminStudentObserveService {
     }
 
     /**
-     *학생의 db엦 저장된 정보는 남겨두면 도메인 또는 dateBase 삭제
+     * 학생의 db엦 저장된 정보는 남겨두면 도메인 또는 dateBase 삭제
      * siteInfo 정보 삭제 및 student isdeleted 값 수정
      * 추가사항 기존 데이터 베이스의 정보를 삭제 할건지?
+     *
      * @param studentId
      */
     public void deleteStudentInfo(Integer studentId) {
@@ -91,6 +104,7 @@ public class AdminStudentObserveService {
 
     /**
      * 입력한 학생 중 존재하지 않는 경우
+     *
      * @param studentIds
      */
     public void deleteStudentsInfo(List<Integer> studentIds) {
@@ -99,25 +113,39 @@ public class AdminStudentObserveService {
             throw new StudentException("입력한 학생중 사이트가 존재하지 않은 학생이 있습니다.");
         }
         findByStudentList
-                .forEach(student ->  {
+                .forEach(student -> {
                     utils_studentInfoDelete(student);
                     siteInfoRepository.delete(student.getSiteInfo());
                     student.disabledStudent(true);
                 });
     }
 
-    public StudentDao.BasicStudent modifyStudentInfo(Integer userId, AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
-        Student student = getStudent(userId);
+    public StudentDao.BasicStudent modifyStudentInfo(AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
+        Student student = getStudent(modifyStudentDto.getId());
         student.adminPermitModifyStudent(modifyStudentDto);
         return new StudentDao.BasicStudent(student);
     }
 
-    public List<StudentDao.BasicStudent> modifyStudentsInfo(List<Integer> userIds, List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos) {
-        List<Student> findStudents = studentRepository.findByIdIn(userIds);
-        if (findStudents.size() != userIds.size()) {
+    public List<StudentDao.BasicStudent> modifyStudentsInfo(List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos) {
+        List<Integer> studentIds = modifyStudentDtos.stream()
+                .map(AdminObserveReq.AdminModifyStudentDto::getId)
+                .collect(toList());
+        List<Student> findStudents = studentRepository.findByIdIn(studentIds);
+        if (findStudents.size() != studentIds.size()) {
             throw new AdminObserveException("존재하지 않는 학생이 확인 되었습니다.");
         }
-        return null;
+        findStudents.stream()
+                .forEach(student -> {
+                    modifyStudentDtos.stream()
+                            .forEach(modifyStudentDto -> {
+                                if (student.getId() == modifyStudentDto.getId()) {
+                                    student.adminPermitModifyStudent(modifyStudentDto);
+                                }
+                            });
+                });
+        return findStudents.stream()
+                .map(StudentDao.BasicStudent::new)
+                .collect(toList());
     }
 
     private Student getStudent(Integer studentId) {
@@ -138,5 +166,35 @@ public class AdminStudentObserveService {
         //유저 삭제
         SSHConnection sshConnection = new SSHConnection(utilConfigure);
         sshConnection.deleteDomainInfo(student.getSiteInfo().getDomainName());
+    }
+
+    public AdminObserveDao.FullInfo findAllStudentInfo(Pageable pageable) {
+        Page<Student> findAllStudentInfo = studentRepository.findAll(pageable);
+        return getFullInfo(findAllStudentInfo);
+    }
+
+    public AdminObserveDao.FullInfo searchStudentInfV1(Boolean onChange, AdminObserveReq.SearchCondition searchCondition, Pageable pageable) {
+        Page<Student> findByConditionToStudentInfo = null;
+        if (onChange) {
+            findByConditionToStudentInfo = studentRepository.searchEqualsConditionInfoV1(pageable, searchCondition);
+
+        } else {
+            findByConditionToStudentInfo = studentRepository.searchSimilarConditionInfoV1(pageable, searchCondition);
+        }
+        return getFullInfo(findByConditionToStudentInfo);
+    }
+
+    private AdminObserveDao.FullInfo getFullInfo(Page<Student> findByConditionToStudentInfo) {
+        List<AdminObserveDao.AdminObserveStudentInfo> mappingData = findByConditionToStudentInfo.getContent().stream()
+                .map(student -> new AdminObserveDao.AdminObserveStudentInfo(
+                        student,
+                        student.getSiteInfo(),
+                        student.getAdmin()))
+                .collect(toList());
+        return new AdminObserveDao.FullInfo(mappingData,
+                findByConditionToStudentInfo.getNumber(),
+                findByConditionToStudentInfo.getTotalPages(),
+                findByConditionToStudentInfo.getSize(),
+                (int) findByConditionToStudentInfo.getTotalElements());
     }
 }

@@ -46,7 +46,6 @@ public class StudentDao {
         private String name;
         private Integer studentCode;
 
-
         public DefaultStudent(Student student) {
             name = student.getName();
             studentCode = student.getStudentCode();

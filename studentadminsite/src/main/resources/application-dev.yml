@@ -1,3 +1,5 @@
+server:
+  port: 5050
 config:
   sshusername: "user"
   sshhost: "172.23.32.1"

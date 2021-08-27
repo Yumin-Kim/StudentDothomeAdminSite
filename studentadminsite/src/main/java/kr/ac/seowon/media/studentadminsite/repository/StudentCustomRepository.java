@@ -1,10 +1,15 @@
 package kr.ac.seowon.media.studentadminsite.repository;
 
 import kr.ac.seowon.media.studentadminsite.domain.Student;
-
-import java.util.Optional;
+import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 public interface StudentCustomRepository {
-    Optional<Student> savec(Student student);
+
+    Page<Student> searchEqualsConditionInfoV1(Pageable pageable, AdminObserveReq.SearchCondition condition);
+
+    Page<Student> searchSimilarConditionInfoV1(Pageable pageable, AdminObserveReq.SearchCondition condition);
 
 }

@@ -1,6 +1,9 @@
 package kr.ac.seowon.media.studentadminsite.repository;
 
 import kr.ac.seowon.media.studentadminsite.domain.Student;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +23,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> , Stu
 
     @EntityGraph(attributePaths = {"siteInfo"})
     List<Student> findByIdIn(List<Integer> studentIds);
+
+    //left join fetch >> left outer join
+    @Override
+    @EntityGraph(attributePaths = {"siteInfo","admin"})
+    Page<Student> findAll(Pageable pageable);
 }

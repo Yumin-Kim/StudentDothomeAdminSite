@@ -1,20 +1,25 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
+import kr.ac.seowon.media.studentadminsite.dao.AdminObserveDao;
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.exception.CustomCollectionValidtion;
 import kr.ac.seowon.media.studentadminsite.service.AdminStudentObserveService;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -27,19 +32,26 @@ public class AdminStudentObserveAPIController {
     private final AdminStudentObserveService adminStudentObserveService;
     private final CustomCollectionValidtion concurrentInsertStudentsInfo;
 
-
     /**
      * 간단한 정렬은 가능하나 완벽하게는??
      * @return
      */
     @GetMapping
     public Res findStudentInfo(Pageable pageable){
-        return null;
+        AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.findAllStudentInfo(pageable);
+        return Res.isOkWithData(fullInfo,"학생 정보 조회 성공");
+    }
+
+    @GetMapping("/site/{studentId}")
+    public Res findSelectStudentSiteInfo(@PathVariable("studentId") Integer studentId){
+        StudentDao.StudentSiteInfo siteInfo = adminStudentObserveService.findSelectStudentSiteInfo(studentId);
+        return Res.isOkWithData(siteInfo, "학생 사이트 조회 성공");
     }
 
     /**
      * 검색 조건 정의후에 개발
      * /////////////////////
+     * search 버튼 클릭시
      * 검색 조건 : 이름 도메인 데이터 베이스 휴학여부 비활성화 관리자 학번 전화번호
      * 조건 : 완벽하게 일치 시 아니면 like 사용해서 진행할지
      * 조건 : 정렬 기준 ASC,DESC
@@ -52,34 +64,43 @@ public class AdminStudentObserveAPIController {
      * 복수 건 : 이름 , 관리자 , 도메인 , 데이터 베이스 , 학번 , 전화번호
      * 완벽한 일치시만 가능
      * 휴학여부 , 비활성화
-     * @param pageable
-     * @return
+     *
      */
     @GetMapping("/v1/search")
-    public Res searchV1StudentInfo(){
-        return null;
+    public Res searchV1StudentInfo(
+            @RequestParam("onChange") @NotNull(message = "공백") Boolean onChange,
+            @RequestBody AdminObserveReq.SearchCondition searchCondition,
+            Pageable pageable
+    ) throws BindException {
+//        log.info("{}",onChange);
+//        if (bindingResult.hasErrors()) {
+//            FieldError fieldError = new FieldError("onChange", "onChange", "onChange 값을 입력해주세요");
+//            bindingResult.addError(fieldError);
+//            throw new BindException(bindingResult);
+//        }
+        AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.searchStudentInfV1(onChange, searchCondition, pageable);
+        return Res.isOkWithData(fullInfo,"asd");
     }
 
-    @GetMapping("/v1/search/")
-    public Res searchLikeStudentInfo(){
-        return null;
-    }
 
-    @PutMapping("/student/{studentId}")
+    @PutMapping("/student")
     public Res modifyStduentInfo(
-            @PathVariable("studentId") Integer studentId,
-            AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
-        StudentDao.BasicStudent basicStudent = adminStudentObserveService.modifyStudentInfo(studentId, modifyStudentDto);
+            @Valid AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
+        StudentDao.BasicStudent basicStudent = adminStudentObserveService.modifyStudentInfo(modifyStudentDto);
         return Res.isOkWithData(basicStudent, "정보 수정 성공");
     }
 
-    @PutMapping("/students/{studentIds}")
+    @PutMapping("/students")
     public Res modifyStduentsInfo(
-            @PathVariable("studentIds") List<Integer> userIds,
-            List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos
-    ) {
-        List<StudentDao.BasicStudent> basicStudents = adminStudentObserveService.modifyStudentsInfo(userIds , modifyStudentDtos);
-        return Res.isOkWithData(null, "정보 수정 성공");
+            @Valid List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos,
+            BindingResult bindingResult
+    ) throws BindException {
+        concurrentInsertStudentsInfo.validate(modifyStudentDtos,bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new BindException(bindingResult);
+        }
+        List<StudentDao.BasicStudent> basicStudents = adminStudentObserveService.modifyStudentsInfo( modifyStudentDtos);
+        return Res.isOkWithData(basicStudents, "정보 수정 성공");
     }
 
     @PostMapping("/insert/{adminId}")

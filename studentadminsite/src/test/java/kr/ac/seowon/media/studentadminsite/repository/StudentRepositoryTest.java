@@ -4,15 +4,10 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.ac.seowon.media.studentadminsite.domain.*;
-import kr.ac.seowon.media.studentadminsite.domain.QAdmin;
-import kr.ac.seowon.media.studentadminsite.domain.QSiteInfo;
-import kr.ac.seowon.media.studentadminsite.domain.QStudent;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +15,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -37,6 +34,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @DataJpaTest
 @Transactional
+@Rollback(value = false)
 class StudentRepositoryTest {
 
     @Autowired
@@ -119,7 +117,7 @@ class StudentRepositoryTest {
     void search_current_correct() throws Exception {
         //given
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-        AdminObserveReq.SearachCondition condition = AdminObserveReq.SearachCondition.builder()
+        AdminObserveReq.SearchCondition condition = AdminObserveReq.SearchCondition.builder()
                 .AdminName(null)
                 .studentCode(null)
                 .domainName(null)
@@ -170,23 +168,7 @@ class StudentRepositoryTest {
                     System.out.println("student1.getName() = " + student1.getName());
                     System.out.println("student1.getSiteInfo() = " + student1.getSiteInfo().getDomainName());
                 });
-        
-    }
-//    private OrderSpecifier<?> getSortedColumn(Student student1, String fieldName){
-//        Path<Object> fieldPath = Expressions.path(Object.class, QStudent.student, fieldName);
-//        return new OrderSpecifier(student1, fieldPath);
-//    }
 
-    private List<OrderSpecifier> getOrderSpecifier(Sort sort) {
-        List<OrderSpecifier> orders = new ArrayList<>();
-        // Sort
-        sort.stream().forEach(order -> {
-            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
-            String prop = order.getProperty();
-            PathBuilder orderByExpression = new PathBuilder(Student.class, "student");
-            orders.add(new OrderSpecifier(direction, orderByExpression.get(prop)));
-        });
-        return orders;
     }
 
     @Test
@@ -194,7 +176,7 @@ class StudentRepositoryTest {
     void start_DynamicQuery_like_outerJoin() throws Exception {
         //given
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-        AdminObserveReq.SearachCondition condition = AdminObserveReq.SearachCondition.builder()
+        AdminObserveReq.SearchCondition condition = AdminObserveReq.SearchCondition.builder()
                 .AdminName(null)
                 .studentCode(201632)
                 .domainName(null)
@@ -216,7 +198,54 @@ class StudentRepositoryTest {
         //then
     }
 
-    private BooleanBuilder searchConditionV2(AdminObserveReq.SearachCondition condition) {
+    /**
+     * yumin으로 시작하는 사람 중 사이트가 null값 확인
+     * @throws Exception
+     */
+    @Test
+    @DisplayName("서브 쿼리를 통해 null 값도 가지고 오도록")
+    void check_sub_query_null() throws Exception{
+        //given
+        PageRequest of = PageRequest.of(0, 10);
+        Page<Student> all = studentRepository.findAll(of);
+        List<Student> name = em.createQuery("select s from Student s " +
+                "left join fetch s.siteInfo si " +
+                "where s.name like :name ", Student.class)
+                .setParameter("name", "yumin%")
+                .getResultList();
+        name.stream()
+                .forEach(student1 -> {
+                    System.out.println("student1.getName() = " + student1.getName());
+                    System.out.println("student1.getSiteInfo().getDomainName() = " + student1.getSiteInfo());
+                });
+        all.stream()
+                .forEach(student1 -> {
+                    System.out.println("student1.getName() = " + student1.getName());
+                    System.out.println("student1.getSiteInfo().getDomainName() = " + student1.getSiteInfo());
+                    if (student1.getSiteInfo() != null) {
+                        System.out.println("null 값이 아닙니다.");
+                        System.out.println("student1.getSiteInfo().getDomainName() = " + student1.getSiteInfo().getDomainName());
+
+                    }
+                });
+        //when
+
+        //then
+    }
+
+    private List<OrderSpecifier> getOrderSpecifier(Sort sort) {
+        List<OrderSpecifier> orders = new ArrayList<>();
+        // Sort
+        sort.stream().forEach(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String prop = order.getProperty();
+            PathBuilder orderByExpression = new PathBuilder(Student.class, "student");
+            orders.add(new OrderSpecifier(direction, orderByExpression.get(prop)));
+        });
+        return orders;
+    }
+
+    private BooleanBuilder searchConditionV2(AdminObserveReq.SearchCondition condition) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (hasText(condition.getPhoneNumber())) {
@@ -244,7 +273,7 @@ class StudentRepositoryTest {
         return booleanBuilder;
     }
 
-    private void extracted(AdminObserveReq.SearachCondition condition, BooleanBuilder booleanBuilder) {
+    private void extracted(AdminObserveReq.SearchCondition condition, BooleanBuilder booleanBuilder) {
         if (condition.getInSchool() != null) {
             booleanBuilder.and(student.inSchool.eq(condition.getInSchool()));
         }
@@ -253,7 +282,7 @@ class StudentRepositoryTest {
         }
     }
 
-    private BooleanBuilder searchContainConditionV1(AdminObserveReq.SearachCondition condition) {
+    private BooleanBuilder searchContainConditionV1(AdminObserveReq.SearchCondition condition) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (hasText(condition.getPhoneNumber())) {
@@ -281,7 +310,7 @@ class StudentRepositoryTest {
         return booleanBuilder;
     }
 
-    private BooleanExpression searchConditionV1(AdminObserveReq.SearachCondition condition) {
+    private BooleanExpression searchConditionV1(AdminObserveReq.SearchCondition condition) {
         return phoneNumberEqualCond(condition.getPhoneNumber())
 //                .and(nameEqualCond(condition.getName()))
 //                .and(isDeletedEqualCond(condition.getIsDeleted()))

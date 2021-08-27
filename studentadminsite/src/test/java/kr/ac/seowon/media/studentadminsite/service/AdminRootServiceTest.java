@@ -37,33 +37,41 @@ class AdminRootServiceTest {
 
     @Test
     @DisplayName("admin 계정 생성 pass")
-    void adminservice_1() throws Exception{
+    void adminservice_1() throws Exception {
         //given
         given(adminRepository.findByName(any()))
                 .willReturn(Optional.empty());
         given(adminRepository.save(any()))
                 .willReturn(admin);
+        given(adminRepository.findByHashCode(any()))
+                .willReturn(Optional.empty());
         //when
         AdminDao.BasicAdmin createAdmin = adminRootService.createAdmin(adminDto);
         //then
-        assertEquals(createAdmin.getName(),admin.getName());
-        assertEquals(createAdmin.getHashCode(),admin.getHashCode());
+        assertEquals(createAdmin.getName(), admin.getName());
+        assertEquals(createAdmin.getHashCode(), admin.getHashCode());
     }
 
     @Test
     @DisplayName("admin 계정 생성시 중복 로직")
-    void adminservice_2() throws Exception{
+    void adminservice_2() throws Exception {
         //given
         given(adminRepository.findByName(any()))
+                .willReturn(Optional.of(admin))
+                .willReturn(Optional.empty());
+        given(adminRepository.save(any()))
+                .willReturn(admin);
+        given(adminRepository.findByHashCode(any()))
                 .willReturn(Optional.of(admin));
         //when
         //then
+        assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
         assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
     }
 
     @Test
     @DisplayName("admin 계정 수정 pass exception 로직 포함")
-    void adminsService_1_modify() throws Exception{
+    void adminsService_1_modify() throws Exception {
         //given
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto("superUser", null, null, null);
         given(adminRepository.findById(any()))
@@ -72,18 +80,18 @@ class AdminRootServiceTest {
         //when
         AdminDao.BasicAdmin modifyAdminInfo = adminRootService.modifyAdminInfo(1, adminDto);
         //then
-        assertEquals(modifyAdminInfo.getName(),"superUser");
-        assertEquals(modifyAdminInfo.getHashCode(),"asdasd");
+        assertEquals(modifyAdminInfo.getName(), "superUser");
+        assertEquals(modifyAdminInfo.getHashCode(), "asdasd");
         assertThrows(AdminException.class, () -> adminRootService.modifyAdminInfo(2, adminDto));
     }
 
     @Test
     @DisplayName("admin paging")
-    void adminService_paging() throws Exception{
+    void adminService_paging() throws Exception {
         //given
         List<Admin> admins = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            Admin admin = Admin.createAdmin("admin"+i, "qweqwe", "asdasd", "123123");
+            Admin admin = Admin.createAdmin("admin" + i, "qweqwe", "asdasd", "123123");
             admins.add(admin);
         }
         Page<Admin> adminPagingMock = new PageImpl<>(admins);

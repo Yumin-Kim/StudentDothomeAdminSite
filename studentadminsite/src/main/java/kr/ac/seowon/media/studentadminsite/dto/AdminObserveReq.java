@@ -27,6 +27,8 @@ public class AdminObserveReq {
     @Getter
     @Setter
     public static class AdminModifyStudentDto {
+        @NotNull(message = "id이 존재하지 않습니다.")
+        private Integer id;
         private String name;
         private String password;
         private String email;
@@ -39,7 +41,7 @@ public class AdminObserveReq {
     @Setter
     @AllArgsConstructor
     @Builder
-    public static class SearachCondition {
+    public static class SearchCondition {
         private String name;
         private Integer studentCode;
         private String email;

@@ -35,6 +35,10 @@ public class AdminRootService {
                     return null;
                 })
                 .orElse(adminRepository.save(admin));
+        List<Admin> collect = adminRepository.findByHashCode(admin.getHashCode()).stream()
+                .filter(admin1 -> admin1.getHashCode().equals(admin.getHashCode()))
+                .collect(toList());
+        if(collect.size() != 0)  throw new AdminException("존재하는 HashCode입니다.");
         return new AdminDao.BasicAdmin(saveAdmin);
     }
 

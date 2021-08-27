@@ -2,32 +2,87 @@ package kr.ac.seowon.media.studentadminsite.repository;
 
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.util.StringUtils.hasText;
 import static kr.ac.seowon.media.studentadminsite.domain.QAdmin.admin;
 import static kr.ac.seowon.media.studentadminsite.domain.QSiteInfo.siteInfo;
 import static kr.ac.seowon.media.studentadminsite.domain.QStudent.student;
+
 public class StudentCustomRepositoryImpl implements StudentCustomRepository {
+
     @PersistenceContext
     EntityManager em;
 
+    private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
-    public Optional<Student> savec(Student student) {
-        em.persist(student);
-
-        Student student1 = em.find(Student.class, student.getId());
-        return Optional.ofNullable(student1);
+    public StudentCustomRepositoryImpl(EntityManager em) {
+        jpaQueryFactory = new JPAQueryFactory(em);
     }
 
+    @Override
+    public PageImpl searchEqualsConditionInfoV1(Pageable pageable, AdminObserveReq.SearchCondition condition) {
+        QueryResults<Student> studentQueryResults = jpaQueryFactory.selectFrom(student)
+                .leftJoin(student.siteInfo, siteInfo).fetchJoin()
+                .leftJoin(student.admin, admin).fetchJoin()
+                .where(searchConditionV1(condition))
+                .orderBy(conditionSortingMethod(pageable.getSort()).stream().toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(studentQueryResults.getResults(), pageable, studentQueryResults.getTotal());
+    }
 
-    private BooleanBuilder searchConditionV2(AdminObserveReq.SearachCondition condition) {
+    @Override
+    public Page<Student> searchSimilarConditionInfoV1(Pageable pageable, AdminObserveReq.SearchCondition condition) {
+        QueryResults<Student> studentQueryResults = jpaQueryFactory.selectFrom(student)
+                .leftJoin(student.siteInfo, siteInfo).fetchJoin()
+                .leftJoin(student.admin, admin).fetchJoin()
+                .where(searchContainConditionV1(condition))
+                .orderBy(conditionSortingMethod(pageable.getSort()).stream().toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(studentQueryResults.getResults(), pageable, studentQueryResults.getTotal());
+    }
+
+    private List<OrderSpecifier> conditionSortingMethod(Sort sort) {
+        List<OrderSpecifier> orders = new ArrayList<>();
+        sort.stream().forEach(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String property = order.getProperty();
+            PathBuilder pathBuilder = null;
+            if (property.contains("domainName") || property.contains("databaseName")) {
+                pathBuilder = new PathBuilder(Student.class, "siteInfo");
+            }
+            else if (property.contains("adminName")) {
+                property = "name";
+                pathBuilder = new PathBuilder(Admin.class, "admin");
+            } else {
+                pathBuilder = new PathBuilder(Student.class, "student");
+            }
+            boolean add = orders.add(new OrderSpecifier(direction, pathBuilder.get(property)));
+        });
+        return orders;
+    }
+
+    private BooleanBuilder searchConditionV1(AdminObserveReq.SearchCondition condition) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (hasText(condition.getPhoneNumber())) {
@@ -45,7 +100,7 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         if (hasText(condition.getDatabaseName())) {
             booleanBuilder.and(siteInfo.databaseName.eq(condition.getDatabaseName()));
         }
-        extracted(condition, booleanBuilder);
+        studentEntityBooleanPropertyEqQuery(condition, booleanBuilder);
         if (condition.getStudentCode() != null) {
             booleanBuilder.and(student.studentCode.eq(condition.getStudentCode()));
         }
@@ -55,7 +110,7 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         return booleanBuilder;
     }
 
-    private void extracted(AdminObserveReq.SearachCondition condition, BooleanBuilder booleanBuilder) {
+    private void studentEntityBooleanPropertyEqQuery(AdminObserveReq.SearchCondition condition, BooleanBuilder booleanBuilder) {
         if (condition.getInSchool() != null) {
             booleanBuilder.and(student.inSchool.eq(condition.getInSchool()));
         }
@@ -64,7 +119,7 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         }
     }
 
-    private BooleanBuilder searchContainConditionV1(AdminObserveReq.SearachCondition condition) {
+    private BooleanBuilder searchContainConditionV1(AdminObserveReq.SearchCondition condition) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (hasText(condition.getPhoneNumber())) {
@@ -82,9 +137,9 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         if (hasText(condition.getDatabaseName())) {
             booleanBuilder.and(siteInfo.databaseName.contains(condition.getDatabaseName()));
         }
-        extracted(condition, booleanBuilder);
+        studentEntityBooleanPropertyEqQuery(condition, booleanBuilder);
         if (condition.getStudentCode() != null) {
-            booleanBuilder.and(student.studentCode.like(condition.getStudentCode()+"%"));
+            booleanBuilder.and(student.studentCode.like(condition.getStudentCode() + "%"));
         }
         if (hasText(condition.getDomainName())) {
             booleanBuilder.and(siteInfo.domainName.contains(condition.getDomainName()));
