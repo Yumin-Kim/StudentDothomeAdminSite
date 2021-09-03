@@ -2,6 +2,7 @@ package kr.ac.seowon.media.studentadminsite.domain;
 
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
 import org.hibernate.exception.ConstraintViolationException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ class SiteInfoDtoTest {
 
     @Test
     @DisplayName("siteInfo Test")
+    @Disabled
     void start_1() throws Exception{
         SiteInfo siteInfo1 = SiteInfo.createSiteInfo("name", "database");
         SiteInfo siteInfo2 = SiteInfo.createSiteInfo("name", "database");

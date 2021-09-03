@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/multiadmin.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/multiadmin.js"></script>
+
+</head>
+<body>
+  <!----------------------------------------------------------------->
+  <header>
+      <div class="csize" id="header_div">
+         <img src="images/header.png">
+      </div>
+  </header>
+  <!----------------------------------------------------------------->
+  <nav>
+      <div class="csize mynav" id="nav_div">
+          <ul>
+              <li><a href="#" onclick="about()">About</a></li>
+              <li><a href="#" onclick="contact()">Contact</a></li>
+              <li><a href="#" onclick="news()">News</a></li>
+              <li><a href="#" onclick="home()">Home</a></li>
+          </ul>
+      </div>
+  </nav>
+  <!----------------------------------------------------------------->
+  <section>
+      <div class="csize mysection" id="sec_div"  height: 150px;height="500px"><a href="add_member_help.html">사용방법 안내
+</h1>
+  </a><br><br>
+ 	      <br><br>
+ 	          <h1  style="font-size:x-large;">Media Server 계정만들기</h1>
+ 	      <br><br>
+
+          <form action="" name="registration">
+             <label for="class_key">Your Key 값</label>
+             <input type="text" name="class_key" id="class_key" placeholder="contact with authorities"/><br>
+
+             <label for="student_id">학번</label>
+             <input type="text" name="student_id" id="student_id" placeholder="202612345"/><br>
+
+             <label for="fullname">이름</label>
+             <input type="text" name="fullname" id="fullname" placeholder="김유신"/><br>
+
+             <label for="password">Password</label>
+             <input type="password" name="password" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"/>
+
+             <label for="password2">Confirm Password</label>
+             <input type="password" name="password2" id="password2" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"/>
+
+             <label for="phone">Phone</label>
+             <input type="text" name="phone" id="phone" placeholder="010-1111-2222"/><br>
+
+             <label for="email">Email</label>
+             <input type="email" name="email" id="email" placeholder="kimjohn@gmail.com"/><br>
+
+             <br>
+            <button type="submit" id="Btn_Register">Register</button><br>
+  </form>
+  </div>
+  </section>
+  <!----------------------------------------------------------------->
+  <footer>
+      <div class="csize" id="footer_div">
+          <img src="images/footer.png">
+      </div>
+  </footer>
+  <!----------------------------------------------------------------->
+  </body>
+</html>

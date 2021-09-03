@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.hasText;
@@ -27,19 +28,20 @@ public class AdminRootService {
         //TODO HashCode 생성 알고리즘 추가
         //TODO admin password 암호화 하여 다시 삽입
         Admin admin = adminDto.toEntity();
-        Admin saveAdmin = (Admin) adminRepository.findByName(admin.getName())
+        List<Admin> admins = (List<Admin>) adminRepository.findByName(admin.getName())
                 .map(data -> {
                     if (hasText(data.getName())) {
                         throw new AdminException("존재하는 이름입니다.");
                     }
                     return null;
                 })
-                .orElse(adminRepository.save(admin));
-        List<Admin> collect = adminRepository.findByHashCode(admin.getHashCode()).stream()
-                .filter(admin1 -> admin1.getHashCode().equals(admin.getHashCode()))
-                .collect(toList());
-        if(collect.size() != 0)  throw new AdminException("존재하는 HashCode입니다.");
-        return new AdminDao.BasicAdmin(saveAdmin);
+                .orElseGet(() -> adminRepository.findByHashCode(admin.getHashCode())
+                        .stream()
+                        .filter(admin1 -> admin1.getHashCode().equals(admin.getHashCode()))
+                        .collect(toList()));
+        if (admins.size() != 0) throw new AdminException("존재하는 HashCode입니다.");
+        Admin save = adminRepository.save(admin);
+        return new AdminDao.BasicAdmin(save);
     }
 
     public AdminDao.BasicAdmin loginAdmin(AdminReq.AdminLoginDto adminLoginDto) {
@@ -61,6 +63,6 @@ public class AdminRootService {
         List<AdminDao.BasicAdmin> basicAdminList = findAdmins.getContent().stream()
                 .map(AdminDao.BasicAdmin::new)
                 .collect(toList());
-        return new AdminDao.BasicPagingAdmin(basicAdminList,findAdmins.getNumber(), findAdmins.getTotalPages(), findAdmins.getSize(), (int) findAdmins.getTotalElements());
+        return new AdminDao.BasicPagingAdmin(basicAdminList, findAdmins.getNumber(), findAdmins.getTotalPages(), findAdmins.getSize(), (int) findAdmins.getTotalElements());
     }
 }

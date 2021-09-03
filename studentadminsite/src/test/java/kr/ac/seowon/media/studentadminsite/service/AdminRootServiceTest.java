@@ -5,6 +5,7 @@ import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled
 class AdminRootServiceTest {
 
     @Mock
@@ -54,6 +56,7 @@ class AdminRootServiceTest {
 
     @Test
     @DisplayName("admin 계정 생성시 중복 로직")
+    @Disabled
     void adminservice_2() throws Exception {
         //given
         given(adminRepository.findByName(any()))

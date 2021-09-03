@@ -38,7 +38,7 @@ public class StudentService {
                 .orElseThrow(() -> new StudentException("승인하지 않은 키입니다."));
         Student student = getStudent(studentDto);
         if (student.getIsDeleted()) throw new StudentException("비활성화 계정입니다");
-        if (!Pattern.matches("^[a-z]$", siteInfoDto.getDomainName()))
+        if (Pattern.matches("^[a-z]$", siteInfoDto.getDomainName()))
             throw new StudentSiteInfoException("domainName은 대문자 , 특수 문자 , 뛰어쓰기가 존재하면 안됩니다.");
 //        SiteInfo createSiteInfo = SiteInfo.createSiteInfo(siteInfoDto.getDomainName(), "s" + studentDto.getStudentCode());
         SiteInfo createSiteInfo = (SiteInfo) siteInfoRespository.findByDomainName(siteInfoDto.getDomainName())

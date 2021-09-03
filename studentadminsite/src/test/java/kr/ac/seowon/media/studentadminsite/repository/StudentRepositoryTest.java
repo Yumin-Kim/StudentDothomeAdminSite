@@ -11,6 +11,7 @@ import kr.ac.seowon.media.studentadminsite.domain.*;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,7 @@ class StudentRepositoryTest {
 
     @Test
     @DisplayName("StudentRepository QueryMethod")
+    @Disabled
     void start_1() throws Exception {
         //given
         //when
@@ -114,6 +116,8 @@ class StudentRepositoryTest {
      */
     @Test
     @DisplayName("조건에 완벽하게 일치할때 동작")
+    @Disabled
+
     void search_current_correct() throws Exception {
         //given
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
@@ -173,6 +177,8 @@ class StudentRepositoryTest {
 
     @Test
     @DisplayName("동적 쿼리 like")
+    @Disabled
+
     void start_DynamicQuery_like_outerJoin() throws Exception {
         //given
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
@@ -203,6 +209,7 @@ class StudentRepositoryTest {
      * @throws Exception
      */
     @Test
+    @Disabled
     @DisplayName("서브 쿼리를 통해 null 값도 가지고 오도록")
     void check_sub_query_null() throws Exception{
         //given

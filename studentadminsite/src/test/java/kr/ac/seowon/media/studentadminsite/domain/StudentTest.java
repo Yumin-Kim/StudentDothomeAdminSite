@@ -9,6 +9,7 @@ import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Rollback(value = false)
 @Transactional
 @SpringBootTest
+@Disabled
 class StudentTest {
 
     @PersistenceContext

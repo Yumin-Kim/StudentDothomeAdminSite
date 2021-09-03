@@ -13,10 +13,7 @@ import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
 import kr.ac.seowon.media.studentadminsite.utils.SSHConnection;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import org.aspectj.lang.annotation.After;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,6 +32,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled
 class StudentServiceTest {
 
     @Mock
