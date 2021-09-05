@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -37,10 +38,12 @@ public class StudentService {
         Admin admin = adminRepository.findByHashCode(studentDto.getHashCode())
                 .orElseThrow(() -> new StudentException("승인하지 않은 키입니다."));
         Student student = getStudent(studentDto);
-        if (student.getIsDeleted()) throw new StudentException("비활성화 계정입니다");
-        if (Pattern.matches("^[a-z]$", siteInfoDto.getDomainName()))
+        Pattern compile = Pattern.compile("^[a-z]*$");
+        Matcher matcher = compile.matcher(siteInfoDto.getDomainName());
+        if (!matcher.matches())
             throw new StudentSiteInfoException("domainName은 대문자 , 특수 문자 , 뛰어쓰기가 존재하면 안됩니다.");
-//        SiteInfo createSiteInfo = SiteInfo.createSiteInfo(siteInfoDto.getDomainName(), "s" + studentDto.getStudentCode());
+        if (student.getIsDeleted()) throw new StudentException("비활성화 계정입니다");
+        // TODO 수정 요함 >> 한 사용자가 여러 계정 생성 못하도록 막기
         SiteInfo createSiteInfo = (SiteInfo) siteInfoRespository.findByDomainName(siteInfoDto.getDomainName())
                 .map(siteInfo -> {
                     if (siteInfo.getDomainName() != null) {

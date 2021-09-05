@@ -52,14 +52,14 @@ class AdminRepositoryTest {
         //when
         Admin findByNameAdmin = adminRepository.findByName("admin3").get();
         Admin findByNameAndPasswordAdmin = adminRepository.findByNameAndPassword("admin2", "qweqwe").get();
-        Admin findByIdAdmin = adminRepository.findById(1).get();
-        findByIdAdmin.modifyEntity(adminDto);
+//        Admin findByIdAdmin = adminRepository.findById(1).get();
+//        findByIdAdmin.modifyEntity(adminDto);
         //then
         assertEquals(findByNameAdmin.getName(),"admin3");
         assertEquals(findByNameAndPasswordAdmin.getName(),"admin2");
         assertEquals(findByNameAndPasswordAdmin.getPassword(),"qweqwe");
-        assertEquals(findByIdAdmin.getName(),"superUser");
-        assertEquals(findByIdAdmin.getPassword(),"qweqwe");
+//        assertEquals(findByIdAdmin.getName(),"superUser");
+//        assertEquals(findByIdAdmin.getPassword(),"qweqwe");
     }
 
     @Test

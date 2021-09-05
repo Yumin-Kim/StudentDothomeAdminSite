@@ -16,7 +16,7 @@ class JdbcRootPermitionTest {
 
     private final String url = "jdbc:log4jdbc:mysql://localhost:3306/mysql";
     private final String id = "root";
-    private final String pwd = "wjqrmsrma!wl6311";
+    private final String pwd = "password";
     private final String dummyUser = "host";
     private final String password = "123";
     private final String modifiyUser = "Host20121";

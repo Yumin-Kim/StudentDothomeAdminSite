@@ -51,30 +51,28 @@ class StudentServiceTest {
     StudentService studentService;
 
     private static MockedStatic<Pattern> patternMockedStatic;
-    @BeforeEach
-    void setting(){
-        patternMockedStatic = mockStatic(Pattern.class);
-    }
+//    @BeforeEach
+//    void setting(){
+//        patternMockedStatic = mockStatic(Pattern.class);
+//    }
     @Test
     @DisplayName("학생 생성 비즈로직_ 정규 표현식")
     void start_1_crateStudent() throws Exception{
         //given
         //자바스크립트는 포함 여부를 확인하지만 java는 조건에 일치하는지를 판단??
-        String test = "asdasdasdASDASDasd";
+        String test = "as";
         String regex1 = "^[a-z]*$";
         String regex2 = "^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|A-Z]*$";
-        boolean matches = Pattern.matches(regex1, test);
-        System.out.println("matches = " + matches);
-        System.out.println(" = " + test.matches(regex1));
-        System.out.println(" = " + test.matches(regex2));
-        String pattern = "[a-z]";
-        System.out.println("ab".matches(pattern));
-        System.out.println("abc".matches(pattern));
-        //when
 
+        String regExp = "(02|010)-\\d{3,4}-\\d{4}";    // Regular Expression
+        String data = "010-1234-4321";
+        Pattern p = Pattern.compile(regex1);
+        Matcher m = p.matcher(test);
+        System.out.println(m.matches());
         //then
+        boolean matches = Pattern.matches("^[a-z]$", test);
+        System.out.println("matches = " + matches);
     }
-
     @Test
     @DisplayName("학생 생성 비즈니스 로직 >> ssh 연결 에서 Exception 발생")
     void start_1_craeteStudent() throws Exception{
@@ -98,10 +96,11 @@ class StudentServiceTest {
         assertThrows(SSHException.class,()->studentService.createStudent(studentDto, siteInfoDto));
 
     }
-    @AfterEach
-    void endPoint(){
-        patternMockedStatic.close();
-    }
+
+//    @AfterEach
+//    void endPoint(){
+//        patternMockedStatic.close();
+//    }
 
 
 }
