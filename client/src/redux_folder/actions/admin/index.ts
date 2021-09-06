@@ -11,7 +11,7 @@ import {
 } from "../../../types/storeType";
 import {
   CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT,
-  GET_ADMINS_INFO,
+  GET_ADMINS_PAGING_INFO,
   MODIFIED_ADMINTOSTUDENT_INFO,
   MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT,
 } from "./type";
@@ -133,7 +133,7 @@ export const getAdminInfoPagingAPI = async ({
   return await axios.get(`/admin/rootinfo/adminall?page=${page}&size=${size}`);
 };
 export const getAdminInfoPagingAction = createActionAxiosGetVerionToAPIPARMA(
-  GET_ADMINS_INFO,
+  GET_ADMINS_PAGING_INFO,
   getAdminInfoPagingAPI
 );
 
@@ -155,7 +155,7 @@ export const modifiedAdminStudentInfoAction =
     modifiedAdminStudentInfoAPI
   );
 //일괄 학생 정보 수정 API
-export const modifiedAdminStudentsInfosAPI = async (
+export const concurrentModifiedAdminStudentInfoAPI = async (
   modifiedDataList: Omit<I_AllStudentInfo_Adamin, "siteInfo" | "adminName">[]
 ): Promise<I_AxiosDefaultDataFormat<I_AllStudentInfo_Adamin[]>> => {
   // let concatQuertString = "";
@@ -171,7 +171,7 @@ export const modifiedAdminStudentsInfosAPI = async (
 export const concurrentModifiedAdminStudentInfoAction =
   createActionAxiosGetVerionToAPIPARMA(
     MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT,
-    modifiedAdminStudentsInfosAPI
+    concurrentModifiedAdminStudentInfoAPI
   );
 //단일 학생 정보 저장 API
 export interface I_createAdminToStudentParam extends I_DefaultStudentInfo {

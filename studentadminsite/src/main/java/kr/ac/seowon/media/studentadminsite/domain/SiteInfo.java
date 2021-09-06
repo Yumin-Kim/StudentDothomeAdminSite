@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "site_info")
-public class SiteInfo {
+public class SiteInfo extends  BaseEntity {
 
     @Id
     @GeneratedValue

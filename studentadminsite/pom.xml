@@ -13,8 +13,8 @@
 	<artifactId>studentadminsite</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>studentadminsite</name>
-<!--	<packaging>jar</packaging>-->
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
+<!--	<packaging>war</packaging>-->
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->

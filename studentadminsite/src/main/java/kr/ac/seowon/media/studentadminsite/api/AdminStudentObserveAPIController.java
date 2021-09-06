@@ -66,7 +66,7 @@ public class AdminStudentObserveAPIController {
      * 휴학여부 , 비활성화
      *
      */
-    @GetMapping("/v1/search")
+    @PostMapping("/v1/search")
     public Res searchV1StudentInfo(
             @RequestParam("onChange") @NotNull(message = "공백") Boolean onChange,
             @RequestBody AdminObserveReq.SearchCondition searchCondition,
@@ -90,9 +90,10 @@ public class AdminStudentObserveAPIController {
         return Res.isOkWithData(basicStudent, "정보 수정 성공");
     }
 
+    //TODO 요청 받는 값 변경
     @PutMapping("/students")
     public Res modifyStduentsInfo(
-            @Valid List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos,
+            @Valid @RequestBody List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos,
             BindingResult bindingResult
     ) throws BindException {
         concurrentInsertStudentsInfo.validate(modifyStudentDtos,bindingResult);

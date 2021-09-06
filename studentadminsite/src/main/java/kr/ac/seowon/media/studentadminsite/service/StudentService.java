@@ -32,11 +32,21 @@ public class StudentService {
     private final SiteInfoRespository siteInfoRespository;
     private final UtilConfigure utilConfigure;
 
-    //Todo
+    //Todo 추가적인 로직 수정으로 테스트 코드 에러 발
     // student isdeleted을 확인하여 계정 생성 여부 파악
     public StudentDao.BasicStudent createStudent(StudentReq.StudentDto studentDto, StudentReq.SiteInfoDto siteInfoDto) {
         Admin admin = adminRepository.findByHashCode(studentDto.getHashCode())
                 .orElseThrow(() -> new StudentException("승인하지 않은 키입니다."));
+        studentRepository.findByStudentCodeAndName(studentDto.getStudentCode(), studentDto.getName())
+                .map(findStudent -> {
+                    if (findStudent.getSiteInfo().getDatabaseName() != null) {
+                        throw new StudentException("현재 학생은 정보가 존재합니다.");
+                    }
+                    return null;
+                })
+                .orElseGet(() -> {
+                    return null;
+                });
         Student student = getStudent(studentDto);
         Pattern compile = Pattern.compile("^[a-z]*$");
         Matcher matcher = compile.matcher(siteInfoDto.getDomainName());
@@ -60,7 +70,6 @@ public class StudentService {
         //jdbc를 활용하여 데이터 베이스 생성
         JdbcRootPermition jdbcRootPermition = new JdbcRootPermition(utilConfigure);
         jdbcRootPermition.createJDBCMysqlUser(createSiteInfo.getDatabaseName(),studentDto.getPassword());
-
         siteInfoRespository.save(createSiteInfo);
         student.modifyStudent(studentDto, admin, createSiteInfo);
         return new StudentDao.BasicStudent(student);

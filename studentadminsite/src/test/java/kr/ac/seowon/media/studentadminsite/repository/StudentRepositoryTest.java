@@ -26,6 +26,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static kr.ac.seowon.media.studentadminsite.domain.QAdmin.admin;
 import static kr.ac.seowon.media.studentadminsite.domain.QSiteInfo.siteInfo;
@@ -85,14 +86,15 @@ class StudentRepositoryTest {
         //given
         //when
 //        Student student = studentRepository.findByStudentCodeAndName(201610302, "").get();
-        List<Student> findStudents = studentRepository.findByStudentCodeIn(List.of(201610302, 201610301));
+        List<Student> findStudents = studentRepository.findByStudentCodeIn(List.of(201510302, 201510301));
         List<Student> byIdIn = studentRepository.findByIdIn(List.of(1, 100));
+        Student yumin10 = studentRepository.findByStudentCodeAndName(201633323, "yumin10").get();
         //then
 //        assertEquals(student.getStudentCode(), 201610302);
 //        assertEquals(student.getInSchool(), true);
 //        assertEquals(student.getIsDeleted(), false);
         assertEquals(findStudents.size(), 2);
-        assertEquals(byIdIn.size(), 1);
+        assertEquals(byIdIn.size(), 2);
 
     }
 

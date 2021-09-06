@@ -26,6 +26,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> , Stu
 
     //left join fetch >> left outer join
     @Override
-    @EntityGraph(attributePaths = {"siteInfo","admin"})
+    @EntityGraph(attributePaths = {"siteInfo", "admin"})
     Page<Student> findAll(Pageable pageable);
 }

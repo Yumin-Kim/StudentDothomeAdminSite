@@ -1,8 +1,18 @@
 import { EntityAction } from "../../../types/action";
+import { searchSimliarV1CondAPI, searchSimliarV1CondAction } from "./index";
 import {
+  concurrentCreateAdminToStudentAction,
+  concurrentDeleteToStudentInfoAction,
+  concurrentModifiedAdminStudentInfoAction,
   createAdminAPI,
   createAdminInfoAction,
+  deleteToStudentInfoAction,
+  getAdminInfoPagingAction,
+  getStudentInfoPagingAction,
+  getStudentSiteInfoAction,
   loginAdminInfoAction,
+  modifiedAdminStudentInfoAction,
+  searchEqualsConditionAction,
 } from "./index";
 //관리자 로그인
 export const LOGIN_ADMIN_INFO = {
@@ -32,11 +42,11 @@ export const GET_ADMIN_STUDENT_INFO = {
 } as const;
 
 //관리자 정보 페이징
-export const GET_ADMINS_INFO = {
-  REQUEST: "REQUEST_GET_ADMINS_INFO",
-  SUCCESS: "SUCCESS_GET_ADMINS_INFO",
-  FAILURE: "FAILURE_GET_ADMINS_INFO",
-};
+export const GET_ADMINS_PAGING_INFO = {
+  REQUEST: "REQUEST_GET_ADMINS_PAGING_INFO",
+  SUCCESS: "SUCCESS_GET_ADMINS_PAGING_INFO",
+  FAILURE: "FAILURE_GET_ADMINS_PAGING_INFO",
+} as const;
 
 //단일 학생 정보 수정
 export const MODIFIED_ADMINTOSTUDENT_INFO = {
@@ -128,5 +138,49 @@ export const DELTETE_UTIL_ADMIN_DOMAIN = {
 
 export type T_loginAdminAction = EntityAction<typeof loginAdminInfoAction>;
 export type T_createAdminAction = EntityAction<typeof createAdminInfoAction>;
-
-export type ADMIN_MERGE_ACTIONS = T_loginAdminAction | T_createAdminAction;
+export type T_GetStudentInfoPagingAction = EntityAction<
+  typeof getStudentInfoPagingAction
+>;
+export type T_GetAdminInfoPagingAction = EntityAction<
+  typeof getAdminInfoPagingAction
+>;
+export type T_ModifiedAdminStudentInfoAction = EntityAction<
+  typeof modifiedAdminStudentInfoAction
+>;
+export type T_ConcurrentModifiedAdminStudentInfoAction = EntityAction<
+  typeof concurrentModifiedAdminStudentInfoAction
+>;
+export type T_CreateAdminToStudentInfoAction = EntityAction<
+  typeof createAdminInfoAction
+>;
+export type T_ConcurrentCreateAdminToStudentInfoAction = EntityAction<
+  typeof concurrentCreateAdminToStudentAction
+>;
+export type T_DeleteToStudentInfoAction = EntityAction<
+  typeof deleteToStudentInfoAction
+>;
+export type T_ConcurrentDeleteToStudentInfoAction = EntityAction<
+  typeof concurrentDeleteToStudentInfoAction
+>;
+export type T_SeatchEqualsV1Action = EntityAction<
+  typeof searchEqualsConditionAction
+>;
+export type T_SeatchSimliarV1Action = EntityAction<
+  typeof searchSimliarV1CondAction
+>;
+export type T_GetStudentSiteInfoAction = EntityAction<
+  typeof getStudentSiteInfoAction
+>;
+export type ADMIN_MERGE_ACTIONS =
+  | T_loginAdminAction
+  | T_createAdminAction
+  | T_GetStudentInfoPagingAction
+  | T_ModifiedAdminStudentInfoAction
+  | T_ConcurrentModifiedAdminStudentInfoAction
+  | T_CreateAdminToStudentInfoAction
+  | T_ConcurrentCreateAdminToStudentInfoAction
+  | T_DeleteToStudentInfoAction
+  | T_ConcurrentDeleteToStudentInfoAction
+  | T_SeatchEqualsV1Action
+  | T_SeatchSimliarV1Action
+  | T_GetStudentSiteInfoAction;

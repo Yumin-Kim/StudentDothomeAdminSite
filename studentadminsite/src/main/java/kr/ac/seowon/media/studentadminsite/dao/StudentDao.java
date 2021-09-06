@@ -16,11 +16,13 @@ public class StudentDao {
         private String email;
         private Boolean inSchool;
         private Boolean isDeleted;
+        private String password;
         private StudentSiteInfo siteInfo;
 
         public BasicStudent(Student student) {
             id = student.getId();
             name = student.getName();
+            password = student.getPassword();
             StudentCode = student.getStudentCode();
             if (student.getPhoneNumber() != null) {
                 phoneNumber = student.getPhoneNumber();
