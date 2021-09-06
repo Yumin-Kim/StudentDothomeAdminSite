@@ -20,7 +20,7 @@ import {
 function* loginAdminFunc(action: T_loginAdminAction) {
   console.log("loginAdminFunc action");
   try {
-    if (action.type === "REQUEST_LOGIN_ADMIN_INFO") {
+    if (action.type === "REQUEST_LOGIN_ADMIN_ROOT") {
       const { data } = yield call(loginAdminInfoAction.API, action.payload);
       console.log("loginAdminFunc SAGA");
       yield put(loginAdminInfoAction.ACTION.SUCCESS(data));

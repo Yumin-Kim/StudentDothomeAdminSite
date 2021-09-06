@@ -52,8 +52,7 @@ export interface I_DefaultStudentInfo {
   studentCode: number;
 }
 
-export interface I_StudentInfo
-  extends Omit<I_CreateStudentInfo,"hashCode"> {
+export interface I_StudentInfo extends Omit<I_CreateStudentInfo, "hashCode"> {
   id: number;
   siteInfo: I_SiteInfo;
   inSchool: boolean;
