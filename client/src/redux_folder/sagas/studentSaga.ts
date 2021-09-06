@@ -39,6 +39,8 @@ function* sagaMethodSignup(action: T_StudentSignupAction) {
   try {
     if (action.type === "REQUEST_SIGNUP_STUDENT_INFO") {
       const { data } = yield call(studentSignupAction.API, action.payload);
+      console.log(data);
+
       yield put(studentSignupAction.ACTION.SUCCESS(data));
     }
   } catch (error) {

@@ -39,7 +39,8 @@ const config: Configuration = {
           ],
           plugins: [
             //     "@babel/plugin-proposal-class-properties",
-            // "@babel/plugin-transform-runtime",
+            //https://velog.io/@haebin/React-regeneratorRuntime-is-not-defined-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0
+            "@babel/plugin-transform-runtime",
           ],
           env: {
             development: {

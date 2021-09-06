@@ -25,7 +25,7 @@ export interface IRoutePathNameComponentToEle {
 export const routeToMappingData: IRoutePathNameComponentToEle[] = [
   {
     pathName: "make",
-    categoryName: "학번 확인",
+    categoryName: "계정 생성전 멀티과 확인!!학번 확인",
     formTagInInputEl: [
       {
         name: "studentCode",

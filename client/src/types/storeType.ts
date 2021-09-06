@@ -36,6 +36,7 @@ export interface StudentStore {
   integrationSucessMessage: string | null; // 통신 후 성공 메세지
   integrationErrorMessage: string | null; // 통신 후 에러 메세지
   integrationRequestMessage: string | null; // 통신 중 메세지 표시
+  prevHistory: null | string;
 }
 //데이터 베이스 , 도메인을 직접적으로 생성 하는 코드
 export interface UtilStore {
@@ -52,7 +53,7 @@ export interface I_DefaultStudentInfo {
 }
 
 export interface I_StudentInfo
-  extends Omit<I_CreateStudentInfo, "password" | "hashCode"> {
+  extends Omit<I_CreateStudentInfo,"hashCode"> {
   id: number;
   siteInfo: I_SiteInfo;
   inSchool: boolean;
@@ -66,6 +67,7 @@ export interface I_CreateStudentInfo {
   phoneNumber: string;
   email: string;
   hashCode: string;
+  domainName: string; //
 }
 
 export interface I_SiteInfo {
@@ -76,7 +78,7 @@ export interface I_SiteInfo {
 
 export interface I_ModifyStudentInfo
   extends Partial<I_SiteInfo>,
-    Omit<Partial<I_StudentInfo>, "inSchool" | "isDeleted" | "id"> {}
+    Omit<Partial<I_StudentInfo>, "inSchool" | "isDeleted"> {}
 
 export interface I_AllStudentInfo_Adamin
   extends Pick<I_StudentInfo, "id" | "inSchool" | "isDeleted">,

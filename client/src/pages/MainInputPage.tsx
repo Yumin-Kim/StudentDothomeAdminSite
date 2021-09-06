@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Redirect, useHistory, useParams } from "react-router";
 import { Form, Input, Button, Typography } from "antd";
 import {
   basicRoutePathName,
   routeToMappingData,
   IRoutePathNameComponentToEle,
 } from "../types/defultType";
-import { layout } from "../components/FormComponet";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTATE } from "../redux_folder/reducers/root";
 import {
@@ -24,24 +23,32 @@ const { Title } = Typography;
 interface IRouteInfo {
   stubing: typeof basicRoutePathName[number];
 }
-
+const layout = {
+  labelCol: { span: 2, offset: 1 },
+  wrapperCol: { span: 10 },
+};
 const MainInputPage = () => {
   const [form] = Form.useForm();
   const { stubing } = useParams<IRouteInfo>();
+  let history = useHistory();
   const [serilizeData, setSerilizeData] =
     useState<IRoutePathNameComponentToEle | null>(null);
   const {
     integrationErrorMessage,
     integrationRequestMessage,
     integrationSucessMessage,
+    requestStudentInfo,
+    studentInfo,
   } = useSelector((state: ROOTSTATE) => state.student);
   const dispatch = useDispatch();
+
   useEffect(() => {
     console.log("MainInputPage useEffect");
     setSerilizeData(
       routeToMappingData.filter(value => value.pathName === stubing)[0]
     );
   }, [stubing]);
+
   const onFinish = useCallback(
     (values: any) => {
       console.log(values);
@@ -90,6 +97,24 @@ const MainInputPage = () => {
     },
     [stubing]
   );
+
+  if (integrationSucessMessage) {
+    if (stubing === "make") {
+      return (
+        <Redirect
+          to={{
+            pathname: "/student/create",
+            state: requestStudentInfo,
+          }}
+        />
+      );
+    }
+    if (stubing === "find") {
+      if (studentInfo?.email && studentInfo?.password)
+        return <Redirect to="/student/main" />;
+      else return <Redirect to="/student/default" />;
+    }
+  }
   return (
     <>
       <Title level={1}>{serilizeData?.categoryName}</Title>
@@ -116,6 +141,11 @@ const MainInputPage = () => {
             <Link to="/makeadmin">관리자 계정 생성</Link>
           </Button>
         ) : null}
+        {stubing === "makeadmin" && (
+          <Button>
+            <Link to="/admin">이전 화면</Link>
+          </Button>
+        )}
       </Form>
     </>
   );

@@ -1,5 +1,10 @@
 import { StudentStore } from "../../types/storeType";
 import studentSaga from "../sagas/studentSaga";
+import { CHANGE_PAGE_DATA } from "../actions/student/type";
+import {
+  PREVHISTORY_SETTING_INFO,
+  CHANGE_SUCCESS_MESSGE,
+} from "../actions/student/type";
 import {
   STDUENT_MERGE_ACTIONS,
   FIND_STUDENTCODE_INFO,
@@ -18,6 +23,7 @@ const stduentInitialState: StudentStore = {
   integrationErrorMessage: null,
   integrationRequestMessage: null,
   integrationSucessMessage: null,
+  prevHistory: null,
 };
 
 const studentReducer = (
@@ -53,7 +59,7 @@ const studentReducer = (
     case MODIFIED_STUDENT_INFO.SUCCESS:
       return {
         ...state,
-        modifyStudentInfo: action.payload.data,
+        studentInfo: action.payload.data,
         integrationSucessMessage: action.payload.message,
         integrationRequestMessage: null,
       };
@@ -66,6 +72,27 @@ const studentReducer = (
         integrationErrorMessage: action.payload.message,
         integrationRequestMessage: null,
       };
+    case PREVHISTORY_SETTING_INFO:
+      return {
+        ...state,
+        prevHistory: action.payload,
+      };
+    case CHANGE_SUCCESS_MESSGE:
+      return {
+        ...state,
+        integrationSucessMessage: action.payload,
+      };
+    case CHANGE_PAGE_DATA:
+      if (state.studentInfo) {
+        return {
+          ...state,
+          requestStudentInfo: {
+            name: state.studentInfo?.name,
+            studentCode: state.studentInfo?.studentCode,
+          },
+          studentInfo: null,
+        };
+      }
     default:
       return state;
   }
