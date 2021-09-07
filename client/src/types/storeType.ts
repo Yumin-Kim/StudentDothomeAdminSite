@@ -90,7 +90,7 @@ export interface I_AllStudentInfo_Adamin
 }
 
 export interface I_AllStudentInfoPaging_Admin {
-  info: I_AllStudentInfo_Adamin[] | [];
+  infos: I_AllStudentInfo_Adamin[] | [];
   currentPage: number;
   totalPage: number;
   currentCount: number;

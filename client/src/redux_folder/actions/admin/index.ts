@@ -94,28 +94,34 @@ export interface I_StudentSorting {
 function sortingNameParse(sort: I_StudentSorting, sortingContext: string) {
   (Object.keys(sort) as Array<keyof typeof sort>).map(value => {
     value.replace("_", ".");
-    sortingContext.concat(`sort=${value},${sort.sortCondition}&`);
+    console.log(value);
+    if (value !== "sortCondition")
+      sortingContext = sortingContext.concat(
+        `sort=${value},${sort.sortCondition}&`
+      );
   });
+  return sortingContext;
 }
 export const getStudentInfoPagingInfoAPI = async ({
   size,
   page,
   sort,
-}: I_DefaultPagingParam): Promise<
+}: Partial<I_DefaultPagingParam>): Promise<
   I_AxiosDefaultDataFormat<I_AllStudentInfoPaging_Admin>
 > => {
   let sortingContext = "&";
+  let data = "";
   if (Array.isArray(sort)) {
-    sort.map(sortData => sortingNameParse(sortData, sortingContext));
+    sort.map(sortData => (data += sortingNameParse(sortData, sortingContext)));
   } else {
     if (sort) {
-      sortingNameParse(sort, sortingContext);
+      data = sortingNameParse(sort, sortingContext);
     }
   }
-  sortingContext.slice(0, -1);
-  return await axios.get(
-    `/admin/studentinfo?size=${size}&page=${page}${sortingContext}`
-  );
+  console.log(data);
+
+  data.slice(0, -1);
+  return await axios.get(`/admin/studentinfo?size=${size}&page=${page}${data}`);
 };
 
 export const getStudentInfoPagingAction = createActionAxiosGetVerionToAPIPARMA(
@@ -275,6 +281,7 @@ export const searchEqualsV1CondAPI = async ({
   I_AxiosDefaultDataFormat<I_AllStudentInfoPaging_Admin>
 > => {
   let concatQueryString = "";
+
   seachAPIParseMethod(paggable, concatQueryString);
   return await axios.post(
     `/admin/studentinfo/v1/search?onChange=true&`,
@@ -295,6 +302,15 @@ export const searchSimliarV1CondAPI = async ({
 > => {
   let concatQueryString = "";
   seachAPIParseMethod(paggable, concatQueryString);
+  console.log("search", search);
+  // Object.values(search).map((value, index) => {
+  //   if (value === undefined) {
+  //     const [objectKey] = Object.entries(search)[index];
+  //     console.log(objectKey);
+
+  //     delete search[objectKey];
+  //   }
+  // });
   return await axios.post(
     `/admin/studentinfo/v1/search?onChange=false&${concatQueryString}`,
     search

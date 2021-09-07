@@ -28,34 +28,14 @@ class Navigation extends React.Component {
         mode="horizontal"
       >
         <Menu.Item key="mail" icon={<MailOutlined />}>
-          <Link to="/">Home</Link>
+          <Link to="/admin/main">학생 정보 확인</Link>
         </Menu.Item>
-        <Menu.Item key="app" icon={<AppstoreOutlined />}>
-          <Link to="/admin">Admin</Link>
+        <Menu.Item key="create" icon={<AppstoreOutlined />}>
+          <Link to="/admin/create">학생 정보 입력</Link>
         </Menu.Item>
-        {/* <SubMenu
-          key="SubMenu"
-          icon={<SettingOutlined />}
-          title="Navigation Three - Submenu"
-        >
-          <Menu.ItemGroup title="Item 1">
-            <Menu.Item key="setting:1">Option 1</Menu.Item>
-            <Menu.Item key="setting:2">Option 2</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup title="Item 2">
-            <Menu.Item key="setting:3">Option 3</Menu.Item>
-            <Menu.Item key="setting:4">Option 4</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-        <Menu.Item key="alipay"> */}
-        {/* <a
-            href="https://ant.design"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Navigation Four - Link
-          </a>
-        </Menu.Item> */}
+        <Menu.Item key="modify" icon={<AppstoreOutlined />}>
+          <Link to="/admin/modify">관리자 정보 수정</Link>
+        </Menu.Item>
       </Menu>
     );
   }

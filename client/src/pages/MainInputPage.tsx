@@ -40,6 +40,10 @@ const MainInputPage = () => {
     requestStudentInfo,
     studentInfo,
   } = useSelector((state: ROOTSTATE) => state.student);
+  const { integrationSucessMessage: adminSuccessMeesage } = useSelector(
+    (state: ROOTSTATE) => state.admin
+  );
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -113,6 +117,11 @@ const MainInputPage = () => {
       if (studentInfo?.email && studentInfo?.password)
         return <Redirect to="/student/main" />;
       else return <Redirect to="/student/default" />;
+    }
+  }
+  if (adminSuccessMeesage) {
+    if (stubing === "admin") {
+      return <Redirect to="/admin/main" />;
     }
   }
   return (
