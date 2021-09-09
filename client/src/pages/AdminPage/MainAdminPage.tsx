@@ -10,6 +10,8 @@ import {
 import { Button, Input, Pagination } from "antd";
 import { Switch, Radio, Form, Space } from "antd";
 import SortingForm from "../../components/SortingForm";
+import { resetIntegrataionMessage } from "../../redux_folder/actions/admin/index";
+import { Redirect } from "react-router";
 
 interface I_TableDataFormat {
   id: number;
@@ -31,6 +33,7 @@ const MainAdminPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [sortingCond, setSortingCond] = useState<null>(null);
+  const { defaultAdminInfo } = useSelector((state: ROOTSTATE) => state.admin);
   const [tableSortRadio, setTableSortRadio] =
     useState<typeof sortinfCondRadio[number]>();
   const start = useCallback(() => {
@@ -60,6 +63,7 @@ const MainAdminPage = () => {
     setSortingCond(value);
   };
   useEffect(() => {
+    dispatch(resetIntegrataionMessage());
     dispatch(
       getStudentInfoPagingAction.ACTION.REQUEST({
         page: 0,
@@ -67,7 +71,9 @@ const MainAdminPage = () => {
       })
     );
   }, []);
-
+  if (!defaultAdminInfo) {
+    return <Redirect to="/" />;
+  }
   return (
     <>
       <Navigation />

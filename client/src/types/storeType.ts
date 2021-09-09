@@ -106,6 +106,7 @@ export interface I_AllAdminPaging_Admin {
 }
 
 export interface I_DefaultAdmin_Admin {
+  id: number;
   name: string;
   hashCode: string;
   phoneNumber: string;

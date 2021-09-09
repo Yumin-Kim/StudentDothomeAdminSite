@@ -1,5 +1,10 @@
 import { EntityAction } from "../../../types/action";
-import { searchSimliarV1CondAPI, searchSimliarV1CondAction } from "./index";
+import { modifiedAdminInfoAPI, modifiedAdminAction } from "./index";
+import {
+  searchSimliarV1CondAPI,
+  searchSimliarV1CondAction,
+  resetIntegrataionMessage,
+} from "./index";
 import {
   concurrentCreateAdminToStudentAction,
   concurrentDeleteToStudentInfoAction,
@@ -32,6 +37,13 @@ export const LOGOUT_ADMIN_INFO = {
   REQUEST: "REQUEST_LOGOUT_ADMIN_INFO",
   SUCCESS: "SUCCESS_LOGOUT_ADMIN_INFO",
   FAILURE: "FAILURE_LOGOUT_ADMIN_INFO",
+} as const;
+
+//관리 수정
+export const MODIFIED_ADMIN_INFO = {
+  REQUEST: "REQUEST_MODIFIED_ADMIN_INFO",
+  SUCCESS: "SUCCESS_MODIFIED_ADMIN_INFO",
+  FAILURE: "FAILURE_MODIFIED_ADMIN_INFO",
 } as const;
 
 //관리자 학생 정보 조회 페이징
@@ -136,6 +148,9 @@ export const DELTETE_UTIL_ADMIN_DOMAIN = {
   FAILURE: "FAILURE_DELTETE_UTIL_ADMIN_DOMAIN",
 } as const;
 
+//리셋 메세지
+export const RESET_MESSAGE = "RESET_MESSAGE" as const;
+
 export type T_loginAdminAction = EntityAction<typeof loginAdminInfoAction>;
 export type T_createAdminAction = EntityAction<typeof createAdminInfoAction>;
 export type T_GetStudentInfoPagingAction = EntityAction<
@@ -171,7 +186,14 @@ export type T_SeatchSimliarV1Action = EntityAction<
 export type T_GetStudentSiteInfoAction = EntityAction<
   typeof getStudentSiteInfoAction
 >;
+export type T_ModifiedAdminInfoAction = EntityAction<
+  typeof modifiedAdminAction
+>;
+export type T_ResetMessage = ReturnType<typeof resetIntegrataionMessage>;
+
 export type ADMIN_MERGE_ACTIONS =
+  | T_ModifiedAdminInfoAction
+  | T_ResetMessage
   | T_loginAdminAction
   | T_createAdminAction
   | T_GetStudentInfoPagingAction

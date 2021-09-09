@@ -22,11 +22,7 @@ class Navigation extends React.Component {
   render() {
     const { current } = this.state;
     return (
-      <Menu
-        onClick={this.handleClick}
-        selectedKeys={[current]}
-        mode="horizontal"
-      >
+      <Menu onClick={this.handleClick} mode="horizontal">
         <Menu.Item key="mail" icon={<MailOutlined />}>
           <Link to="/admin/main">학생 정보 확인</Link>
         </Menu.Item>

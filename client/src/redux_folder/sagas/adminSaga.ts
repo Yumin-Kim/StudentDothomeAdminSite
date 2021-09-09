@@ -1,5 +1,10 @@
 import axios, { AxiosError } from "axios";
 import {
+  MODIFIED_ADMIN_INFO,
+  T_ModifiedAdminInfoAction,
+} from "../actions/admin/type";
+import { modifiedAdminAction } from "../actions/admin/index";
+import {
   MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT,
   T_ConcurrentModifiedAdminStudentInfoAction,
   CREAETE_ADMINTOSTUDENTCODE_INFO,
@@ -359,6 +364,23 @@ function* sagaMethodGetSiteInfo(action: T_GetStudentSiteInfoAction) {
 function* watchGetStudentSiteInfo() {
   yield takeLatest(SITEINFO_ADMIN_INFO.REQUEST, sagaMethodGetSiteInfo);
 }
+
+function* sagaMethodModifiedAdminInfo(action: T_ModifiedAdminInfoAction) {
+  try {
+    if (action.type === "REQUEST_MODIFIED_ADMIN_INFO") {
+      const { data } = yield call(modifiedAdminAction.API, action.payload);
+      yield put(modifiedAdminAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      yield put(modifiedAdminAction.ACTION.FAILURE(error.response?.data));
+    }
+  }
+}
+
+function* watchModifiedAdminInfo() {
+  yield takeLatest(MODIFIED_ADMIN_INFO.REQUEST, sagaMethodModifiedAdminInfo);
+}
 export default function* adminSaga() {
   yield all([
     fork(watchLoginAdminSaga),
@@ -374,5 +396,6 @@ export default function* adminSaga() {
     fork(watchSearchEqaulsV1Cond),
     fork(watchSearchSimliarV1Cond),
     fork(watchGetStudentSiteInfo),
+    fork(watchModifiedAdminInfo),
   ]);
 }

@@ -1,6 +1,11 @@
 import axios from "axios";
-import { SEACRCH_V1_SIMILIAR_CONDITION, SITEINFO_ADMIN_INFO } from "./type";
+import {
+  RESET_MESSAGE,
+  SEACRCH_V1_SIMILIAR_CONDITION,
+  SITEINFO_ADMIN_INFO,
+} from "./type";
 import { I_SiteInfo } from "../../../types/storeType";
+import { MODIFIED_ADMIN_INFO } from "./type";
 import {
   DELETE_ADMINTOSTUDENT_INFO_CONCURRENT,
   SEACRCH_V1_EQUALS_CONDITION,
@@ -69,6 +74,21 @@ export const createAdminAPI = async (
 export const createAdminInfoAction = createActionAxiosGetVerionToAPIPARMA(
   CREATE_ADMIN_INFO,
   createAdminAPI
+);
+//관리자 정보 수정
+interface I_modifiedAdmin {
+  adminId: number;
+  modifiedData: Partial<Omit<I_DefaultAdmin_Admin, "id">>;
+}
+export const modifiedAdminInfoAPI = async (
+  data: I_modifiedAdmin
+): Promise<I_AxiosDefaultDataFormat<I_DefaultAdmin_Admin>> => {
+  return await axios.put(`/admin/rootinfo/${data.adminId}`, data.modifiedData);
+};
+
+export const modifiedAdminAction = createActionAxiosGetVerionToAPIPARMA(
+  MODIFIED_ADMIN_INFO,
+  modifiedAdminInfoAPI
 );
 
 //관리자 학생 정보 조회<페이징>
@@ -303,14 +323,7 @@ export const searchSimliarV1CondAPI = async ({
   let concatQueryString = "";
   seachAPIParseMethod(paggable, concatQueryString);
   console.log("search", search);
-  // Object.values(search).map((value, index) => {
-  //   if (value === undefined) {
-  //     const [objectKey] = Object.entries(search)[index];
-  //     console.log(objectKey);
 
-  //     delete search[objectKey];
-  //   }
-  // });
   return await axios.post(
     `/admin/studentinfo/v1/search?onChange=false&${concatQueryString}`,
     search
@@ -337,3 +350,8 @@ export const getStudentSiteInfoAction = createActionAxiosGetVerionToAPIPARMA(
 //util 데이터 베이스 삭제
 //util 도메인 삭제
 //uitl 도메인 생성
+
+export const resetIntegrataionMessage = () => ({
+  type: RESET_MESSAGE,
+  payload: null,
+});

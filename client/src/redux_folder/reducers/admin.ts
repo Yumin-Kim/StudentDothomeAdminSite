@@ -1,5 +1,9 @@
 import { AdminStore } from "../../types/storeType";
 import {
+  CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT,
+  RESET_MESSAGE,
+} from "../actions/admin/type";
+import {
   SEACRCH_V1_EQUALS_CONDITION,
   SEACRCH_V1_SIMILIAR_CONDITION,
 } from "../actions/admin/type";
@@ -36,6 +40,7 @@ const adminReducer = (
     case CREATE_ADMIN_INFO.REQUEST:
     case LOGIN_ADMIN_INFO.REQUEST:
     case SEACRCH_V1_SIMILIAR_CONDITION.REQUEST:
+    case CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT.REQUEST:
     case SEACRCH_V1_EQUALS_CONDITION.REQUEST:
       return {
         ...state,
@@ -57,6 +62,7 @@ const adminReducer = (
       };
     case SEACRCH_V1_EQUALS_CONDITION.SUCCESS:
     case GET_ADMIN_STUDENT_INFO.SUCCESS:
+    case CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT.SUCCESS:
     case SEACRCH_V1_SIMILIAR_CONDITION.SUCCESS:
       return {
         ...state,
@@ -64,9 +70,16 @@ const adminReducer = (
         integrationSucessMessage: action.payload.message,
         allStudentInfo_paging: action.payload.data,
       };
+    case RESET_MESSAGE:
+      return {
+        ...state,
+        integrationSucessMessage: action.payload,
+        integrationErrorMessage: action.payload,
+        integrationRequestMessage: action.payload,
+      };
     case SEACRCH_V1_EQUALS_CONDITION.FAILURE:
     case SEACRCH_V1_SIMILIAR_CONDITION.FAILURE:
-
+    case CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT.FAILURE:
     case GET_ADMIN_STUDENT_INFO.FAILURE:
     case LOGIN_ADMIN_INFO.FAILURE:
     case CREATE_ADMIN_INFO.FAILURE:
@@ -74,6 +87,7 @@ const adminReducer = (
         ...state,
         integrationErrorMessage: action.payload.message,
         integrationRequestMessage: null,
+        integrationSucessMessage: null,
       };
     default:
       return state;
