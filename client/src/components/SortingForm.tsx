@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import { Form, Input, Button, Space, Select, Switch } from "antd";
 const { Option } = Select;
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getStudentInfoPagingAction,
   searchEqualsConditionAction,
@@ -10,7 +10,12 @@ import {
 import { sortinfCondRadio } from "../pages/AdminPage/MainAdminPage";
 import { BasicSortingBox, EqualsSortingBox } from "./RadiooBox";
 import { I_SearchCondition_Admin } from "../types/storeType";
-import { searchSimliarV1CondAction } from "../redux_folder/actions/admin/index";
+import {
+  searchSimliarV1CondAction,
+  eqaulConditionAction,
+} from "../redux_folder/actions/admin/index";
+import { ROOTSTATE } from "../redux_folder/reducers/root";
+import { similarConditionAction } from "../redux_folder/actions/admin/index";
 
 interface SortingFormProps {
   getSoringCond: any;
@@ -22,6 +27,9 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
   const [form] = Form.useForm();
   const [text, setText] = useState([]);
   const [text1, setText1] = useState([]);
+  const { sortingEqualCond, sortingSimilarCond } = useSelector(
+    (state: ROOTSTATE) => state.admin
+  );
 
   const handleChange = (value: any, name: any) => {
     console.log("handleChange", value, name);
@@ -72,6 +80,7 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
         searchData[value.cond as keyof I_SearchCondition_Admin] =
           value.sortCond;
       });
+      dispatch(eqaulConditionAction(searchData));
 
       dispatch(
         searchEqualsConditionAction.ACTION.REQUEST({
@@ -120,8 +129,6 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
     const indexing = Number(value.target.id.match(/[0-9]/g)[0]);
     console.log(value.target.value);
     if (value.target.value !== "") {
-      console.log(indexing);
-      console.log(text, text1);
       if (text1[indexing])
         setText1(prev => {
           console.log("prev", prev);
@@ -132,12 +139,12 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
       else {
         setText1(prev => [...prev, value.target.value]);
       }
-      console.log(text1);
 
       const custom = text.reduce((prev, cur, index) => {
         prev[cur] = text1[index];
         return prev;
       }, {} as any);
+      dispatch(similarConditionAction(custom));
       dispatch(
         searchSimliarV1CondAction.ACTION.REQUEST({
           paggable: { page: 0, size: 10 },
@@ -149,14 +156,23 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
 
   useEffect(() => {
     console.log("useEffectMode");
-
+    console.log("form", form.getFieldInstance);
+    console.log("form", form.getFieldValue("sorting"));
+    form.setFieldsValue({
+      sorting: [],
+    });
     form.setFieldsValue({ sortCond: undefined });
     setText1([]);
     setText([]);
   }, [mode]);
 
   return (
-    <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
+    <Form
+      name="dynamic_form_nest_item"
+      onFinish={onFinish}
+      autoComplete="off"
+      form={form}
+    >
       <Form.List name="sorting">
         {(fields, { add, remove }) => (
           <>

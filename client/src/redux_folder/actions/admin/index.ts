@@ -5,7 +5,12 @@ import {
   SITEINFO_ADMIN_INFO,
 } from "./type";
 import { I_SiteInfo } from "../../../types/storeType";
-import { MODIFIED_ADMIN_INFO } from "./type";
+import {
+  MODIFIED_ADMIN_INFO,
+  EQUAL_COND_SYNC,
+  SIMILAR_COND_SYNC,
+  CURRENT_ELEMENT_SIZE_SYNC,
+} from "./type";
 import {
   DELETE_ADMINTOSTUDENT_INFO_CONCURRENT,
   SEACRCH_V1_EQUALS_CONDITION,
@@ -18,7 +23,7 @@ import {
   CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT,
   GET_ADMINS_PAGING_INFO,
   MODIFIED_ADMINTOSTUDENT_INFO,
-  MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT,
+  MODIFIED_STUDENT_INFO_CONCURRENT,
 } from "./type";
 import {
   I_AllStudentInfo_Adamin,
@@ -49,9 +54,7 @@ axios.defaults.baseURL =
 //관리자 로그인
 export const loginAdminAPI = async (
   adminDefault: Pick<I_DefaultAdmin_Admin, "name" | "password">
-): Promise<
-  I_AxiosDefaultDataFormat<Omit<I_DefaultAdmin_Admin, "password">>
-> => {
+): Promise<I_AxiosDefaultDataFormat<I_DefaultAdmin_Admin>> => {
   return await axios.post(
     `/admin/rootinfo/login?name=${adminDefault.name}&password=${adminDefault.password}`
   );
@@ -65,9 +68,7 @@ export const loginAdminInfoAction = createActionAxiosGetVerionToAPIPARMA(
 // 관리자 계정 생성
 export const createAdminAPI = async (
   adminInfo: I_DefaultAdmin_Admin
-): Promise<
-  I_AxiosDefaultDataFormat<Omit<I_DefaultAdmin_Admin, "password">>
-> => {
+): Promise<I_AxiosDefaultDataFormat<I_DefaultAdmin_Admin>> => {
   return await axios.post("/admin/rootinfo/", adminInfo);
 };
 
@@ -184,19 +185,12 @@ export const modifiedAdminStudentInfoAction =
 export const concurrentModifiedAdminStudentInfoAPI = async (
   modifiedDataList: Omit<I_AllStudentInfo_Adamin, "siteInfo" | "adminName">[]
 ): Promise<I_AxiosDefaultDataFormat<I_AllStudentInfo_Adamin[]>> => {
-  // let concatQuertString = "";
-  // modifiedDataList.map(modifiedData => {
-  // Object.entries(modifiedData).map((value, index) => {
-  //   if (index !== 0) concatQuertString.concat(`&${value[0]}=${value[1]}`);
-  //   else concatQuertString.concat(`${value[0]}=${value[1]}`);
-  // });
-  // })
   return await axios.put(`/admin/studentinfo/students`, modifiedDataList);
 };
 
 export const concurrentModifiedAdminStudentInfoAction =
   createActionAxiosGetVerionToAPIPARMA(
-    MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT,
+    MODIFIED_STUDENT_INFO_CONCURRENT,
     concurrentModifiedAdminStudentInfoAPI
   );
 //단일 학생 정보 저장 API
@@ -351,7 +345,27 @@ export const getStudentSiteInfoAction = createActionAxiosGetVerionToAPIPARMA(
 //util 도메인 삭제
 //uitl 도메인 생성
 
+//통합 메시지 리셋
 export const resetIntegrataionMessage = () => ({
   type: RESET_MESSAGE,
   payload: null,
+});
+//동일 조건
+export const eqaulConditionAction = (
+  cond: Partial<I_SearchCondition_Admin>
+) => ({
+  type: EQUAL_COND_SYNC,
+  payload: cond,
+});
+//유사 조건
+export const similarConditionAction = (
+  cond: Partial<I_SearchCondition_Admin>
+) => ({
+  type: SIMILAR_COND_SYNC,
+  payload: cond,
+});
+//페이징
+export const currentElementsSizeAction = (size: number) => ({
+  type: CURRENT_ELEMENT_SIZE_SYNC,
+  payload: size,
 });

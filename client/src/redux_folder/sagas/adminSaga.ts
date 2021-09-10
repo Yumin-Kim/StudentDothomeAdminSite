@@ -5,7 +5,7 @@ import {
 } from "../actions/admin/type";
 import { modifiedAdminAction } from "../actions/admin/index";
 import {
-  MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT,
+  MODIFIED_STUDENT_INFO_CONCURRENT,
   T_ConcurrentModifiedAdminStudentInfoAction,
   CREAETE_ADMINTOSTUDENTCODE_INFO,
   T_CreateAdminToStudentInfoAction,
@@ -174,7 +174,7 @@ function* sagaMethodConcurrentModifiedStudentInfo(
   action: T_ConcurrentModifiedAdminStudentInfoAction
 ) {
   try {
-    if (action.type === "REQUEST_MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT") {
+    if (action.type === "REQUEST_MODIFIED_STUDENT_INFO_CONCURRENT") {
       const { data } = yield call(
         concurrentModifiedAdminStudentInfoAction.API,
         action.payload
@@ -194,7 +194,7 @@ function* sagaMethodConcurrentModifiedStudentInfo(
 
 function* watchModfiedConcurrentAdminStudent() {
   yield takeLatest(
-    MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT.REQUEST,
+    MODIFIED_STUDENT_INFO_CONCURRENT.REQUEST,
     sagaMethodConcurrentModifiedStudentInfo
   );
 }

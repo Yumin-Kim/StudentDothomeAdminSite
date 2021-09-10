@@ -33,7 +33,9 @@ const MainAdminPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [sortingCond, setSortingCond] = useState<null>(null);
-  const { defaultAdminInfo } = useSelector((state: ROOTSTATE) => state.admin);
+  const { defaultAdminInfo, pageSize } = useSelector(
+    (state: ROOTSTATE) => state.admin
+  );
   const [tableSortRadio, setTableSortRadio] =
     useState<typeof sortinfCondRadio[number]>();
   const start = useCallback(() => {
@@ -43,14 +45,18 @@ const MainAdminPage = () => {
       setSelectedRowKeys([]);
     }, 1000);
   }, []);
+  const onChnagePaginationSize = value => {
+    console.log("onChnagePaginationSize", value);
+  };
   const onChnagePagination = (value: any) => {
     console.log(value);
     console.log("sortingCond", sortingCond);
+    console.log(value);
 
     dispatch(
       getStudentInfoPagingAction.ACTION.REQUEST({
         page: Number(value) - 1,
-        size: 10,
+        size: pageSize,
         sort: sortingCond,
       })
     );
@@ -60,6 +66,8 @@ const MainAdminPage = () => {
     setTableSortRadio(value.target.value);
   }, []);
   const getData = (value: any) => {
+    console.log(value);
+
     setSortingCond(value);
   };
   useEffect(() => {
@@ -67,7 +75,7 @@ const MainAdminPage = () => {
     dispatch(
       getStudentInfoPagingAction.ACTION.REQUEST({
         page: 0,
-        size: 10,
+        size: pageSize,
       })
     );
   }, []);
@@ -85,23 +93,14 @@ const MainAdminPage = () => {
       {tableSortRadio !== undefined && (
         <SortingForm getSoringCond={getData} mode={tableSortRadio} />
       )}
-      <div style={{ marginBottom: 16 }}>
-        {/* <Button
-          type="primary"
-          onClick={start}
-          loading={loading}
-        >
-          Reload
-        </Button> */}
-        {/* <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span> */}
-      </div>
+      <div style={{ marginBottom: 16 }}></div>
       <CommonTable value={allStudentInfo_paging} />
       <Pagination
         defaultCurrent={allStudentInfo_paging?.currentPage}
         total={allStudentInfo_paging?.totalCount}
         onChange={onChnagePagination}
+        defaultCurrent={1}
+        onShowSizeChange={onChnagePaginationSize}
       />
     </>
   );

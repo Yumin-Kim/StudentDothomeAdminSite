@@ -1,5 +1,11 @@
 import { EntityAction } from "../../../types/action";
-import { modifiedAdminInfoAPI, modifiedAdminAction } from "./index";
+import {
+  modifiedAdminInfoAPI,
+  modifiedAdminAction,
+  currentElementsSizeAction,
+  similarConditionAction,
+  eqaulConditionAction,
+} from "./index";
 import {
   searchSimliarV1CondAPI,
   searchSimliarV1CondAction,
@@ -67,10 +73,10 @@ export const MODIFIED_ADMINTOSTUDENT_INFO = {
   FAILURE: "FAILURE_MODIFIED_ADMINTOSTUDENT_INFO",
 } as const;
 //일괄 학생 정보 수정 API
-export const MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT = {
-  REQUEST: "REQUEST_MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT",
-  SUCCESS: "SUCCESS_MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT",
-  FAILURE: "FAILURE_MODIFIED_ADMINTOSTUDENT_INFO_CONCURRENT",
+export const MODIFIED_STUDENT_INFO_CONCURRENT = {
+  REQUEST: "REQUEST_MODIFIED_STUDENT_INFO_CONCURRENT",
+  SUCCESS: "SUCCESS_MODIFIED_STUDENT_INFO_CONCURRENT",
+  FAILURE: "FAILURE_MODIFIED_STUDENT_INFO_CONCURRENT",
 } as const;
 //단일 학생 정보 저장 API
 export const CREAETE_ADMINTOSTUDENTCODE_INFO = {
@@ -148,8 +154,15 @@ export const DELTETE_UTIL_ADMIN_DOMAIN = {
   FAILURE: "FAILURE_DELTETE_UTIL_ADMIN_DOMAIN",
 } as const;
 
+//동기
 //리셋 메세지
 export const RESET_MESSAGE = "RESET_MESSAGE" as const;
+//동일 조건
+export const EQUAL_COND_SYNC = "EQUAL_COND_SYNC" as const;
+//유사 조건
+export const SIMILAR_COND_SYNC = "SIMILAR_COND_SYNC" as const;
+//페이지 사이즈
+export const CURRENT_ELEMENT_SIZE_SYNC = "CURRENT_ELEMENT_SIZE_SYNC" as const;
 
 export type T_loginAdminAction = EntityAction<typeof loginAdminInfoAction>;
 export type T_createAdminAction = EntityAction<typeof createAdminInfoAction>;
@@ -190,10 +203,20 @@ export type T_ModifiedAdminInfoAction = EntityAction<
   typeof modifiedAdminAction
 >;
 export type T_ResetMessage = ReturnType<typeof resetIntegrataionMessage>;
+export type T_EqualConditionACtion = ReturnType<typeof eqaulConditionAction>;
+export type T_SimilarConditionACtion = ReturnType<
+  typeof similarConditionAction
+>;
+export type T_CurrentElementsSizeAction = ReturnType<
+  typeof currentElementsSizeAction
+>;
 
 export type ADMIN_MERGE_ACTIONS =
   | T_ModifiedAdminInfoAction
   | T_ResetMessage
+  | T_EqualConditionACtion
+  | T_SimilarConditionACtion
+  | T_CurrentElementsSizeAction
   | T_loginAdminAction
   | T_createAdminAction
   | T_GetStudentInfoPagingAction

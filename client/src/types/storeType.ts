@@ -18,10 +18,13 @@ export interface AdminStore {
     | I_DefaultStudentInfo; // 복수 학생 정보 입력
   searchConditionInfo: I_SearchCondition_Admin | null; // 학생 조회 조건
   createAdminInfo: I_DefaultAdmin_Admin | null; // 관리자 정보 생성
-  defaultAdminInfo: Omit<I_DefaultAdmin_Admin, "password"> | null;
+  defaultAdminInfo: I_DefaultAdmin_Admin | null;
   integrationSucessMessage: string | null; // 통신 후 성공 메세지
   integrationErrorMessage: string | null; // 통신 후 에러 메세지
   integrationRequestMessage: string | null; // 통신 중 메세지 표시
+  sortingEqualCond: null | Partial<I_SearchCondition_Admin>;
+  sortingSimilarCond: null | Partial<I_SearchCondition_Admin>;
+  pageSize: number;
 }
 // 학생 관련 데이터
 export interface StudentStore {
