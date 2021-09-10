@@ -91,6 +91,9 @@ public class Student extends BaseEntity {
         if (modifyStudentDto.getPassword() != null) {
             password = modifyStudentDto.getPassword();
         }
+        if(modifyStudentDto.getStudentCode() != null){
+            studentCode = modifyStudentDto.getStudentCode();
+        }
     }
 
     public void disabledStudent(Boolean change) {

@@ -2,7 +2,7 @@ server:
   port: 8080
 config:
   sshusername: "user"
-  sshhost: "172.17.0.2"
+  sshhost: "172.17.0.1"
   sshPort: 22
   sshPassword: "test1234"
   databaseUrl: "jdbc:mysql://localhost:3306/mysql"

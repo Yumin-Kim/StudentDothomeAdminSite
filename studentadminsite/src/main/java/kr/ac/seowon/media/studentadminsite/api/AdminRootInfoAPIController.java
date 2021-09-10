@@ -48,7 +48,7 @@ public class AdminRootInfoAPIController {
             @PathVariable("adminId") Integer adminId,
             @Validated({AdminReq.modifyAdmin.class}) @RequestBody AdminReq.AdminDto adminDto) {
         AdminDao.BasicAdmin modifyAdminInfo = adminRootService.modifyAdminInfo(adminId, adminDto);
-        return Res.isOkWithData(modifyAdminInfo, "회원의 정보를 수정 완료 했습니다.");
+        return Res.isOkWithData(modifyAdminInfo, "관리자의 정보를 수정 완료 했습니다.");
     }
 
     @GetMapping("/adminall")

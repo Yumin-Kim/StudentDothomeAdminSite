@@ -79,7 +79,7 @@ public class AdminStudentObserveAPIController {
 //            throw new BindException(bindingResult);
 //        }
         AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.searchStudentInfV1(onChange, searchCondition, pageable);
-        return Res.isOkWithData(fullInfo,"asd");
+        return Res.isOkWithData(fullInfo,"조회 성");
     }
 
 

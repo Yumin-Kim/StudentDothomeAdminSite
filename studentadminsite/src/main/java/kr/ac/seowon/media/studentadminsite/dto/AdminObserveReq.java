@@ -35,6 +35,7 @@ public class AdminObserveReq {
         private String phoneNumber;
         private Boolean inSchool;
         private Boolean isDeleted;
+        private Integer studentCode;
     }
 
     @Getter
