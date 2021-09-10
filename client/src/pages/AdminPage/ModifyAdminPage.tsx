@@ -50,9 +50,9 @@ const ModifyAdminPage = () => {
     }
     dispatch(resetIntegrataionMessage());
   }, [integrationSucessMessage, integrationErrorMessage]);
-  if (!defaultAdminInfo) {
-    return <Redirect to="/" />;
-  }
+  // if (!defaultAdminInfo) {
+  //   return <Redirect to="/" />;
+  // }
   return (
     <>
       <Navigation />

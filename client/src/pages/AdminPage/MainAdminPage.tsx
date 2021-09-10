@@ -79,9 +79,9 @@ const MainAdminPage = () => {
       })
     );
   }, []);
-  if (!defaultAdminInfo) {
-    return <Redirect to="/" />;
-  }
+  // if (!defaultAdminInfo) {
+  //   return <Redirect to="/" />;
+  // }
   return (
     <>
       <Navigation />

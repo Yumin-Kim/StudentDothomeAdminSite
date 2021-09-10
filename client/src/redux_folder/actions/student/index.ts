@@ -20,7 +20,7 @@ import {
 axios.defaults.baseURL =
   process.env.NODE_ENV !== "production"
     ? "http://localhost:5050/api"
-    : "http://localhost:8080/api";
+    : "http://media.seowon.ac.kr:8080/api";
 //학생 로그인 api
 export const studentLoginAPI = async (
   loginInfo: Pick<I_CreateStudentInfo, "name" | "studentCode">

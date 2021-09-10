@@ -99,6 +99,8 @@ const adminReducer = (
             1,
             action.payload.data[index]
           );
+          draft.integrationRequestMessage = null;
+          draft.integrationSucessMessage = action.payload.message;
         });
         break;
       case RESET_MESSAGE:

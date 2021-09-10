@@ -15,6 +15,7 @@
     "@types/styled-components": "^5.1.12",
     "antd": "^4.16.11",
     "axios": "^0.21.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "cross-env": "^7.0.3",
     "immer": "^9.0.6",
     "lodash": "^4.17.21",

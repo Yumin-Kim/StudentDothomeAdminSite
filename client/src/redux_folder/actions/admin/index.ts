@@ -50,7 +50,7 @@ import {
 axios.defaults.baseURL =
   process.env.NODE_ENV !== "production"
     ? "http://localhost:5050/api"
-    : "http://localhost:8080/api";
+    : "http://media.seowon.ac.kr:8080/api";
 //관리자 로그인
 export const loginAdminAPI = async (
   adminDefault: Pick<I_DefaultAdmin_Admin, "name" | "password">

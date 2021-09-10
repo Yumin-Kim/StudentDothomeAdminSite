@@ -1,12 +1,26 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { Table, Button, Modal, Form, Input, Select, Switch } from "antd";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Switch,
+  message,
+} from "antd";
 import {
   I_AllStudentInfoPaging_Admin,
   I_AllStudentInfo_Adamin,
 } from "../types/storeType";
-import { useDispatch } from "react-redux";
-import { concurrentModifiedAdminStudentInfoAction } from "../redux_folder/actions/admin/index";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  concurrentModifiedAdminStudentInfoAction,
+  resetIntegrataionMessage,
+} from "../redux_folder/actions/admin/index";
 import FormItemComponent from "./FormItemComponent";
+import { ROOTSTATE } from "../redux_folder/reducers/root";
+import Description_ModalList from "./Description_ModalList";
 
 const { Option } = Select;
 interface CommonTableProps {
@@ -25,7 +39,7 @@ interface I_TableColumnEl {
   title: string;
   dataIndex: columnName;
 }
-interface I_TableDataFormat {
+export interface I_TableDataFormat {
   id: number;
   name: string;
   studentCode: number;
@@ -72,48 +86,64 @@ const tableIndexingData: I_TableColumnEl[] = [
 ];
 
 const CommonTable: FC<CommonTableProps> = ({ value }) => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<
+    Partial<I_TableDataFormat>[]
+  >([]);
   const [columnData, setColumnData] = useState<I_TableDataFormat[] | null>(
     null
   );
   const [openModal, setOpenModal] = useState(false);
-  const onOpenModifiedModal = useCallback(() => {
-    setOpenModal(true);
-    setVisible(true);
-  }, [openModal]);
+
   const [form] = Form.useForm();
   const [changeSelected, setChangeSelected] = useState(0);
   const [modifiedFormList, setModifiedFormList] = useState<
     Omit<I_AllStudentInfo_Adamin, "siteInfo" | "adminName">[] | []
   >([]);
-
+  const dispatch = useDispatch();
+  const { integrationErrorMessage, integrationSucessMessage } = useSelector(
+    (state: ROOTSTATE) => state.admin
+  );
   //Modal State
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
   ///
-
-  const dispatch = useDispatch();
+  //Modal 창 오픈
+  const onOpenModifiedModal = useCallback(() => {
+    setOpenModal(true);
+    setVisible(true);
+  }, [openModal]);
 
   // 수정 완료 이벤트 발생
   const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
-    setTimeout(() => {
+    if (modifiedFormList.length !== 0) {
+      message.info(
+        `${modifiedFormList.length}개의 데이터를 수정 요청 중입니다..`
+      );
+      setTimeout(() => {
+        setVisible(false);
+        setConfirmLoading(false);
+        dispatch(
+          concurrentModifiedAdminStudentInfoAction.ACTION.REQUEST(
+            modifiedFormList
+          )
+        );
+        setModifiedFormList([]);
+      }, 1500);
+    } else {
       setVisible(false);
       setConfirmLoading(false);
-      console.log(modifiedFormList);
-      dispatch(
-        concurrentModifiedAdminStudentInfoAction.ACTION.REQUEST(
-          modifiedFormList
-        )
-      );
-      setModifiedFormList([]);
-    }, 2000);
+      message.warning("수정할 정보가 없습니다.");
+    }
   };
+  //수정된 정보를 저장했을때 발생하며 undefined , string일때 부가적으로 처리
   const onFinishForm = useCallback(
     (value: any) => {
       value.studentCode = Number(value.studentCode);
+      const duplicateValidation = modifiedFormList.filter(
+        (filterData, index) =>
+          filterData.id === selectedRowKeys[changeSelected].id
+      );
       if (typeof value.isDeleted === "string")
         value.isDeleted = value.isDeleted === "활성화" ? false : true;
       else {
@@ -122,25 +152,29 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
       if (typeof value.inSchool === "string") {
         value.inSchool = value.inSchool === "재학중" ? true : false;
       }
-      console.log(changeSelected);
-      console.log(selectedRowKeys);
-
       value["id"] = selectedRowKeys[changeSelected].id;
-      console.log("parseValue", value);
-      setModifiedFormList(prev => [...prev, value]);
+      setModifiedFormList(prev => {
+        const duplicateData = prev.filter(
+          filterData => filterData.id === selectedRowKeys[changeSelected].id
+        );
+        if (duplicateData.length > 0) {
+          prev.forEach((val, index) => {
+            if (val.id === selectedRowKeys[changeSelected].id) {
+              prev.splice(index, 1, value);
+            }
+          });
+          return [...prev];
+        } else {
+          return [...prev, value];
+        }
+      });
+      message.success("수정할 정보를 저장했습니다.");
     },
-    [changeSelected, selectedRowKeys]
+    [changeSelected, selectedRowKeys, modifiedFormList]
   );
-
+  //Modal 창에서 다른 학생을 선택 했을때 발생
   const onChangeSelect = useCallback(
     (value: any) => {
-      console.log(value);
-
-      console.log(form.getFieldValue("name"));
-      console.log(form.getFieldValue("domainName"));
-      console.log(form.getFieldValue("databaseName"));
-      console.log(form.getFieldValue("studentCode"));
-
       setChangeSelected(value);
       form.setFieldsValue({
         name: "",
@@ -151,38 +185,45 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
     },
     [changeSelected]
   );
+  //close Modal
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
+    setChangeSelected(0);
+    setModifiedFormList([]);
   };
+  //선택 항목 setState
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+    onChange: (
+      selectedRowKeys: I_TableDataFormat[] | [],
+      selectedRows: I_TableDataFormat[]
+    ) => {
       setSelectedRowKeys(selectedRows);
     },
   };
 
+  //Modal 창에서 사용자 변경시 데이터 자동으로 삽입
   useEffect(() => {
-    console.log("selectedRowKeys.length", selectedRowKeys.length);
-
     if (selectedRowKeys.length > 0 && openModal) {
-      console.log("useEffect", selectedRowKeys.length);
+      console.log(selectedRowKeys[changeSelected]);
 
       form.setFieldsValue({
         name: selectedRowKeys[changeSelected].name,
         domainName: selectedRowKeys[changeSelected].domainName,
         studentCode: selectedRowKeys[changeSelected].studentCode,
         databaseName: selectedRowKeys[changeSelected].databaseName,
-        isDeleted: selectedRowKeys[changeSelected].isDeleted,
-        inSchool: selectedRowKeys[changeSelected].inSchool,
       });
     }
   }, [selectedRowKeys, changeSelected, openModal]);
-
+  //정보 수정에 따른 메세지 제공
+  useEffect(() => {
+    if (integrationErrorMessage) {
+      message.error(integrationErrorMessage);
+    } else if (integrationSucessMessage) {
+      message.success(integrationSucessMessage);
+    }
+    dispatch(resetIntegrataionMessage());
+  }, [integrationSucessMessage, integrationErrorMessage]);
+  // Table Data Source 삽입
   useEffect(() => {
     if (value) {
       if (value.infos) {
@@ -216,7 +257,7 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
       }
     }
   }, [value?.infos]);
-
+  //
   return (
     <>
       {openModal && (
@@ -226,9 +267,10 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
           onOk={handleOk}
           confirmLoading={confirmLoading}
           onCancel={handleCancel}
+          width={1000}
         >
           <Form form={form} onFinish={onFinishForm}>
-            <Select name="selected" defaultValue={0} onChange={onChangeSelect}>
+            <Select name="selected" onChange={onChangeSelect} defaultValue={0}>
               {selectedRowKeys !== undefined &&
                 selectedRowKeys.length !== 0 &&
                 selectedRowKeys.map((value, index) => (
@@ -290,6 +332,9 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
               저장
             </Button>
           </Form>
+          {modifiedFormList.length > 0 && (
+            <Description_ModalList modifiedList={modifiedFormList} />
+          )}
         </Modal>
       )}
       {selectedRowKeys.length > 0 && (

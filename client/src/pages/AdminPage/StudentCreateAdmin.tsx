@@ -60,9 +60,9 @@ const StudentCreateAdmin = () => {
   useEffect(() => {
     dispatch(resetIntegrataionMessage());
   }, []);
-  if (!defaultAdminInfo) {
-    return <Redirect to="/" />;
-  }
+  // if (!defaultAdminInfo) {
+  //   return <Redirect to="/" />;
+  // }
   return (
     <>
       <Navigation />

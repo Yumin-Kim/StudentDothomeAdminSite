@@ -18,18 +18,23 @@ const FormItemComponent: FC<I_FormItemComponent> = ({
   unCheckChild,
   validName,
 }) => {
+  console.log(value, label, name, checkedChild, unCheckChild, validName);
+  console.log(value[1]);
+  console.log(validName);
+
+  console.log(value[1] === validName);
   return (
     <Form.Item name={name} label={label}>
-      {value[1] === { validName } ? (
+      {value[1] === validName ? (
         <Switch
           checkedChildren={checkedChild}
           unCheckedChildren={unCheckChild}
+          defaultChecked
         />
       ) : (
         <Switch
           checkedChildren={checkedChild}
           unCheckedChildren={unCheckChild}
-          defaultChecked
         />
       )}
     </Form.Item>
