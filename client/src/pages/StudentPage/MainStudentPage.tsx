@@ -9,6 +9,10 @@ import {
   changeIntegrationSuccessMessage,
 } from "../../redux_folder/actions/student/index";
 
+const baseReomteURL =
+  process.env.NODE_ENV !== "production"
+    ? "http://localhost"
+    : "http://media.seowon.ac.kr";
 const MainStudentPage = () => {
   const {
     integrationSucessMessage,
@@ -68,8 +72,8 @@ const MainStudentPage = () => {
       <Descriptions.Item label="도메인 및 데이터 베이스 정보">
         도메인 :{" "}
         <a
-          href={`http://localhost/${studentInfo?.siteInfo.domainName}`}
-        >{`http://localhost/${studentInfo?.siteInfo.domainName}`}</a>
+          href={`${baseReomteURL}/${studentInfo?.siteInfo.domainName}`}
+        >{`${baseReomteURL}/${studentInfo?.siteInfo.domainName}`}</a>
         <br />
         데이터 베이스 : {studentInfo?.siteInfo.databaseName}{" "}
         <a href="http://media.seowon.ac.kr/phpmyadmin">
