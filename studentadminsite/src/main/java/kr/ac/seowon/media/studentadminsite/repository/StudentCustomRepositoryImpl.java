@@ -70,9 +70,9 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
             PathBuilder pathBuilder = null;
             if (property.contains("domainName") || property.contains("databaseName")) {
                 pathBuilder = new PathBuilder(Student.class, "siteInfo");
+                property = "name";
             }
             else if (property.contains("adminName")) {
-                property = "name";
                 pathBuilder = new PathBuilder(Admin.class, "admin");
             } else {
                 pathBuilder = new PathBuilder(Student.class, "student");
