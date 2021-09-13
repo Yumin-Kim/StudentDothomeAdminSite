@@ -15,7 +15,7 @@ echo "입력한 값은 : $directory $message $branch"
 # fi
 git add $directory
 wait 
-git commit -m '"'$message'"'
+git commit -m '"'"$message"'"'
 wait
 git push origin $branch
 
