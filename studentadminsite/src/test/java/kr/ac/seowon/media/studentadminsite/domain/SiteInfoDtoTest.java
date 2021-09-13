@@ -19,9 +19,8 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@DataJpaTest
 @Transactional
-@Rollback(false)
 class SiteInfoDtoTest {
 
     @Autowired
@@ -29,7 +28,6 @@ class SiteInfoDtoTest {
 
     @Test
     @DisplayName("siteInfo Test")
-    @Disabled
     void start_1() throws Exception{
         SiteInfo siteInfo1 = SiteInfo.createSiteInfo("name", "database");
         SiteInfo siteInfo2 = SiteInfo.createSiteInfo("name", "database");

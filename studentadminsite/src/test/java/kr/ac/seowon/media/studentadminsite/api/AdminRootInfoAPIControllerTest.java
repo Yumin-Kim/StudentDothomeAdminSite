@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+//TODO 기존 테스트 수정은 완료 했으나 API 재수정하고 Disabled 해제 후 확
 @WebMvcTest(controllers = {AdminRootInfoAPIController.class})
 @Disabled
 class AdminRootInfoAPIControllerTest {

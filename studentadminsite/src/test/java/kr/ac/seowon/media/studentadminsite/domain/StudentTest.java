@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +25,8 @@ import static kr.ac.seowon.media.studentadminsite.domain.QAdmin.admin;
 import static kr.ac.seowon.media.studentadminsite.domain.QStudent.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Rollback(value = false)
 @Transactional
-@SpringBootTest
-@Disabled
+@DataJpaTest
 class StudentTest {
 
     @PersistenceContext
@@ -41,17 +40,17 @@ class StudentTest {
 
     @BeforeEach
     void configure(){
-        AdminObserveReq.BasicStudentDto basicStudentDto = new AdminObserveReq.BasicStudentDto("yumin", 201632323);
+        AdminObserveReq.BasicStudentDto basicStudentDto = new AdminObserveReq.BasicStudentDto("yumin", 201532323);
         Admin admin = Admin.createAdmin("name", "1234", "asd", "asd");
         SiteInfo siteInfo = SiteInfo.createSiteInfo("domain", "databaseName");
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             AdminObserveReq.BasicStudentDto basicStudentDto1 = new AdminObserveReq.BasicStudentDto("yumin" +i, 201632323+i);
             Student student2 = Student.createStudent(basicStudentDto1, admin);
             em.persist(student2);
         }
         Student student1 = Student.createStudent(basicStudentDto, admin);
 
-        StudentReq.StudentDto studentDto = new StudentReq.StudentDto("yumin123", 201632323, "qweqwe", "qweqwe", "qwe", "qwe");
+        StudentReq.StudentDto studentDto = new StudentReq.StudentDto("yumin123", 201732323, "qweqwe", "qweqwe", "qwe", "qwe");
         student1.modifyStudent(studentDto,admin,siteInfo);
         em.persist(admin);
         em.persist(siteInfo);
@@ -65,7 +64,7 @@ class StudentTest {
         Student singleResult = em.createQuery("select s from Student s join fetch s.siteInfo si" +
                 " where s.name = :name and s.studentCode = :code", Student.class)
                 .setParameter("name", "yumin")
-                .setParameter("code", 201632323)
+                .setParameter("code", 201532323)
                 .getSingleResult();
         siteInfoRespository.delete(singleResult.getSiteInfo());
         singleResult.disabledStudent(true);
@@ -78,11 +77,11 @@ class StudentTest {
     void start_querydsl() throws Exception{
         //given
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-        Student student = jpaQueryFactory.selectFrom(QStudent.student)
-                .where(QStudent.student.name.eq("yumin"))
+        Student querydslFindStudent = jpaQueryFactory.selectFrom(student)
+                .where(student.name.eq("yumin"))
                 .fetchOne();
         //when
-        assertEquals(student.getName(),"yumin");
+        assertEquals(querydslFindStudent.getName(),"yumin");
         //then
     }
 

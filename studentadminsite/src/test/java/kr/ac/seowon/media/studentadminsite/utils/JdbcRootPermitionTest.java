@@ -1,9 +1,6 @@
 package kr.ac.seowon.media.studentadminsite.utils;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +9,7 @@ import java.sql.Statement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdbcRootPermitionTest {
 
     private final String url = "jdbc:log4jdbc:mysql://localhost:3306/mysql";
@@ -19,7 +17,7 @@ class JdbcRootPermitionTest {
     private final String pwd = "password";
     private final String dummyUser = "host";
     private final String password = "123";
-    private final String modifiyUser = "Host20121";
+    private final String modifiyUser = "Host20";
     Connection connection = null;
     Statement statement = null;
 
@@ -33,7 +31,7 @@ class JdbcRootPermitionTest {
 
 
     @Test
-    @Disabled
+    @Order(2)
     void jdbcTest() throws Exception {
         statement.execute("drop user "+dummyUser+"@'%'");
         statement.execute("drop database "+dummyUser);
@@ -43,7 +41,7 @@ class JdbcRootPermitionTest {
 
     @Test
     @DisplayName("mysql 사용자 생성 테스트 코드")
-    @Disabled
+    @Order(1)
     void createMysqlUserJDBCConnection() throws Exception{
         statement.execute("create user "+dummyUser+"@'%' identified by '"+password+"'");
         statement.execute("create database " + dummyUser);

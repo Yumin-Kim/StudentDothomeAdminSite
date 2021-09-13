@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-@Disabled
 class AdminRootServiceTest {
 
     @Mock
@@ -55,21 +55,19 @@ class AdminRootServiceTest {
     }
 
     @Test
-    @DisplayName("admin 계정 생성시 중복 로직")
-    @Disabled
+    @DisplayName("admin 계정 생성시 중복 로직_ 존재하는 hacode 에러")
     void adminservice_2() throws Exception {
         //given
         given(adminRepository.findByName(any()))
-                .willReturn(Optional.of(admin))
+                .willReturn(Optional.of(admin));
+        assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
+        //when
+        given(adminRepository.findByName(any()))
                 .willReturn(Optional.empty());
-        given(adminRepository.save(any()))
-                .willReturn(admin);
         given(adminRepository.findByHashCode(any()))
                 .willReturn(Optional.of(admin));
-        //when
+        assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
         //then
-        assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
-        assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
     }
 
     @Test
@@ -105,10 +103,6 @@ class AdminRootServiceTest {
         //when
         AdminDao.BasicPagingAdmin allPagingV1 = adminRootService.findAllPagingV1(pagingAdminParam);
         //then
-//        System.out.println("allPagingV1.getCurrentCount() = " + allPagingV1.getCurrentCount());
-//        System.out.println("allPagingV1.getTotalPage() = " + allPagingV1.getTotalPage());
-//        System.out.println("allPagingV1.getCurrentPage() = " + allPagingV1.getCurrentPage());
-//        System.out.println("allPagingV1.getTotalCount() = " + allPagingV1.getTotalCount());
     }
 
 }

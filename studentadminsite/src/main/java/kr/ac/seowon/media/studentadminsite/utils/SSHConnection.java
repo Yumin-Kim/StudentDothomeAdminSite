@@ -18,7 +18,6 @@ public class SSHConnection {
 
     @SneakyThrows(SSHException.class)
     public SSHConnection(UtilConfigure utilConfigure) {
-        log.info(utilConfigure.toString());
         log.info("new SSHConnection() create >>");
         JSch jsch = new JSch();
         try {
@@ -33,6 +32,10 @@ public class SSHConnection {
         } catch (JSchException e) {
             throw new SSHException("ssh 연결에 실패 하셨습니다.");
         }
+    }
+
+    public static SSHConnection testCaseStubbing(UtilConfigure utilConfigure){
+        return new SSHConnection(utilConfigure);
     }
 
     //TODO SSH 프로토콜로 접근하여 데이터 베이스 명과 디렉토리 명 변경 로직,

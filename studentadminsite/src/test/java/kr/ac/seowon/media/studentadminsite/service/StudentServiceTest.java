@@ -10,6 +10,7 @@ import kr.ac.seowon.media.studentadminsite.exception.utilexception.SSHException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
+import kr.ac.seowon.media.studentadminsite.utils.JdbcRootPermition;
 import kr.ac.seowon.media.studentadminsite.utils.SSHConnection;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import org.aspectj.lang.annotation.After;
@@ -17,22 +18,25 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-@Disabled
+@ExtendWith({MockitoExtension.class})
 class StudentServiceTest {
 
     @Mock
@@ -45,16 +49,21 @@ class StudentServiceTest {
     SiteInfoRespository siteInfoRespository;
 
     @Mock
+    private SSHConnection sshConnection;
+
+    @InjectMocks
     UtilConfigure utilConfigure;
 
     @InjectMocks
     StudentService studentService;
 
     private static MockedStatic<Pattern> patternMockedStatic;
-//    @BeforeEach
-//    void setting(){
-//        patternMockedStatic = mockStatic(Pattern.class);
-//    }
+
+    @BeforeEach
+    void setting() {
+
+        patternMockedStatic = mockStatic(Pattern.class);
+    }
     @Test
     @DisplayName("학생 생성 비즈로직_ 정규 표현식")
     void start_1_crateStudent() throws Exception{
@@ -66,9 +75,8 @@ class StudentServiceTest {
 
         String regExp = "(02|010)-\\d{3,4}-\\d{4}";    // Regular Expression
         String data = "010-1234-4321";
-        Pattern p = Pattern.compile(regex1);
-        Matcher m = p.matcher(test);
-        System.out.println(m.matches());
+//        Matcher m = Pattern.compile("^[a-z]*$").matcher(test);
+//        System.out.println(m.matches());
         //then
         boolean matches = Pattern.matches("^[a-z]$", test);
         System.out.println("matches = " + matches);
@@ -83,24 +91,39 @@ class StudentServiceTest {
         StudentReq.SiteInfoDto siteInfoDto = new StudentReq.SiteInfoDto("database", "asdas", null);
         AdminObserveReq.BasicStudentDto basicStudentDto = new AdminObserveReq.BasicStudentDto("name", 201610309);
         Student student1 = Student.createStudent(basicStudentDto, admin);
+
+        Pattern staticPattern = mock(Pattern.class);
+        Matcher staticmatcher = mock(Matcher.class);
+
         given(adminRepository.findByHashCode(any()))
                 .willReturn(Optional.of(admin));
         given(studentRepository.findByStudentCodeAndName(any(), any()))
                 .willReturn(Optional.of(student1));
-        given(Pattern.matches("^[a-z]$", siteInfoDto.getDomainName()))
+        given(Pattern.compile(any()))
+                .willReturn(staticPattern);
+        given(staticPattern.matcher(any()))
+                .willReturn(staticmatcher);
+        given(staticmatcher.matches())
                 .willReturn(true);
-        given(siteInfoRespository.findByDomainName(any()))
-                .willReturn(Optional.empty());
-        //when
-        //then
-        assertThrows(SSHException.class,()->studentService.createStudent(studentDto, siteInfoDto));
+        try (
+                MockedConstruction<SSHConnection> sshConnectionMockedConstruction = mockConstruction(SSHConnection.class);
+                MockedConstruction<JdbcRootPermition> jdbcRootPermitionMockedConstruction = mockConstruction(JdbcRootPermition.class)
+        ) {
 
+            SSHConnection sshConnection = new SSHConnection(utilConfigure);
+            JdbcRootPermition jdbcRootPermition = new JdbcRootPermition(utilConfigure);
+            given(siteInfoRespository.findByDomainName(any()))
+                    .willReturn(Optional.empty());
+            //when
+            studentService.createStudent(studentDto, siteInfoDto);
+        }
     }
 
-//    @AfterEach
-//    void endPoint(){
-//        patternMockedStatic.close();
-//    }
+    @AfterEach
+    void endPoint() {
+
+        patternMockedStatic.close();
+    }
 
 
 }

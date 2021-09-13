@@ -39,7 +39,7 @@ public class StudentService {
                 .orElseThrow(() -> new StudentException("승인하지 않은 키입니다."));
         studentRepository.findByStudentCodeAndName(studentDto.getStudentCode(), studentDto.getName())
                 .map(findStudent -> {
-                    if (findStudent.getSiteInfo().getDatabaseName() != null) {
+                    if (findStudent.getSiteInfo() != null) {
                         throw new StudentException("현재 학생은 정보가 존재합니다.");
                     }
                     return null;
