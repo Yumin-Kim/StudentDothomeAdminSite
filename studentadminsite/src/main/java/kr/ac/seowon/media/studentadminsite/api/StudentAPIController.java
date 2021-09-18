@@ -1,5 +1,6 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
+import kr.ac.seowon.media.studentadminsite.SessionFactory;
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/student")
 @RequiredArgsConstructor
@@ -17,9 +20,13 @@ import org.springframework.web.bind.annotation.*;
 public class StudentAPIController {
 
     private final StudentService studentService;
+    private final SessionFactory sessionFactory;
 
     @GetMapping
-    public Res findStudentCodeAndName(@Validated({StudentReq.FindStudentCode.class}) @ModelAttribute StudentReq.StudentDto studentDto) {
+    public Res findStudentCodeAndName(
+            HttpServletRequest request,
+            @Validated({StudentReq.FindStudentCode.class}) @ModelAttribute StudentReq.StudentDto studentDto) {
+        sessionFactory.validationSession(request,"student");
         StudentDao.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "학번 조회 결과 입니다.");
     }
@@ -31,13 +38,17 @@ public class StudentAPIController {
     }
 
     @PostMapping("/login")
-    public Res studentLogin(@Validated({StudentReq.FindStudentCode.class}) @RequestBody StudentReq.StudentDto studentDto) {
+    public Res studentLogin(HttpServletRequest request, @Validated({StudentReq.FindStudentCode.class}) @RequestBody StudentReq.StudentDto studentDto) {
+        sessionFactory.makeSession(request,"student",studentDto);
         StudentDao.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "로그인 성공");
     }
 
     @PostMapping("/logout")
-    public Res studentLogout() {
+    public Res studentLogout(
+            HttpServletRequest request
+    ) {
+        sessionFactory.removeSession(request,"student");
         return Res.isOkByMessage("로그아웃 성공");
     }
 
@@ -54,8 +65,10 @@ public class StudentAPIController {
     @PutMapping("/{studentId}")
     @ResponseStatus(HttpStatus.OK)
     public Res modifyStudentInfo(
+            HttpServletRequest request,
             @PathVariable("studentId") Integer studentId,
             @RequestBody StudentReq.ModifyStudentDto modifyStudentDto) {
+        sessionFactory.validationSession(request,"student");
         StudentReq.StudentDto studentDto = new StudentReq.StudentDto(modifyStudentDto);
         StudentReq.SiteInfoDto siteInfoDto = new StudentReq.SiteInfoDto(modifyStudentDto);
 
