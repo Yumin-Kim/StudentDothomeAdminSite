@@ -8,6 +8,7 @@ import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminExcept
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 @Component
+@Slf4j
 public class SessionFactory {
 
     @Autowired
@@ -45,6 +47,8 @@ public class SessionFactory {
     public void validationSession(HttpServletRequest request, String sessionName) {
         HttpSession session = request.getSession();
         Integer entityId = (Integer)session.getAttribute(sessionName);
+        log.info("request = {}", request.getSession().getAttribute("admin"));
+
         if (entityId == null) throw new AdminException("세션이 포함되어 있지 않습니다");
         else if(sessionName == "admin" && entityId != null) adminRepository.findById(entityId).orElseThrow(()-> new AdminException("존재하지 않는 관리자 입니다."));
         else if(sessionName == "student" && entityId != null) studentRepository.findById(entityId).orElseThrow(()-> new AdminException("존재하지 않는 학생 입니다."));

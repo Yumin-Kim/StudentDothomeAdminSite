@@ -4,9 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTATE } from "../../redux_folder/reducers/root";
 import { I_ModifyStudentInfo } from "../../types/storeType";
 import { keys } from "ts-transformer-keys";
-import { studentModifyStudentInfoAction } from "../../redux_folder/actions/student/index";
+import {
+  studentModifyStudentInfoAction,
+  getStudentCookieInfo,
+} from "../../redux_folder/actions/student/index";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { resetIntegrataionMessage } from "../../redux_folder/actions/admin/index";
 export const layout = {
   labelCol: { span: 2, offset: 1 },
   wrapperCol: { span: 10 },
@@ -24,6 +29,8 @@ const EditStudentPage = () => {
     useSelector((state: ROOTSTATE) => state.student);
   const [modifiiedData, setModifiedData] = useState(false);
   const dispatch = useDispatch();
+  const [cookies, setCookie, removeCookie] = useCookies(["studentInfo"]);
+
   const onFinish = (values: any) => {
     if (studentInfo) {
       const immtableData = [
@@ -60,23 +67,39 @@ const EditStudentPage = () => {
   };
 
   useEffect(() => {
-    form.setFieldsValue({
-      name: studentInfo?.name,
-      studentCode: studentInfo?.studentCode,
-      phoneNumber: studentInfo?.phoneNumber,
-      email: studentInfo?.email,
-      domainName: studentInfo?.siteInfo.domainName,
-      databaseName: studentInfo?.siteInfo.databaseName,
-      password: studentInfo?.password,
-    });
     if (integrationSucessMessage) {
       setModifiedData(true);
     }
     // if (integrationErrorMessage) message.error(integrationErrorMessage);
   }, [integrationErrorMessage, integrationSucessMessage, modifiiedData]);
+
+  useEffect(() => {
+    if (!studentInfo) {
+      if (cookies.studentInfo) {
+        dispatch(getStudentCookieInfo(cookies.studentInfo));
+      }
+    } else {
+      form.setFieldsValue({
+        name: studentInfo?.name,
+        studentCode: studentInfo?.studentCode,
+        phoneNumber: studentInfo?.phoneNumber,
+        email: studentInfo?.email,
+        domainName: studentInfo?.siteInfo.domainName,
+        databaseName: studentInfo?.siteInfo.databaseName,
+        password: studentInfo?.password,
+      });
+    }
+  }, [studentInfo]);
+
   if (integrationSucessMessage && modifiiedData) {
     return <Redirect to="/student/main" />;
   }
+
+  if (!cookies.studentInfo && !studentInfo) {
+    dispatch(resetIntegrataionMessage());
+    return <Redirect to="/" />;
+  }
+
   return (
     <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
       <Form.Item name="name" label="이름">

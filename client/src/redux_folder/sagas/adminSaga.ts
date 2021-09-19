@@ -71,7 +71,6 @@ function* loginAdminFunc(action: T_loginAdminAction) {
   try {
     if (action.type === "REQUEST_LOGIN_ADMIN_ROOT") {
       const { data } = yield call(loginAdminInfoAction.API, action.payload);
-      console.log("loginAdminFunc SAGA");
       yield put(loginAdminInfoAction.ACTION.SUCCESS(data));
     }
   } catch (error) {

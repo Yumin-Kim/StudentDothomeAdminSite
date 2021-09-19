@@ -12,6 +12,7 @@ import { Switch, Radio, Form, Space } from "antd";
 import SortingForm from "../../components/SortingForm";
 import { resetIntegrataionMessage } from "../../redux_folder/actions/admin/index";
 import { Redirect } from "react-router";
+import { useCookies } from "react-cookie";
 
 interface I_TableDataFormat {
   id: number;
@@ -26,6 +27,8 @@ interface I_TableDataFormat {
 export const sortinfCondRadio = ["sort", "equal", "like"] as const;
 
 const MainAdminPage = () => {
+  const now = new Date();
+
   const { allStudentInfo_paging } = useSelector(
     (state: ROOTSTATE) => state.admin
   );
@@ -38,6 +41,9 @@ const MainAdminPage = () => {
   );
   const [tableSortRadio, setTableSortRadio] =
     useState<typeof sortinfCondRadio[number]>();
+
+  const [cookies, setCookie, removeCookie] = useCookies(["adminInfo"]);
+
   const start = useCallback(() => {
     setLoading(true);
     setTimeout(() => {
@@ -45,14 +51,28 @@ const MainAdminPage = () => {
       setSelectedRowKeys([]);
     }, 1000);
   }, []);
+  useEffect(() => {
+    if (defaultAdminInfo) {
+      if (!cookies.adminInfo) {
+        setCookie("adminInfo", defaultAdminInfo, {
+          path: "/",
+          expires: now.getDay(),
+        });
+      } else {
+        if (cookies.adminInfo.id !== defaultAdminInfo.id) {
+          setCookie("adminInfo", defaultAdminInfo, {
+            path: "/",
+            expires: now.getDay(),
+          });
+        }
+      }
+    }
+  }, []);
   const onChnagePaginationSize = value => {
     console.log("onChnagePaginationSize", value);
   };
   const onChnagePagination = (value: any) => {
-    console.log(value);
     console.log("sortingCond", sortingCond);
-    console.log(value);
-
     dispatch(
       getStudentInfoPagingAction.ACTION.REQUEST({
         page: Number(value) - 1,
@@ -66,10 +86,9 @@ const MainAdminPage = () => {
     setTableSortRadio(value.target.value);
   }, []);
   const getData = (value: any) => {
-    console.log(value);
-
     setSortingCond(value);
   };
+
   useEffect(() => {
     dispatch(resetIntegrataionMessage());
     dispatch(
@@ -79,9 +98,10 @@ const MainAdminPage = () => {
       })
     );
   }, []);
-  // if (!defaultAdminInfo) {
-  //   return <Redirect to="/" />;
-  // }
+  if (!cookies.adminInfo && !defaultAdminInfo) {
+    dispatch(resetIntegrataionMessage());
+    return <Redirect to="/" />;
+  }
   return (
     <>
       <Navigation />

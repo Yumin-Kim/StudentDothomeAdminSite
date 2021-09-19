@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetIntegrataionMessage } from "../../redux_folder/actions/admin";
 import { ROOTSTATE } from "../../redux_folder/reducers/root";
 import { Redirect } from "react-router";
+import { useCookies } from "react-cookie";
+import { getCookieInfo } from "../../redux_folder/actions/admin/index";
 
 const props = {
   name: "file",
@@ -44,6 +46,8 @@ const StudentCreateAdmin = () => {
   const [parseModeState, setParseModeState] = useState(false);
   const dispatch = useDispatch();
   const { defaultAdminInfo } = useSelector((state: ROOTSTATE) => state.admin);
+  const [cookies, setCookie, removeCookie] = useCookies(["adminInfo"]);
+
   const onChangeMode = useCallback(
     (value: any) => {
       setSwitchState(value);
@@ -59,10 +63,18 @@ const StudentCreateAdmin = () => {
   };
   useEffect(() => {
     dispatch(resetIntegrataionMessage());
-  }, []);
-  // if (!defaultAdminInfo) {
-  //   return <Redirect to="/" />;
-  // }
+    if (!defaultAdminInfo) {
+      if (cookies.adminInfo) {
+        dispatch(getCookieInfo(cookies.adminInfo));
+      }
+    }
+  }, [defaultAdminInfo]);
+
+  if (!cookies.adminInfo && !defaultAdminInfo) {
+    dispatch(resetIntegrataionMessage());
+    return <Redirect to="/" />;
+  }
+
   return (
     <>
       <Navigation />
@@ -87,25 +99,6 @@ const StudentCreateAdmin = () => {
           </Form.Item>
         </Form>
       ) : (
-        // <Form onFinish={onFinishForm}>
-        //   <Form.Item name="upload">
-        //     <Dragger {...props}>
-        //       <p className="ant-upload-drag-icon">
-        //         <InboxOutlined />
-        //       </p>
-        //       <p className="ant-upload-text">
-        //         Click or drag file to this area to upload
-        //       </p>
-        //       <p className="ant-upload-hint">
-        //         Support for a single or bulk upload. Strictly prohibit from
-        //         uploading company data or other band files
-        //       </p>
-        //     </Dragger>
-        //     <Button type="primary" htmlType="submit">
-        //       변환
-        //     </Button>
-        //   </Form.Item>
-        // </Form>
         <ExcelParingComponent />
       )}
     </>

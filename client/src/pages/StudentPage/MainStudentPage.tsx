@@ -8,6 +8,9 @@ import {
   prevHistoryMappging,
   changeIntegrationSuccessMessage,
 } from "../../redux_folder/actions/student/index";
+import { useCookies } from "react-cookie";
+import { getStudentCookieInfo } from "../../redux_folder/actions/student/index";
+import { resetIntegrataionMessage } from "../../redux_folder/actions/admin/index";
 
 const baseReomteURL =
   process.env.NODE_ENV !== "production"
@@ -21,26 +24,57 @@ const MainStudentPage = () => {
     studentInfo,
   } = useSelector((state: ROOTSTATE) => state.student);
   const [editPageState, setEditPageState] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["studentInfo"]);
+
   const dispatch = useDispatch();
   const location = useLocation();
-
-  useEffect(() => {
-    if (prevHistory) {
-      dispatch(prevHistoryMappging(""));
-    }
-
-    if (integrationSucessMessage && !integrationRequestMessage) {
-      message.success(integrationSucessMessage);
-      dispatch(changeIntegrationSuccessMessage());
-    }
-  }, [integrationSucessMessage]);
 
   const onClickEdit = useCallback(() => {
     setEditPageState(true);
     dispatch(prevHistoryMappging(location.pathname));
   }, []);
+  useEffect(() => {
+    if (prevHistory) {
+      dispatch(prevHistoryMappging(""));
+    }
+    if (integrationSucessMessage && !integrationRequestMessage) {
+      message.success(integrationSucessMessage);
+      dispatch(changeIntegrationSuccessMessage());
+    }
+  }, [integrationSucessMessage]);
+  const now = new Date();
+  useEffect(() => {
+    if (studentInfo) {
+      if (!cookies.studentInfo) {
+        setCookie("studentInfo", studentInfo, {
+          path: "/",
+          expires: now.getDay(),
+        });
+      } else {
+        if (cookies.studentInfo.id !== studentInfo.id) {
+          removeCookie("studentInfo");
+          setCookie("studentInfo", studentInfo, {
+            path: "/",
+            expires: now.getDay(),
+          });
+          dispatch(getStudentCookieInfo(cookies.studentInfo));
+        }
+      }
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   if (cookies.studentInfo) {
+  //     dispatch(getStudentCookieInfo(cookies.studentInfo));
+  //   }
+  // });
+
   if (editPageState) {
     return <Redirect to="/student/edit" />;
+  }
+  if (!studentInfo && !cookies.studentInfo) {
+    dispatch(resetIntegrataionMessage());
+    return <Redirect to="/" />;
   }
   return (
     <Descriptions
@@ -71,11 +105,14 @@ const MainStudentPage = () => {
       </Descriptions.Item>
       <Descriptions.Item label="도메인 및 데이터 베이스 정보">
         도메인 :{" "}
-        <a
-          href={`${baseReomteURL}/${studentInfo?.siteInfo.domainName}`}
-        >{`${baseReomteURL}/${studentInfo?.siteInfo.domainName}`}</a>
+        {studentInfo?.siteInfo && (
+          <a
+            href={`${baseReomteURL}/${studentInfo?.siteInfo.domainName}`}
+          >{`${baseReomteURL}/${studentInfo?.siteInfo.domainName}`}</a>
+        )}
         <br />
-        데이터 베이스 : {studentInfo?.siteInfo.databaseName}{" "}
+        데이터 베이스 :{" "}
+        {studentInfo?.siteInfo && studentInfo?.siteInfo.databaseName}{" "}
         <a href="http://media.seowon.ac.kr/phpmyadmin">
           phpMyAdmin으로 확인하기
         </a>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, useHistory, useParams } from "react-router";
-import { Form, Input, Button, Typography } from "antd";
+import { Form, Input, Button, Typography, message } from "antd";
 import {
   basicRoutePathName,
   routeToMappingData,
@@ -13,7 +13,10 @@ import {
   loginAdminAPI,
 } from "../redux_folder/actions/admin/index";
 import { Link } from "react-router-dom";
-import { createAdminInfoAction } from "../redux_folder/actions/admin/index";
+import {
+  createAdminInfoAction,
+  resetIntegrataionMessage,
+} from "../redux_folder/actions/admin/index";
 import {
   studentFindStudentCodeAction,
   studentModifyStudentInfoAction,
@@ -40,9 +43,11 @@ const MainInputPage = () => {
     requestStudentInfo,
     studentInfo,
   } = useSelector((state: ROOTSTATE) => state.student);
-  const { integrationSucessMessage: adminSuccessMeesage } = useSelector(
-    (state: ROOTSTATE) => state.admin
-  );
+  const {
+    integrationSucessMessage: adminSuccessMeesage,
+    integrationErrorMessage: adminErrorMessage,
+    integrationRequestMessage: adminRequestMessage,
+  } = useSelector((state: ROOTSTATE) => state.admin);
 
   const dispatch = useDispatch();
 
@@ -52,10 +57,16 @@ const MainInputPage = () => {
       routeToMappingData.filter(value => value.pathName === stubing)[0]
     );
   }, [stubing]);
+  useEffect(() => {
+    console.log("integrationRequestMessage userEffect");
+    if (adminErrorMessage) {
+      message.error(adminErrorMessage);
+      dispatch(resetIntegrataionMessage());
+    }
+  }, [adminErrorMessage, adminRequestMessage, adminSuccessMeesage]);
 
   const onFinish = useCallback(
     (values: any) => {
-      console.log(values);
       if (stubing === "admin") {
         const { name, password } = values;
         dispatch(
@@ -65,7 +76,6 @@ const MainInputPage = () => {
           })
         );
       }
-      console.log(stubing);
       if (stubing === "find" || stubing == "make" || stubing === "step") {
         const { name, studentCode } = values;
         if (stubing === "find") {
@@ -79,8 +89,6 @@ const MainInputPage = () => {
           );
         }
         if (stubing === "make") {
-          console.log(name);
-
           dispatch(
             studentFindStudentCodeAction.ACTION.REQUEST({ name, studentCode })
           );
@@ -101,7 +109,7 @@ const MainInputPage = () => {
     },
     [stubing]
   );
-
+  // 페이지 전환 처음
   if (integrationSucessMessage) {
     if (stubing === "make") {
       return (
@@ -124,6 +132,7 @@ const MainInputPage = () => {
       return <Redirect to="/admin/main" />;
     }
   }
+  // 페이지 전환 끝
   return (
     <>
       <Title level={1}>{serilizeData?.categoryName}</Title>

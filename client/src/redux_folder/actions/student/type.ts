@@ -1,4 +1,5 @@
 import { EntityAction } from "../../../types/action";
+import { getStudentCookieInfo } from "./index";
 import {
   prevHistoryMappging,
   changeIntegrationSuccessMessage,
@@ -48,7 +49,7 @@ export const MODIFIED_STUDENT_INFO = {
 export const PREVHISTORY_SETTING_INFO = "PREVHISTORY_SETTING_INFO" as const;
 export const CHANGE_SUCCESS_MESSGE = "CHANGE_SUCCESS_MESSGE" as const;
 export const CHANGE_PAGE_DATA = "CHANGE_PAGE_MESSGE" as const;
-
+export const GET_STDUENTCOOKIE_INFO = "GET_STDUENTCOOKIE_INFO" as const;
 export type T_StudentSignupAction = EntityAction<typeof studentSignupAction>;
 export type T_StudentFindStudentCodeAction = EntityAction<
   typeof studentFindStudentCodeAction
@@ -63,8 +64,9 @@ export type T_ChangeSuccessMessage = ReturnType<
   typeof changeIntegrationSuccessMessage
 >;
 export type T_ChangePageData = ReturnType<typeof changeDefaultToCreatePage>;
-
+export type T_GetStudentCookieInfo = ReturnType<typeof getStudentCookieInfo>;
 export type STDUENT_MERGE_ACTIONS =
+  | T_GetStudentCookieInfo
   | T_StudentFindStudentCodeAction
   | T_StudentLoginAction
   | T_StudentModifyStudentInfoAction

@@ -2,4 +2,4 @@ jwt:
   secret: jwtsecretkey
 spring:
   profiles:
-    active: local
+    active: ${BUILD}

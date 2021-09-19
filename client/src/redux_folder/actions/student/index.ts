@@ -4,6 +4,7 @@ import {
   I_AxiosDefaultDataFormat,
 } from "../../../types/action";
 import { I_CreateStudentInfo, I_StudentInfo } from "../../../types/storeType";
+import { GET_STDUENTCOOKIE_INFO } from "./type";
 import {
   PREVHISTORY_SETTING_INFO,
   CHANGE_SUCCESS_MESSGE,
@@ -106,4 +107,9 @@ export const changeIntegrationSuccessMessage = () => ({
 
 export const changeDefaultToCreatePage = () => ({
   type: CHANGE_PAGE_DATA,
+});
+// 학생 쿠키 정보 저장
+export const getStudentCookieInfo = (params: I_StudentInfo) => ({
+  type: GET_STDUENTCOOKIE_INFO,
+  payload: params,
 });

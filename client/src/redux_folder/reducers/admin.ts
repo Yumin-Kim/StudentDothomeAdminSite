@@ -19,7 +19,10 @@ import {
   LOGIN_ADMIN_INFO,
 } from "../actions/admin/type";
 import produce from "immer";
-import { MODIFIED_STUDENT_INFO_CONCURRENT } from "../actions/admin/type";
+import {
+  MODIFIED_STUDENT_INFO_CONCURRENT,
+  GET_COOKIE_INFO,
+} from "../actions/admin/type";
 const adminIniitialState: AdminStore = {
   allStudentInfo_paging: null, // 학생 정보 페이징
   allAdminInfo_paging: null,
@@ -137,6 +140,11 @@ const adminReducer = (
         return {
           ...state,
           pageSize: action.payload,
+        };
+      case GET_COOKIE_INFO:
+        return {
+          ...state,
+          defaultAdminInfo: action.payload,
         };
       default:
         return state;

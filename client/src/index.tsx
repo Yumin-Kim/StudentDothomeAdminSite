@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 import configure from "./redux_folder/store";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Basic from "./layouts/Basic";
+import { CookiesProvider } from "react-cookie";
 
 const category = ["home", "member", "team", "dashboard", "comment"] as const;
 const GlobalStyle = createGlobalStyle`
@@ -63,12 +64,14 @@ const store = configure();
 
 render(
   <>
-    <Provider store={store}>
-      <GlobalStyle />
-      <BrowserRouter basename="/multi">
-        <Basic />
-      </BrowserRouter>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <GlobalStyle />
+        <BrowserRouter basename="/multi">
+          <Basic />
+        </BrowserRouter>
+      </Provider>
+    </CookiesProvider>
   </>,
   document.getElementById("root")
 );

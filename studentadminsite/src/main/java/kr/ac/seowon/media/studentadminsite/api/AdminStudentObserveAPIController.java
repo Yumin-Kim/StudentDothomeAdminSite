@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -37,20 +38,20 @@ public class AdminStudentObserveAPIController {
 
     /**
      * 간단한 정렬은 가능하나 완벽하게는??
+     *
      * @return
      */
     @GetMapping
-    public Res findStudentInfo(HttpServletRequest request, Pageable pageable){
-        sessionFactory.validationSession(request,"admin");
+    public Res findStudentInfo(HttpServletRequest request, Pageable pageable
+    ) {
         AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.findAllStudentInfo(pageable);
-        return Res.isOkWithData(fullInfo,"학생 정보 조회 성공");
+        return Res.isOkWithData(fullInfo, "학생 정보 조회 성공");
     }
 
     @GetMapping("/site/{studentId}")
     public Res findSelectStudentSiteInfo(
             HttpServletRequest request,
-            @PathVariable("studentId") Integer studentId){
-        sessionFactory.validationSession(request,"admin");
+            @PathVariable("studentId") Integer studentId) {
         StudentDao.StudentSiteInfo siteInfo = adminStudentObserveService.findSelectStudentSiteInfo(studentId);
         return Res.isOkWithData(siteInfo, "학생 사이트 조회 성공");
     }
@@ -71,7 +72,6 @@ public class AdminStudentObserveAPIController {
      * 복수 건 : 이름 , 관리자 , 도메인 , 데이터 베이스 , 학번 , 전화번호
      * 완벽한 일치시만 가능
      * 휴학여부 , 비활성화
-     *
      */
     @PostMapping("/v1/search")
     public Res searchV1StudentInfo(
@@ -86,9 +86,8 @@ public class AdminStudentObserveAPIController {
 //            bindingResult.addError(fieldError);
 //            throw new BindException(bindingResult);
 //        }
-        sessionFactory.validationSession(request,"admin");
         AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.searchStudentInfV1(onChange, searchCondition, pageable);
-        return Res.isOkWithData(fullInfo,"조회 성");
+        return Res.isOkWithData(fullInfo, "조회 성");
     }
 
 
@@ -96,26 +95,23 @@ public class AdminStudentObserveAPIController {
     public Res modifyStduentInfo(
             HttpServletRequest request,
             @Valid AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
-        sessionFactory.validationSession(request,"admin");
         StudentDao.BasicStudent basicStudent = adminStudentObserveService.modifyStudentInfo(modifyStudentDto);
         return Res.isOkWithData(basicStudent, "정보 수정 성공");
     }
 
-    //TODO 요청 받는 값 변경
     @PutMapping("/students")
     public Res modifyStduentsInfo(
             HttpServletRequest request,
             @Valid @RequestBody List<AdminObserveReq.AdminModifyStudentDto> modifyStudentDtos,
             BindingResult bindingResult
     ) throws BindException {
-        sessionFactory.validationSession(request,"admin");
-        concurrentInsertStudentsInfo.validate(modifyStudentDtos,bindingResult);
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        List<StudentDao.BasicStudent> basicStudents = adminStudentObserveService.modifyStudentsInfo( modifyStudentDtos);
+        List<StudentDao.BasicStudent> basicStudents = adminStudentObserveService.modifyStudentsInfo(modifyStudentDtos);
         return Res.isOkWithData(basicStudents, "정보 수정 성공");
     }
+    //TODO 요청 받는 값 변경
 
     @PostMapping("/insert/{adminId}")
     public Res insertBasicInfo(
@@ -123,7 +119,6 @@ public class AdminStudentObserveAPIController {
             @PathVariable("adminId") Integer adminId,
             @Valid @RequestBody AdminObserveReq.BasicStudentDto basicStudentDto
     ) {
-        sessionFactory.validationSession(request,"admin");
         adminStudentObserveService.insertStudentInfo(adminId, basicStudentDto);
         return Res.isOkByMessage("학생정보를 저장하였습니다.");
     }

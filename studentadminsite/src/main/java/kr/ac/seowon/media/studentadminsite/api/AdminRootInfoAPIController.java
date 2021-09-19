@@ -2,8 +2,10 @@ package kr.ac.seowon.media.studentadminsite.api;
 
 import kr.ac.seowon.media.studentadminsite.SessionFactory;
 import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
+import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
 import kr.ac.seowon.media.studentadminsite.service.AdminRootService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
@@ -34,10 +39,9 @@ public class AdminRootInfoAPIController {
     @ResponseStatus(HttpStatus.OK)
     public Res loginAdmin(
             @Valid @ModelAttribute AdminReq.AdminLoginDto adminLoginDto,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpServletResponse response
     ) {
-
-        sessionFactory.makeSession(request, "admin",adminLoginDto);
         AdminDao.BasicAdmin admin = adminRootService.loginAdmin(adminLoginDto);
         return Res.isOkWithData(admin, "해당 계정으로 로그인을 성공하였습니다.");
     }
@@ -48,7 +52,6 @@ public class AdminRootInfoAPIController {
     public Res logout(
             HttpServletRequest request
     ) {
-        sessionFactory.removeSession(request,"admin");
         return Res.isOkByMessage("해당 계정으로 로그아웃을 성공하셨습니다.");
     }
 
@@ -58,7 +61,6 @@ public class AdminRootInfoAPIController {
             HttpServletRequest request,
             @PathVariable("adminId") Integer adminId,
             @Validated({AdminReq.modifyAdmin.class}) @RequestBody AdminReq.AdminDto adminDto) {
-        sessionFactory.validationSession(request, "admin");
         AdminDao.BasicAdmin modifyAdminInfo = adminRootService.modifyAdminInfo(adminId, adminDto);
         return Res.isOkWithData(modifyAdminInfo, "관리자의 정보를 수정 완료 했습니다.");
     }
@@ -68,7 +70,6 @@ public class AdminRootInfoAPIController {
     public Res getAllPagingV1(
             HttpServletRequest request,
             Pageable pageable) {
-        sessionFactory.validationSession(request, "admin");
         AdminDao.BasicPagingAdmin basicPagingAdmin = adminRootService.findAllPagingV1(pageable);
         return Res.isOkWithData(basicPagingAdmin, "총 관리자 조회 성공");
     }

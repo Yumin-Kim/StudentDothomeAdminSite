@@ -9,6 +9,8 @@ import {
   modifiedAdminAction,
 } from "../../redux_folder/actions/admin/index";
 import { Redirect } from "react-router";
+import { useCookies } from "react-cookie";
+import { getCookieInfo } from "../../redux_folder/actions/admin/index";
 
 const ModifyAdminPage = () => {
   const {
@@ -19,6 +21,7 @@ const ModifyAdminPage = () => {
   } = useSelector((state: ROOTSTATE) => state.admin);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [cookies, setCookie, removeCookie] = useCookies(["adminInfo"]);
 
   const onFinishForm = useCallback((values: any) => {
     const { name, phoneNumber, hashCode, password } = values;
@@ -32,14 +35,19 @@ const ModifyAdminPage = () => {
 
   useEffect(() => {
     dispatch(resetIntegrataionMessage());
-    console.log(defaultAdminInfo);
-    form.setFieldsValue({
-      name: defaultAdminInfo?.name,
-      phoneNumber: defaultAdminInfo?.phoneNumber,
-      hashCode: defaultAdminInfo?.hashCode,
-      password: defaultAdminInfo?.password,
-    });
-  }, []);
+    if (!defaultAdminInfo) {
+      if (cookies.adminInfo) {
+        dispatch(getCookieInfo(cookies.adminInfo));
+      }
+    } else {
+      form.setFieldsValue({
+        name: defaultAdminInfo?.name,
+        phoneNumber: defaultAdminInfo?.phoneNumber,
+        hashCode: defaultAdminInfo?.hashCode,
+        password: defaultAdminInfo?.password,
+      });
+    }
+  }, [defaultAdminInfo]);
 
   useEffect(() => {
     if (integrationErrorMessage) {
@@ -50,9 +58,12 @@ const ModifyAdminPage = () => {
     }
     dispatch(resetIntegrataionMessage());
   }, [integrationSucessMessage, integrationErrorMessage]);
-  // if (!defaultAdminInfo) {
-  //   return <Redirect to="/" />;
-  // }
+
+  if (!cookies.adminInfo && !defaultAdminInfo) {
+    dispatch(resetIntegrataionMessage());
+    return <Redirect to="/" />;
+  }
+
   return (
     <>
       <Navigation />

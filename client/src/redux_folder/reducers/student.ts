@@ -1,6 +1,9 @@
 import { StudentStore } from "../../types/storeType";
 import studentSaga from "../sagas/studentSaga";
-import { CHANGE_PAGE_DATA } from "../actions/student/type";
+import {
+  CHANGE_PAGE_DATA,
+  GET_STDUENTCOOKIE_INFO,
+} from "../actions/student/type";
 import {
   PREVHISTORY_SETTING_INFO,
   CHANGE_SUCCESS_MESSGE,
@@ -93,6 +96,11 @@ const studentReducer = (
           studentInfo: null,
         };
       }
+    case GET_STDUENTCOOKIE_INFO:
+      return {
+        ...state,
+        studentInfo: action.payload,
+      };
     default:
       return state;
   }

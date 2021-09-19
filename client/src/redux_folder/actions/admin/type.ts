@@ -1,4 +1,5 @@
 import { EntityAction } from "../../../types/action";
+import { getCookieInfo } from "./index";
 import {
   modifiedAdminInfoAPI,
   modifiedAdminAction,
@@ -163,7 +164,8 @@ export const EQUAL_COND_SYNC = "EQUAL_COND_SYNC" as const;
 export const SIMILAR_COND_SYNC = "SIMILAR_COND_SYNC" as const;
 //페이지 사이즈
 export const CURRENT_ELEMENT_SIZE_SYNC = "CURRENT_ELEMENT_SIZE_SYNC" as const;
-
+//cookie 정보 저장
+export const GET_COOKIE_INFO = "GET_COOKIE_INFO" as const;
 export type T_loginAdminAction = EntityAction<typeof loginAdminInfoAction>;
 export type T_createAdminAction = EntityAction<typeof createAdminInfoAction>;
 export type T_GetStudentInfoPagingAction = EntityAction<
@@ -210,7 +212,7 @@ export type T_SimilarConditionACtion = ReturnType<
 export type T_CurrentElementsSizeAction = ReturnType<
   typeof currentElementsSizeAction
 >;
-
+export type T_GetCookieInfoAction = ReturnType<typeof getCookieInfo>;
 export type ADMIN_MERGE_ACTIONS =
   | T_ModifiedAdminInfoAction
   | T_ResetMessage
@@ -228,4 +230,5 @@ export type ADMIN_MERGE_ACTIONS =
   | T_ConcurrentDeleteToStudentInfoAction
   | T_SeatchEqualsV1Action
   | T_SeatchSimliarV1Action
+  | T_GetCookieInfoAction
   | T_GetStudentSiteInfoAction;

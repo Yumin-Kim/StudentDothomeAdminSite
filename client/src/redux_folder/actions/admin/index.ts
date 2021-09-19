@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  GET_COOKIE_INFO,
   RESET_MESSAGE,
   SEACRCH_V1_SIMILIAR_CONDITION,
   SITEINFO_ADMIN_INFO,
@@ -46,6 +47,7 @@ import {
   CREATE_ADMIN_INFO,
   GET_ADMIN_STUDENT_INFO,
 } from "./type";
+import { withResponsiveMode } from "office-ui-fabric-react/lib/utilities/decorators/withResponsiveMode";
 
 axios.defaults.baseURL =
   process.env.NODE_ENV !== "production"
@@ -142,7 +144,10 @@ export const getStudentInfoPagingInfoAPI = async ({
   console.log(data);
 
   data.slice(0, -1);
-  return await axios.get(`/admin/studentinfo?size=${size}&page=${page}${data}`);
+  return await axios.get(
+    `/admin/studentinfo?size=${size}&page=${page}${data}`,
+    { withCredentials: true }
+  );
 };
 
 export const getStudentInfoPagingAction = createActionAxiosGetVerionToAPIPARMA(
@@ -368,4 +373,9 @@ export const similarConditionAction = (
 export const currentElementsSizeAction = (size: number) => ({
   type: CURRENT_ELEMENT_SIZE_SYNC,
   payload: size,
+});
+//cookie 정보 저장
+export const getCookieInfo = (cookieInfo: I_DefaultAdmin_Admin) => ({
+  type: GET_COOKIE_INFO,
+  payload: cookieInfo,
 });
