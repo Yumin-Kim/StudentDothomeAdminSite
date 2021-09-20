@@ -8,7 +8,7 @@ import { GET_STDUENTCOOKIE_INFO } from "./type";
 import {
   PREVHISTORY_SETTING_INFO,
   CHANGE_SUCCESS_MESSGE,
-  CHANGE_PAGE_DATA,
+  DEFAULT_PAGE_CONNECTION_DATA,
 } from "./type";
 import {
   FIND_STUDENTCODE_INFO,
@@ -106,7 +106,7 @@ export const changeIntegrationSuccessMessage = () => ({
 });
 
 export const changeDefaultToCreatePage = () => ({
-  type: CHANGE_PAGE_DATA,
+  type: DEFAULT_PAGE_CONNECTION_DATA,
 });
 // 학생 쿠키 정보 저장
 export const getStudentCookieInfo = (params: I_StudentInfo) => ({

@@ -6,6 +6,7 @@ import kr.ac.seowon.media.studentadminsite.exception.CustomCollectionValidtion;
 import kr.ac.seowon.media.studentadminsite.service.AdminStudentObserveService;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -38,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AdminStudentObserveAPIController.class)
+@Disabled
 class AdminStudentObserveAPIControllerTest {
     @MockBean
     UtilConfigure utilConfigure;

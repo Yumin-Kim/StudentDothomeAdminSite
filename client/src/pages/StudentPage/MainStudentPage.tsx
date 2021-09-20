@@ -44,30 +44,29 @@ const MainStudentPage = () => {
   }, [integrationSucessMessage]);
   const now = new Date();
   useEffect(() => {
+    if (!studentInfo && cookies.studentInfo) {
+      dispatch(getStudentCookieInfo(cookies.studentInfo));
+    }
     if (studentInfo) {
+      const expires = new Date();
+      expires.setDate(expires.getDate() + 1);
       if (!cookies.studentInfo) {
         setCookie("studentInfo", studentInfo, {
           path: "/",
-          expires: now.getDay(),
+          expires,
         });
       } else {
         if (cookies.studentInfo.id !== studentInfo.id) {
           removeCookie("studentInfo");
           setCookie("studentInfo", studentInfo, {
             path: "/",
-            expires: now.getDay(),
+            expires,
           });
-          dispatch(getStudentCookieInfo(cookies.studentInfo));
+          dispatch(getStudentCookieInfo(studentInfo));
         }
       }
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (cookies.studentInfo) {
-  //     dispatch(getStudentCookieInfo(cookies.studentInfo));
-  //   }
-  // });
 
   if (editPageState) {
     return <Redirect to="/student/edit" />;

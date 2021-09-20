@@ -1,11 +1,20 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getCookieInfo } from "../redux_folder/actions/admin/index";
+import { getStudentCookieInfo } from "../redux_folder/actions/student/index";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getStudentCookieInfo(null));
+    dispatch(getCookieInfo(null));
+  }, []);
+
   return (
     <>
-      <h1>Hello Home</h1>
+      <h1>Hello</h1>
       <div
         style={{
           margin: "0 auto",

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Descriptions, Badge, Button } from "antd";
+import { Descriptions, Badge, Button, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTATE } from "../../redux_folder/reducers/root";
 import { Redirect } from "react-router-dom";
@@ -8,28 +8,38 @@ import { useCookies } from "react-cookie";
 import { getStudentCookieInfo } from "../../redux_folder/actions/student/index";
 
 const DefaultStudentPage = () => {
-  const { studentInfo } = useSelector((state: ROOTSTATE) => state.student);
+  const { studentInfo, integrationSucessMessage } = useSelector(
+    (state: ROOTSTATE) => state.student
+  );
   const [changePage, setChangePage] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["studentInfo"]);
   const dispatch = useDispatch();
 
   const onClickCreateStudent = useCallback(() => {
     setChangePage(true);
-  }, []);
+  }, [changePage]);
   const now = new Date();
   useEffect(() => {
+    if (integrationSucessMessage) {
+      message.success(integrationSucessMessage);
+    }
+    if (!studentInfo && cookies.studentInfo) {
+      dispatch(getStudentCookieInfo(cookies.studentInfo));
+    }
     if (studentInfo) {
+      const expires = new Date();
+      expires.setDate(expires.getDate() + 1);
       if (!cookies.studentInfo) {
         setCookie("studentInfo", studentInfo, {
           path: "/",
-          expires: now.getDay(),
+          expires,
         });
       } else {
         if (cookies.studentInfo.id !== studentInfo.id) {
           removeCookie("studentInfo");
           setCookie("studentInfo", studentInfo, {
             path: "/",
-            expires: now.getDay(),
+            expires,
           });
           dispatch(getStudentCookieInfo(studentInfo));
         }
@@ -37,14 +47,7 @@ const DefaultStudentPage = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (cookies.studentInfo !== studentInfo?.id) {
-  //     dispatch(getStudentCookieInfo(cookies.studentInfo));
-  //   }
-  // }, [cookies]);
-
   if (changePage) {
-    dispatch(changeDefaultToCreatePage());
     return <Redirect to="/student/create" />;
   }
 

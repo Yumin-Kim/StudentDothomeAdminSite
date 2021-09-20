@@ -48,7 +48,8 @@ export const MODIFIED_STUDENT_INFO = {
 
 export const PREVHISTORY_SETTING_INFO = "PREVHISTORY_SETTING_INFO" as const;
 export const CHANGE_SUCCESS_MESSGE = "CHANGE_SUCCESS_MESSGE" as const;
-export const CHANGE_PAGE_DATA = "CHANGE_PAGE_MESSGE" as const;
+export const DEFAULT_PAGE_CONNECTION_DATA =
+  "DEFAULT_PAGE_CONNECTION_DATA" as const;
 export const GET_STDUENTCOOKIE_INFO = "GET_STDUENTCOOKIE_INFO" as const;
 export type T_StudentSignupAction = EntityAction<typeof studentSignupAction>;
 export type T_StudentFindStudentCodeAction = EntityAction<

@@ -53,16 +53,19 @@ const MainAdminPage = () => {
   }, []);
   useEffect(() => {
     if (defaultAdminInfo) {
+      const expires = new Date();
+      expires.setDate(expires.getDate() + 1);
       if (!cookies.adminInfo) {
         setCookie("adminInfo", defaultAdminInfo, {
           path: "/",
-          expires: now.getDay(),
+          expires,
         });
       } else {
         if (cookies.adminInfo.id !== defaultAdminInfo.id) {
+          removeCookie("adminInfo");
           setCookie("adminInfo", defaultAdminInfo, {
             path: "/",
-            expires: now.getDay(),
+            expires,
           });
         }
       }
@@ -116,10 +119,10 @@ const MainAdminPage = () => {
       <div style={{ marginBottom: 16 }}></div>
       <CommonTable value={allStudentInfo_paging} />
       <Pagination
-        defaultCurrent={allStudentInfo_paging?.currentPage}
+        defaultCurrent={allStudentInfo_paging?.currentPage + 1}
         total={allStudentInfo_paging?.totalCount}
+        defaultPageSize={20}
         onChange={onChnagePagination}
-        defaultCurrent={1}
         onShowSizeChange={onChnagePaginationSize}
       />
     </>

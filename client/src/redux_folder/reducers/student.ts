@@ -1,7 +1,7 @@
 import { StudentStore } from "../../types/storeType";
 import studentSaga from "../sagas/studentSaga";
 import {
-  CHANGE_PAGE_DATA,
+  DEFAULT_PAGE_CONNECTION_DATA,
   GET_STDUENTCOOKIE_INFO,
 } from "../actions/student/type";
 import {
@@ -85,17 +85,18 @@ const studentReducer = (
         ...state,
         integrationSucessMessage: action.payload,
       };
-    case CHANGE_PAGE_DATA:
-      if (state.studentInfo) {
-        return {
-          ...state,
-          requestStudentInfo: {
-            name: state.studentInfo?.name,
-            studentCode: state.studentInfo?.studentCode,
-          },
-          studentInfo: null,
-        };
-      }
+    case DEFAULT_PAGE_CONNECTION_DATA:
+      return {
+        ...state,
+        requestStudentInfo: {
+          name: state.studentInfo?.name,
+          studentCode: state.studentInfo?.studentCode,
+        },
+        // studentInfo: null,
+        // integrationErrorMessage: null,
+        // integrationRequestMessage: null,
+        // integrationSucessMessage: null,
+      };
     case GET_STDUENTCOOKIE_INFO:
       return {
         ...state,

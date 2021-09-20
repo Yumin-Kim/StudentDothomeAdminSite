@@ -18,17 +18,4 @@ import static org.junit.jupiter.api.Assertions.*;
 @Rollback(value = false)
 class AdminTest {
 
-    @PersistenceContext
-    EntityManager em;
-
-    @Test
-    @DisplayName("테스트 코드 ")
-    void start_1() throws Exception{
-        //given
-        Admin admin = Admin.createAdmin("name","password","hashCode","01012341234");
-        //when
-        em.persist(admin);
-        //then
-    }
-
 }

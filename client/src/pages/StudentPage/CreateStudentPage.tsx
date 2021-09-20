@@ -2,7 +2,10 @@ import React, { FC, useEffect, useState } from "react";
 import { message, Form, Input, Button, Select } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { ROOTSTATE } from "../../redux_folder/reducers/root";
-import { studentSignupAction } from "../../redux_folder/actions/student/index";
+import {
+  studentSignupAction,
+  changeDefaultToCreatePage,
+} from "../../redux_folder/actions/student/index";
 import { Redirect } from "react-router";
 const { Option } = Select;
 
@@ -65,11 +68,10 @@ const CreateStudentPage = () => {
       setRequestState(false);
     }
   }, [integrationErrorMessage]);
-
-  if (integrationSucessMessage && requestState) {
-    console.log("integrationSucessMessage && studentInfo?.domainName");
-    return <Redirect to="/student/main" />;
-  }
+  useEffect(() => {
+    form.resetFields();
+    dispatch(changeDefaultToCreatePage());
+  }, []);
 
   const onReset = () => {
     form.resetFields();
@@ -87,6 +89,11 @@ const CreateStudentPage = () => {
       domainName: "domain",
     });
   };
+
+  if (integrationSucessMessage && requestState) {
+    console.log("integrationSucessMessage && studentInfo?.domainName");
+    return <Redirect to="/student/main" />;
+  }
 
   return (
     <>

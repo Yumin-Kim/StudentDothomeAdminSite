@@ -58,6 +58,11 @@ const MainInputPage = () => {
     );
   }, [stubing]);
   useEffect(() => {
+    if (integrationErrorMessage) {
+      message.error(integrationErrorMessage);
+    }
+  }, [integrationErrorMessage, integrationRequestMessage]);
+  useEffect(() => {
     console.log("integrationRequestMessage userEffect");
     if (adminErrorMessage) {
       message.error(adminErrorMessage);
@@ -137,9 +142,6 @@ const MainInputPage = () => {
     <>
       <Title level={1}>{serilizeData?.categoryName}</Title>
       <Title level={2}>{serilizeData?.categoryName}</Title>
-      <Title level={3}>{integrationErrorMessage}</Title>
-      <Title level={3}>{integrationRequestMessage}</Title>
-      <Title level={3}>{integrationSucessMessage}</Title>
       <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
         {" "}
         {serilizeData?.formTagInInputEl.map((value, index) => (
