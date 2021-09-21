@@ -111,9 +111,9 @@ const EditStudentPage = () => {
       <Form.Item name="email" label="E-mail">
         <Input />
       </Form.Item>
-      <Form.Item name="password" label="Password" hasFeedback>
+      {/* <Form.Item name="password" label="Password" hasFeedback>
         <Input.Password />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item
         name="domainName"
         label="domainName"
@@ -134,9 +134,9 @@ const EditStudentPage = () => {
       >
         <Input type="text" />
       </Form.Item>
-      <Form.Item name="databaseName" label="databaseName">
+      {/* <Form.Item name="databaseName" label="databaseName">
         <Input type="text" />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
           변경

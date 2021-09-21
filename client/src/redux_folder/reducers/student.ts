@@ -93,9 +93,9 @@ const studentReducer = (
           studentCode: state.studentInfo?.studentCode,
         },
         // studentInfo: null,
-        // integrationErrorMessage: null,
-        // integrationRequestMessage: null,
-        // integrationSucessMessage: null,
+        integrationErrorMessage: null,
+        integrationRequestMessage: null,
+        integrationSucessMessage: null,
       };
     case GET_STDUENTCOOKIE_INFO:
       return {

@@ -19,6 +19,8 @@ import {
   LOGIN_ADMIN_INFO,
 } from "../actions/admin/type";
 import produce from "immer";
+import { CREAETE_ADMINTOSTUDENTCODE_INFO } from "../actions/admin/type";
+import { message } from "antd";
 import {
   MODIFIED_STUDENT_INFO_CONCURRENT,
   GET_COOKIE_INFO,
@@ -52,6 +54,7 @@ const adminReducer = (
     switch (action.type) {
       case MODIFIED_STUDENT_INFO_CONCURRENT.REQUEST:
       case GET_ADMIN_STUDENT_INFO.REQUEST:
+      case CREAETE_ADMINTOSTUDENTCODE_INFO.REQUEST:
       case CREATE_ADMIN_INFO.REQUEST:
       case LOGIN_ADMIN_INFO.REQUEST:
       case SEACRCH_V1_SIMILIAR_CONDITION.REQUEST:
@@ -85,7 +88,11 @@ const adminReducer = (
           integrationSucessMessage: action.payload.message,
           allStudentInfo_paging: action.payload.data,
         };
-
+      case CREAETE_ADMINTOSTUDENTCODE_INFO.SUCCESS:
+        return {
+          ...state,
+          integrationSucessMessage: action.payload.message,
+        };
       case "SUCCESS_MODIFIED_STUDENT_INFO_CONCURRENT":
         console.log("SUCCESS_MODIFIED_STUDENT_INFO_CONCURRENT");
         const parseData = action.payload.data.reduce((prev, cur, index) => {
@@ -126,6 +133,15 @@ const adminReducer = (
           integrationRequestMessage: null,
           integrationSucessMessage: null,
         };
+      case CREAETE_ADMINTOSTUDENTCODE_INFO.FAILURE:
+        return {
+          ...state,
+          integrationErrorMessage: action.payload.message,
+          integrationRequestMessage: null,
+          integrationSucessMessage: null,
+          createDefaultStudentInfo: action.payload.data,
+        };
+
       case EQUAL_COND_SYNC:
         return {
           ...state,

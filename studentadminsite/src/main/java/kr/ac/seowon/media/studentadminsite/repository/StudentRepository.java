@@ -8,8 +8,10 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.DoubleStream;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> , StudentCustomRepository {
 
@@ -28,4 +30,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> , Stu
     @Override
     @EntityGraph(attributePaths = {"siteInfo", "admin"})
     Page<Student> findAll(Pageable pageable);
+
+    Optional<Student> findByStudentCode(Integer studentCode);
 }

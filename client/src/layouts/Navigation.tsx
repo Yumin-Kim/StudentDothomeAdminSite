@@ -1,3 +1,4 @@
+// 관리자 페이지 NavigationBar
 import React from "react";
 import { Menu } from "antd";
 import {
@@ -31,6 +32,9 @@ class Navigation extends React.Component {
         </Menu.Item>
         <Menu.Item key="modify" icon={<AppstoreOutlined />}>
           <Link to="/admin/modify">관리자 정보 수정</Link>
+        </Menu.Item>
+        <Menu.Item key="modify" icon={<AppstoreOutlined />}>
+          <Link to="/admin/delete">도메인 , 데이터 베이스 확인 및 삭제 </Link>
         </Menu.Item>
       </Menu>
     );

@@ -7,7 +7,7 @@ import {
   getStudentInfoPagingAction,
   I_StudentSorting,
 } from "../../redux_folder/actions/admin/index";
-import { Button, Input, Pagination } from "antd";
+import { Button, Input, message, Pagination } from "antd";
 import { Switch, Radio, Form, Space } from "antd";
 import SortingForm from "../../components/SortingForm";
 import { resetIntegrataionMessage } from "../../redux_folder/actions/admin/index";
@@ -99,6 +99,9 @@ const MainAdminPage = () => {
         page: 0,
         size: pageSize,
       })
+    );
+    message.info(
+      "학생 정보 수정 및 활성화를 원하면 좌측 체크박스를 이용해주세요"
     );
   }, []);
   if (!cookies.adminInfo && !defaultAdminInfo) {

@@ -3,7 +3,10 @@ import {
   MODIFIED_ADMIN_INFO,
   T_ModifiedAdminInfoAction,
 } from "../actions/admin/type";
-import { modifiedAdminAction } from "../actions/admin/index";
+import {
+  modifiedAdminAction,
+  createAdminToStudentInfoAction,
+} from "../actions/admin/index";
 import {
   MODIFIED_STUDENT_INFO_CONCURRENT,
   T_ConcurrentModifiedAdminStudentInfoAction,
@@ -202,13 +205,18 @@ function* sagaMethodCreateStudentInfo(
   action: T_CreateAdminToStudentInfoAction
 ) {
   try {
-    if (action.type === "REQUEST_CREATE_ADMIN_INFO") {
-      const { data } = yield call(createAdminInfoAction.API, action.payload);
-      yield put(createAdminInfoAction.ACTION.SUCCESS(data));
+    if (action.type === "REQUEST_CREAETE_ADMINTOSTUDENTCODE_INFO") {
+      const { data } = yield call(
+        createAdminToStudentInfoAction.API,
+        action.payload
+      );
+      yield put(createAdminToStudentInfoAction.ACTION.SUCCESS(data));
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      yield put(createAdminInfoAction.ACTION.FAILURE(error.response?.data));
+      yield put(
+        createAdminToStudentInfoAction.ACTION.FAILURE(error.response?.data)
+      );
     }
   }
 }

@@ -146,7 +146,7 @@
 					<dockerDirectory>docker</dockerDirectory>
 					<resources>
 						<resource>
-							<targetPath>/target/*.jar</targetPath>
+							<targetPath>target/*.jar</targetPath>
 							<directory>${project.build.directory}</directory>
 							<include>${project.build.finalName}.jar</include>
 						</resource>

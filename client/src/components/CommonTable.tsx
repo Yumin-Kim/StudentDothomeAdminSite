@@ -6,8 +6,9 @@ import {
   Form,
   Input,
   Select,
-  Switch,
+  Title,
   message,
+  Descriptions,
 } from "antd";
 import {
   I_AllStudentInfoPaging_Admin,
@@ -21,6 +22,7 @@ import {
 import FormItemComponent from "./FormItemComponent";
 import { ROOTSTATE } from "../redux_folder/reducers/root";
 import Description_ModalList from "./Description_ModalList";
+import { concurrentDeleteToStudentInfoAction } from "../redux_folder/actions/admin/index";
 
 const { Option } = Select;
 interface CommonTableProps {
@@ -93,7 +95,9 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
     null
   );
   const [openModal, setOpenModal] = useState(false);
-
+  const [deletedRowTableColumns, setDeletedRowTableColumns] = useState<
+    null | I_AllStudentInfo_Adamin[]
+  >(null);
   const [form] = Form.useForm();
   const [changeSelected, setChangeSelected] = useState(0);
   const [modifiedFormList, setModifiedFormList] = useState<
@@ -106,13 +110,23 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
   //Modal State
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [deletedVisiable, setDeletedVisiable] = useState(false);
   ///
   //Modal 창 오픈
   const onOpenModifiedModal = useCallback(() => {
     setOpenModal(true);
     setVisible(true);
   }, [openModal]);
-
+  // 비활성화 Modal 창 열기
+  const onOpenDeleteModal = useCallback(() => {
+    setDeletedVisiable(true);
+    const filterData = selectedRowKeys.reduce((pre, cur, index) => {
+      const a = value?.infos.filter(values => values.id === cur.id);
+      pre.push(a);
+      return pre;
+    }, [] as any);
+    setDeletedRowTableColumns(filterData.flat());
+  }, [deletedVisiable, selectedRowKeys]);
   // 수정 완료 이벤트 발생
   const handleOk = () => {
     setConfirmLoading(true);
@@ -136,6 +150,14 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
       message.warning("수정할 정보가 없습니다.");
     }
   };
+  //비활성화 ok버튼 클릭시
+  const deleteModalHandleOk = useCallback(() => {
+    const studentIndexs = deletedRowTableColumns.map(values => values.id);
+
+    dispatch(concurrentDeleteToStudentInfoAction.ACTION.REQUEST(studentIndexs));
+    setDeletedVisiable(false);
+    setDeletedRowTableColumns(null);
+  }, [deletedVisiable, deletedRowTableColumns]);
   //수정된 정보를 저장했을때 발생하며 undefined , string일때 부가적으로 처리
   const onFinishForm = useCallback(
     (value: any) => {
@@ -191,6 +213,11 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
     setChangeSelected(0);
     setModifiedFormList([]);
   };
+  //delete Modal 창 닫기
+  const deleteModalCancel = useCallback(() => {
+    setDeletedVisiable(false);
+    setDeletedRowTableColumns(null);
+  }, [deletedVisiable]);
   //선택 항목 setState
   const rowSelection = {
     onChange: (
@@ -221,6 +248,7 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
     } else if (integrationSucessMessage) {
       message.success(integrationSucessMessage);
     }
+
     dispatch(resetIntegrataionMessage());
   }, [integrationSucessMessage, integrationErrorMessage]);
   // Table Data Source 삽입
@@ -337,10 +365,44 @@ const CommonTable: FC<CommonTableProps> = ({ value }) => {
           )}
         </Modal>
       )}
+      {deletedVisiable && (
+        <Modal
+          title="학생 비활성화"
+          visible={deletedVisiable}
+          onOk={deleteModalHandleOk}
+          okText="모두 비활성화"
+          cancelText="나가기"
+          onCancel={deleteModalCancel}
+          width={1000}
+        >
+          <>
+            <h2>선택한 학생은 데이터베이스 , 도메인 정보가 삭제됩니다.</h2>
+            {deletedRowTableColumns &&
+              deletedRowTableColumns.map(columnData => (
+                <Descriptions>
+                  <Descriptions.Item label="이름">
+                    {columnData.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="학번">
+                    {columnData.studentCode}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="활성화">
+                    {columnData.isDeleted ? "비활성화" : "활성화"}
+                  </Descriptions.Item>
+                </Descriptions>
+              ))}
+          </>
+        </Modal>
+      )}
       {selectedRowKeys.length > 0 && (
-        <Button type="primary" onClick={onOpenModifiedModal}>
-          수정
-        </Button>
+        <>
+          <Button type="primary" onClick={onOpenModifiedModal}>
+            수정
+          </Button>
+          <Button type="primary" onClick={onOpenDeleteModal}>
+            비활성화
+          </Button>
+        </>
       )}
       <div>
         <Table

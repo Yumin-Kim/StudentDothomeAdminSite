@@ -68,7 +68,6 @@ public class StudentAPIController {
             HttpServletRequest request,
             @PathVariable("studentId") Integer studentId,
             @RequestBody StudentReq.ModifyStudentDto modifyStudentDto) {
-        sessionFactory.validationSession(request,"student");
         StudentReq.StudentDto studentDto = new StudentReq.StudentDto(modifyStudentDto);
         StudentReq.SiteInfoDto siteInfoDto = new StudentReq.SiteInfoDto(modifyStudentDto);
 

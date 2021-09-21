@@ -56,14 +56,12 @@ const MainStudentPage = () => {
           expires,
         });
       } else {
-        if (cookies.studentInfo.id !== studentInfo.id) {
-          removeCookie("studentInfo");
-          setCookie("studentInfo", studentInfo, {
-            path: "/",
-            expires,
-          });
-          dispatch(getStudentCookieInfo(studentInfo));
-        }
+        removeCookie("studentInfo");
+        setCookie("studentInfo", studentInfo, {
+          path: "/",
+          expires,
+        });
+        dispatch(getStudentCookieInfo(studentInfo));
       }
     }
   }, []);

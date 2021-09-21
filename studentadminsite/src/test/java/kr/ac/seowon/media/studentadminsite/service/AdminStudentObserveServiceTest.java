@@ -43,8 +43,6 @@ class AdminStudentObserveServiceTest {
                 .willReturn(Optional.empty())
                 .willReturn(Optional.of(admin))
                 .willReturn(Optional.of(admin));
-
-
     }
 
     @Test
@@ -54,7 +52,7 @@ class AdminStudentObserveServiceTest {
         AdminObserveReq.BasicStudentDto basicStudentDto = new AdminObserveReq.BasicStudentDto("name", 201610309);
         Admin admin = Admin.createAdmin("name", "1234", "asd", "asd");
         Student student = Student.createStudent(basicStudentDto, admin);
-        given(studentRepository.findByStudentCodeAndName(any(), any()))
+        given(studentRepository.findByStudentCode(any()))
                 .willReturn(Optional.empty())
                 .willReturn(Optional.of(student));
         //when

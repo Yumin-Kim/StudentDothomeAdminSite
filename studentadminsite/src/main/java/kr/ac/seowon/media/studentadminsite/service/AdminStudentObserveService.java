@@ -47,10 +47,11 @@ public class AdminStudentObserveService {
             return null;
         }
     }
-
+    //TODO 존재하는 현재 학번이랑 이름 같이 조회해서 에러 발생
+    // 존재하는 조건 다시 수
     public void insertStudentInfo(Integer adminId, AdminObserveReq.BasicStudentDto basicStudentDto) {
         Admin observeAdmin = getAdmin(adminId);
-        studentRepository.findByStudentCodeAndName(basicStudentDto.getStudentCode(), basicStudentDto.getName())
+        studentRepository.findByStudentCode(basicStudentDto.getStudentCode())
                 .map(student -> {
                     if (student != null) {
                         throw new AdminObserveException("존재하는 학번 저장을 시도하였습니다.");
@@ -104,7 +105,7 @@ public class AdminStudentObserveService {
 
     /**
      * 입력한 학생 중 존재하지 않는 경우
-     *
+     * 학생 조회후 데이터 베이스 , 도메인 정보 없으면 정보 없다고 에러 발생
      * @param studentIds
      */
     public void deleteStudentsInfo(List<Integer> studentIds) {

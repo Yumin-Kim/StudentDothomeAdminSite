@@ -257,13 +257,7 @@ export const deleteToStudentInfoAction = createActionAxiosGetVerionToAPIPARMA(
 export const concurrentDeleteToStudentInfoAPI = async (
   studentIds: number[]
 ) => {
-  let concatQueryString = "";
-  studentIds.map(value => {
-    concatQueryString.concat(`${value},`);
-  });
-  concatQueryString.slice(0, -1);
-
-  return await axios.delete(`/admin/studentinfo/students/${concatQueryString}`);
+  return await axios.delete(`/admin/studentinfo/students/${studentIds.join()}`);
 };
 
 export const concurrentDeleteToStudentInfoAction =

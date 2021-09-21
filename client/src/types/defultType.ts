@@ -62,7 +62,7 @@ export const routeToMappingData: IRoutePathNameComponentToEle[] = [
   },
   {
     pathName: "find",
-    categoryName: "계정 찾기",
+    categoryName: "계정 확인!!",
     formTagInInputEl: [
       {
         name: "name",

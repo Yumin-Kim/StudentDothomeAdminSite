@@ -1,5 +1,5 @@
 import { EntityAction } from "../../../types/action";
-import { getCookieInfo } from "./index";
+import { getCookieInfo, createAdminToStudentInfoAction } from "./index";
 import {
   modifiedAdminInfoAPI,
   modifiedAdminAction,
@@ -181,7 +181,7 @@ export type T_ConcurrentModifiedAdminStudentInfoAction = EntityAction<
   typeof concurrentModifiedAdminStudentInfoAction
 >;
 export type T_CreateAdminToStudentInfoAction = EntityAction<
-  typeof createAdminInfoAction
+  typeof createAdminToStudentInfoAction
 >;
 export type T_ConcurrentCreateAdminToStudentInfoAction = EntityAction<
   typeof concurrentCreateAdminToStudentAction

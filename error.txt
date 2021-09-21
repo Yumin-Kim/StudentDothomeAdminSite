@@ -1,2 +1,0 @@
-To https://github.com/Yumin-Kim/StudentDothomeAdminSite.git
-   fb009d9..30ca5e0  master -> master

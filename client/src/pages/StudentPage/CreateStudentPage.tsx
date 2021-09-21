@@ -7,6 +7,8 @@ import {
   changeDefaultToCreatePage,
 } from "../../redux_folder/actions/student/index";
 import { Redirect } from "react-router";
+import { useCookies } from "react-cookie";
+import { getStudentCookieInfo } from "../../redux_folder/actions/student/index";
 const { Option } = Select;
 
 export const layout = {
@@ -32,10 +34,12 @@ const CreateStudentPage = () => {
   const [form] = Form.useForm();
   const {
     requestStudentInfo,
+    studentInfo,
     integrationErrorMessage,
     integrationSucessMessage,
   } = useSelector((state: ROOTSTATE) => state.student);
   const [requestState, setRequestState] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["studentInfo"]);
   const dispatch = useDispatch();
 
   const onFinish = (values: any) => {
@@ -72,16 +76,40 @@ const CreateStudentPage = () => {
     form.resetFields();
     dispatch(changeDefaultToCreatePage());
   }, []);
-
+  useEffect(() => {
+    if (!studentInfo && cookies.studentInfo) {
+      dispatch(getStudentCookieInfo(cookies.studentInfo));
+    }
+    if (studentInfo) {
+      const expires = new Date();
+      expires.setDate(expires.getDate() + 1);
+      if (!cookies.studentInfo) {
+        setCookie("studentInfo", studentInfo, {
+          path: "/",
+          expires,
+        });
+      } else {
+        if (cookies.studentInfo.id !== studentInfo.id) {
+          removeCookie("studentInfo");
+          setCookie("studentInfo", studentInfo, {
+            path: "/",
+            expires,
+          });
+          dispatch(getStudentCookieInfo(studentInfo));
+        }
+      }
+    }
+  });
   const onReset = () => {
     form.resetFields();
   };
 
   const onFill = () => {
+    console.log(requestStudentInfo);
     form.setFieldsValue({
       multiCode: "class2021",
-      name: requestStudentInfo?.name,
-      studentCode: requestStudentInfo?.studentCode,
+      name: studentInfo?.name,
+      studentCode: studentInfo?.studentCode,
       confirm: 970417,
       password: 970417,
       phoneNumber: "010-8939-8932",
@@ -115,10 +143,10 @@ const CreateStudentPage = () => {
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (requestStudentInfo?.studentCode) {
+                if (studentInfo?.studentCode) {
                   if (
                     !value ||
-                    String(requestStudentInfo?.studentCode) === String(value)
+                    String(studentInfo?.studentCode) === String(value)
                   ) {
                     return Promise.resolve();
                   }
@@ -130,10 +158,7 @@ const CreateStudentPage = () => {
             }),
           ]}
         >
-          <Input
-            type="number"
-            placeholder={String(requestStudentInfo?.studentCode)}
-          />
+          <Input type="number" placeholder={String(studentInfo?.studentCode)} />
         </Form.Item>
         <Form.Item
           name="name"
@@ -145,8 +170,8 @@ const CreateStudentPage = () => {
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (requestStudentInfo?.name) {
-                  if (!value || requestStudentInfo?.name === value) {
+                if (studentInfo?.name) {
+                  if (!value || studentInfo?.name === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
@@ -157,7 +182,7 @@ const CreateStudentPage = () => {
             }),
           ]}
         >
-          <Input placeholder={requestStudentInfo?.name} />
+          <Input placeholder={studentInfo?.name} />
         </Form.Item>
         <Form.Item
           name="password"

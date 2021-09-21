@@ -141,7 +141,6 @@ const MainInputPage = () => {
   return (
     <>
       <Title level={1}>{serilizeData?.categoryName}</Title>
-      <Title level={2}>{serilizeData?.categoryName}</Title>
       <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
         {" "}
         {serilizeData?.formTagInInputEl.map((value, index) => (

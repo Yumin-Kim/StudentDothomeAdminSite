@@ -13,6 +13,7 @@ import DefaultStudentPage from "../pages/StudentPage/DefaultStudentPage";
 import MainAdminPage from "../pages/AdminPage/MainAdminPage";
 import ModifyAdminPage from "../pages/AdminPage/ModifyAdminPage";
 import StudentCreateAdmin from "../pages/AdminPage/StudentCreateAdmin";
+import DeleteUtilInfoPage from "../pages/AdminPage/DeleteUtilInfoPage";
 const { Header, Content, Footer } = Layout;
 
 const Basic = () => {
@@ -34,6 +35,7 @@ const Basic = () => {
           <Route path="/admin/main" component={MainAdminPage} />
           <Route path="/admin/create" component={StudentCreateAdmin} />
           <Route path="/admin/modify" component={ModifyAdminPage} />
+          <Route path="/admin/delete" component={DeleteUtilInfoPage} />
           <Route path="/:stubing" component={MainInputPage} />
           <Redirect path="*" to="/" />
         </Switch>

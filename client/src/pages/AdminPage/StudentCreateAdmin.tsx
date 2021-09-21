@@ -9,7 +9,12 @@ import { resetIntegrataionMessage } from "../../redux_folder/actions/admin";
 import { ROOTSTATE } from "../../redux_folder/reducers/root";
 import { Redirect } from "react-router";
 import { useCookies } from "react-cookie";
-import { getCookieInfo } from "../../redux_folder/actions/admin/index";
+import {
+  getCookieInfo,
+  createAdminToStudentInfoAction,
+} from "../../redux_folder/actions/admin/index";
+import { values } from "@uifabric/utilities";
+import { lowerFirst } from "lodash";
 
 const props = {
   name: "file",
@@ -42,10 +47,16 @@ const props = {
 };
 
 const StudentCreateAdmin = () => {
+  const [form] = Form.useForm();
   const [switchState, setSwitchState] = useState(true);
   const [parseModeState, setParseModeState] = useState(false);
   const dispatch = useDispatch();
-  const { defaultAdminInfo } = useSelector((state: ROOTSTATE) => state.admin);
+  const {
+    defaultAdminInfo,
+    integrationErrorMessage,
+    integrationRequestMessage,
+    integrationSucessMessage,
+  } = useSelector((state: ROOTSTATE) => state.admin);
   const [cookies, setCookie, removeCookie] = useCookies(["adminInfo"]);
 
   const onChangeMode = useCallback(
@@ -59,7 +70,16 @@ const StudentCreateAdmin = () => {
     setParseModeState(false);
   }, []);
   const onFinishForm = (value: any) => {
-    console.log(value);
+    const { name, studentCode } = value;
+    if (defaultAdminInfo) {
+      dispatch(
+        createAdminToStudentInfoAction.ACTION.REQUEST({
+          adminId: defaultAdminInfo?.id,
+          name,
+          studentCode,
+        })
+      );
+    }
   };
   useEffect(() => {
     dispatch(resetIntegrataionMessage());
@@ -69,6 +89,15 @@ const StudentCreateAdmin = () => {
       }
     }
   }, [defaultAdminInfo]);
+
+  useEffect(() => {
+    if (integrationErrorMessage) {
+      message.error(integrationErrorMessage);
+    } else if (integrationSucessMessage) {
+      message.success(integrationSucessMessage);
+    }
+    dispatch(resetIntegrataionMessage());
+  }, [integrationSucessMessage, integrationRequestMessage]);
 
   if (!cookies.adminInfo && !defaultAdminInfo) {
     dispatch(resetIntegrataionMessage());
@@ -85,12 +114,47 @@ const StudentCreateAdmin = () => {
         defaultChecked
       />
       {switchState ? (
-        <Form>
-          <Form.Item label="학번 입력">
-            <Input name="studentCode" type="number" />
+        <Form form={form} onFinish={onFinishForm}>
+          <Form.Item
+            label="학번 입력"
+            name="studentCode"
+            rules={[
+              { required: true, message: "학번을 입력하세요" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || String(value).length === 9) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("학번을 9자리를 입력해주세요")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input type="number" />
           </Form.Item>
-          <Form.Item label="이름 입력">
-            <Input name="name" type="text" />
+          <Form.Item
+            label="이름 입력"
+            name="name"
+            rules={[
+              { required: true, message: "이름을 입력해주세요" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (
+                    !value ||
+                    !String(value).match(/[(a-z)||(A-Z)||(0-9)]/g)?.length
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("영문 숫자가 포함되어 있습니다.")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input type="text" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">

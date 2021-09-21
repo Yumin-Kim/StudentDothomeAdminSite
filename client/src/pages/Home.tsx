@@ -21,9 +21,9 @@ const Home = () => {
           textAlign: "center",
         }}
       >
-        <Button block>
+        {/* <Button block>
           <Link to="/make">계정 생성</Link>
-        </Button>
+        </Button> */}
         <Button block>
           <Link to="/find">계정 찾기</Link>
         </Button>
