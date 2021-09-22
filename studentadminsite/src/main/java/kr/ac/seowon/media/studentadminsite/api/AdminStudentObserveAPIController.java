@@ -87,7 +87,7 @@ public class AdminStudentObserveAPIController {
 //            throw new BindException(bindingResult);
 //        }
         AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.searchStudentInfV1(onChange, searchCondition, pageable);
-        return Res.isOkWithData(fullInfo, "조회 성");
+        return Res.isOkWithData(fullInfo, "조회 성공");
     }
 
 
@@ -137,6 +137,7 @@ public class AdminStudentObserveAPIController {
     }
 
     //단일 정보 삭제
+    @Deprecated
     @DeleteMapping("/student/{studentId}")
     public Res deleteStudentInfo(@PathVariable("studentId") Integer studentId) {
         adminStudentObserveService.deleteStudentInfo(studentId);
@@ -146,8 +147,8 @@ public class AdminStudentObserveAPIController {
     //복수 정보 삭제
     @DeleteMapping("/students/{studentIds}")
     public Res deleteStudentInfos(@PathVariable("studentIds") List<Integer> studentIds) {
-        adminStudentObserveService.deleteStudentsInfo(studentIds);
-        return Res.isOkByMessage("정보 삭제 성공");
+        List<AdminObserveDao.AdminObserveStudentInfo>  adminObserveStudentInfos = adminStudentObserveService.deleteStudentsInfo(studentIds);
+        return Res.isOkWithData(adminObserveStudentInfos,"정보 삭제 성공");
     }
 
 }

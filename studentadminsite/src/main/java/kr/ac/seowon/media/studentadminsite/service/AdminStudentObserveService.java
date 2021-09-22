@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -47,8 +48,7 @@ public class AdminStudentObserveService {
             return null;
         }
     }
-    //TODO 존재하는 현재 학번이랑 이름 같이 조회해서 에러 발생
-    // 존재하는 조건 다시 수
+
     public void insertStudentInfo(Integer adminId, AdminObserveReq.BasicStudentDto basicStudentDto) {
         Admin observeAdmin = getAdmin(adminId);
         studentRepository.findByStudentCode(basicStudentDto.getStudentCode())
@@ -91,27 +91,27 @@ public class AdminStudentObserveService {
      * 학생의 db엦 저장된 정보는 남겨두면 도메인 또는 dateBase 삭제
      * siteInfo 정보 삭제 및 student isdeleted 값 수정
      * 추가사항 기존 데이터 베이스의 정보를 삭제 할건지?
-     *
      * @param studentId
      */
     public void deleteStudentInfo(Integer studentId) {
         Student student = getStudent(studentId);
         //database 정보 수정 및 삭제
         utils_studentInfoDelete(student);
-
         siteInfoRepository.delete(student.getSiteInfo());
         student.disabledStudent(true);
     }
 
-    /**
-     * 입력한 학생 중 존재하지 않는 경우
-     * 학생 조회후 데이터 베이스 , 도메인 정보 없으면 정보 없다고 에러 발생
-     * @param studentIds
-     */
-    public void deleteStudentsInfo(List<Integer> studentIds) {
+    public List<AdminObserveDao.AdminObserveStudentInfo> deleteStudentsInfo(List<Integer> studentIds) {
         List<Student> findByStudentList = studentRepository.findByIdIn(studentIds);
         if (findByStudentList.size() != studentIds.size()) {
             throw new StudentException("입력한 학생중 사이트가 존재하지 않은 학생이 있습니다.");
+        }
+        List<Integer> emptySiteInfoStudents = findByStudentList.stream()
+                .filter(student -> student.getSiteInfo() == null)
+                .map(Student::getStudentCode)
+                .collect(toList());
+        if(emptySiteInfoStudents.size() != 0){
+            throw new StudentException("입력한 학생중 " + StringUtils.join(emptySiteInfoStudents, ",") + " 은 삭제할 정보가 없습니다.");
         }
         findByStudentList
                 .forEach(student -> {
@@ -119,6 +119,9 @@ public class AdminStudentObserveService {
                     siteInfoRepository.delete(student.getSiteInfo());
                     student.disabledStudent(true);
                 });
+        return findByStudentList.stream()
+                .map(student -> new AdminObserveDao.AdminObserveStudentInfo(student, student.getSiteInfo(), student.getAdmin()))
+                .collect(toList());
     }
 
     public StudentDao.BasicStudent modifyStudentInfo(AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {

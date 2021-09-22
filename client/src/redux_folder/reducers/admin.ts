@@ -3,6 +3,7 @@ import {
   EQUAL_COND_SYNC,
   SIMILAR_COND_SYNC,
   CURRENT_ELEMENT_SIZE_SYNC,
+  DELETE_ADMINTOSTUDENT_INFO_CONCURRENT,
 } from "../actions/admin/type";
 import {
   CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT,
@@ -50,7 +51,6 @@ const adminReducer = (
   action: ADMIN_MERGE_ACTIONS
 ) => {
   return produce(state, (draft): AdminStore => {
-    console.log("Admin Reducer");
     switch (action.type) {
       case MODIFIED_STUDENT_INFO_CONCURRENT.REQUEST:
       case GET_ADMIN_STUDENT_INFO.REQUEST:
@@ -59,6 +59,7 @@ const adminReducer = (
       case LOGIN_ADMIN_INFO.REQUEST:
       case SEACRCH_V1_SIMILIAR_CONDITION.REQUEST:
       case CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT.REQUEST:
+      case DELETE_ADMINTOSTUDENT_INFO_CONCURRENT.REQUEST:
       case SEACRCH_V1_EQUALS_CONDITION.REQUEST:
         return {
           ...state,
@@ -93,8 +94,9 @@ const adminReducer = (
           ...state,
           integrationSucessMessage: action.payload.message,
         };
+
       case "SUCCESS_MODIFIED_STUDENT_INFO_CONCURRENT":
-        console.log("SUCCESS_MODIFIED_STUDENT_INFO_CONCURRENT");
+      case DELETE_ADMINTOSTUDENT_INFO_CONCURRENT.SUCCESS:
         const parseData = action.payload.data.reduce((prev, cur, index) => {
           let data = draft.allStudentInfo_paging?.infos.findIndex(
             v => v.id === action.payload.data[index].id
@@ -102,7 +104,6 @@ const adminReducer = (
           prev.push(data as number);
           return prev;
         }, [] as number[]);
-
         parseData.map((value, index) => {
           draft.allStudentInfo_paging?.infos.splice(
             value,
@@ -113,6 +114,7 @@ const adminReducer = (
           draft.integrationSucessMessage = action.payload.message;
         });
         break;
+
       case RESET_MESSAGE:
         return {
           ...state,
@@ -120,6 +122,7 @@ const adminReducer = (
           integrationErrorMessage: action.payload,
           integrationRequestMessage: action.payload,
         };
+      case DELETE_ADMINTOSTUDENT_INFO_CONCURRENT.FAILURE:
       case SEACRCH_V1_EQUALS_CONDITION.FAILURE:
       case SEACRCH_V1_SIMILIAR_CONDITION.FAILURE:
       case CREAETE_ADMINTOSTUDENTCODE_INFO_CONCURRENT.FAILURE:

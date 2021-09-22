@@ -14,6 +14,7 @@ import MainAdminPage from "../pages/AdminPage/MainAdminPage";
 import ModifyAdminPage from "../pages/AdminPage/ModifyAdminPage";
 import StudentCreateAdmin from "../pages/AdminPage/StudentCreateAdmin";
 import DeleteUtilInfoPage from "../pages/AdminPage/DeleteUtilInfoPage";
+import { useHistory } from "react-router";
 const { Header, Content, Footer } = Layout;
 
 const Basic = () => {

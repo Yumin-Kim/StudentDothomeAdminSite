@@ -91,7 +91,6 @@ function* createAdminFunc(action: T_createAdminAction) {
   try {
     if (action.type === "REQUEST_CREATE_ADMIN_INFO") {
       const { data } = yield call(createAdminInfoAction.API, action.payload);
-      console.log("createAdmin logic saga");
       yield put(createAdminInfoAction.ACTION.SUCCESS(data));
     }
   } catch (error) {

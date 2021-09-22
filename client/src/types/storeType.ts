@@ -43,11 +43,14 @@ export interface StudentStore {
 }
 //데이터 베이스 , 도메인을 직접적으로 생성 하는 코드
 export interface UtilStore {
-  createDatabase: I_UtilDatabase | null;
-  createDomain: I_UtilDomain | null;
-  integrationSucessMessage: string | null; // 통신 후 성공 메세지
-  integrationErrorMessage: string | null; // 통신 후 에러 메세지
-  integrationRequestMessage: string | null; // 통신 중 메세지 표시
+  originConnectionDatabases: { user: string }[] | null;
+  originConnectionDomains: string[] | null;
+  originDBConnectionRequestMessage: string | null; // 통신 후 성공 메세지
+  originDBConnectionSucessMessage: string | null; // 통신 후 에러 메세지
+  originDBConnectionErrorMessage: string | null; // 통신 중 메세지 표시
+  originDomainConnectionRequestMessage: string | null; // 통신 후 성공 메세지
+  originDomainConnectionSucessMessage: string | null; // 통신 후 에러 메세지
+  originDomainConnectionErrorMessage: string | null; // 통신 중 메세지 표시
 }
 
 export interface I_DefaultStudentInfo {

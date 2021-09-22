@@ -36,7 +36,6 @@ import static org.springframework.util.StringUtils.hasText;
 
 @DataJpaTest
 @Transactional
-@Rollback(value = false)
 class StudentRepositoryTest {
 
     @Autowired
@@ -81,14 +80,17 @@ class StudentRepositoryTest {
 
     @Test
     @DisplayName("StudentRepository QueryMethod")
-    @Disabled
     void start_1() throws Exception {
         //given
         //when
 //        Student student = studentRepository.findByStudentCodeAndName(201610302, "").get();
         List<Student> findStudents = studentRepository.findByStudentCodeIn(List.of(201510302, 201510301));
-        List<Student> byIdIn = studentRepository.findByIdIn(List.of(1, 100));
-        Student yumin10 = studentRepository.findByStudentCodeAndName(201633323, "yumin10").get();
+        List<Student> byIdIn = studentRepository.findByIdIn(List.of(1, 101));
+        byIdIn.stream().forEach(data -> {
+            System.out.println("data.getName() = " + data.getName());
+            System.out.println("data.getSiteInfo() = " + data.getSiteInfo());
+                }
+        );
         //then
 //        assertEquals(student.getStudentCode(), 201610302);
 //        assertEquals(student.getInSchool(), true);
@@ -97,6 +99,7 @@ class StudentRepositoryTest {
         assertEquals(byIdIn.size(), 2);
 
     }
+
 
     /**
      * 검색 조건 정의후에 개발
@@ -119,7 +122,6 @@ class StudentRepositoryTest {
     @Test
     @DisplayName("조건에 완벽하게 일치할때 동작")
     @Disabled
-
     void search_current_correct() throws Exception {
         //given
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
@@ -149,7 +151,7 @@ class StudentRepositoryTest {
         Sort.Order sorting1 = new Sort.Order(Sort.Direction.DESC, "siteInfo.domainName");
         Sort.Order sorting2 = new Sort.Order(Sort.Direction.DESC, "name");
 
-        PageRequest name = PageRequest.of(0, 5, Sort.by(List.of(sorting1,sorting2)));
+        PageRequest name = PageRequest.of(0, 5, Sort.by(List.of(sorting1, sorting2)));
         QueryResults<Student> studentQueryResults = jpaQueryFactory.selectFrom(student)
                 .where(searchConditionV2(condition))
                 .leftJoin(student.admin, admin)
@@ -168,7 +170,7 @@ class StudentRepositoryTest {
         System.out.println("total = " + total);
         System.out.println("offset = " + offset);
         System.out.println("results.size() = " + results.size());
-        
+
         results.stream()
                 .forEach(student1 -> {
                     System.out.println("student1.getName() = " + student1.getName());
@@ -180,7 +182,6 @@ class StudentRepositoryTest {
     @Test
     @DisplayName("동적 쿼리 like")
     @Disabled
-
     void start_DynamicQuery_like_outerJoin() throws Exception {
         //given
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
@@ -208,18 +209,19 @@ class StudentRepositoryTest {
 
     /**
      * yumin으로 시작하는 사람 중 사이트가 null값 확인
+     *
      * @throws Exception
      */
     @Test
     @Disabled
     @DisplayName("서브 쿼리를 통해 null 값도 가지고 오도록")
-    void check_sub_query_null() throws Exception{
+    void check_sub_query_null() throws Exception {
         //given
         PageRequest of = PageRequest.of(0, 10);
         Page<Student> all = studentRepository.findAll(of);
         List<Student> name = em.createQuery("select s from Student s " +
-                "left join fetch s.siteInfo si " +
-                "where s.name like :name ", Student.class)
+                        "left join fetch s.siteInfo si " +
+                        "where s.name like :name ", Student.class)
                 .setParameter("name", "yumin%")
                 .getResultList();
         name.stream()
@@ -311,7 +313,7 @@ class StudentRepositoryTest {
         }
         extracted(condition, booleanBuilder);
         if (condition.getStudentCode() != null) {
-            booleanBuilder.and(student.studentCode.like(condition.getStudentCode()+"%"));
+            booleanBuilder.and(student.studentCode.like(condition.getStudentCode() + "%"));
         }
         if (hasText(condition.getDomainName())) {
             booleanBuilder.and(siteInfo.domainName.contains(condition.getDomainName()));

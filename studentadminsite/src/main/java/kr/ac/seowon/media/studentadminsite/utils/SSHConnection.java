@@ -8,6 +8,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.List;
+
 // 해당 로직은 ssh 로 사용자 , 데이터 베이스 , 디렉토리가 모두 구성 되어 있다 전제하고 진행한다.
 // 데이터 베이스는 사용자 이름과 비밀번호가 지정되어 있다.
 @Slf4j
@@ -84,7 +87,7 @@ public class SSHConnection {
             ChannelExec channelExec = (ChannelExec) channel;
             log.info("delete ssh,domain info");
             log.info("delete domain Info = {}",domain);
-            channelExec.setCommand("./deleteStudent.sh " + domain);
+            channelExec.setCommand("./deleteStudent.sh  " + domain);
             ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
             channel.setOutputStream(responseStream);
             channel.connect();
@@ -94,10 +97,34 @@ public class SSHConnection {
             String responseString = responseStream.toString();
             log.info("response String = {}", responseString);
             if(!responseString.contains("Done")){
-                throw new StudentException("존재하지 않는 도메인 정보입니다.");
+                throw new StudentException("존재하지 않는 도를메인 정보입니다.");
             }
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근하였지만 정보 수정에 실패하였습니다.");
+            throw new SSHException("ssh 접근하였지만 정보 삭제 실패하였습니다.");
+        } finally {
+            if (channel != null) {
+                channel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
+        }
+    }
+
+    public List<String> selectSSHDomainInfo(){
+        try {
+            ChannelExec channelExec = (ChannelExec) channel;
+            channelExec.setCommand("echo $(ls /home)");
+            ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
+            channel.setOutputStream(responseStream);
+            channel.connect();
+            while (channel.isConnected()) {
+                Thread.sleep(100);
+            }
+            String responseString = responseStream.toString();
+            return Arrays.asList(responseString.split(" "));
+        } catch (JSchException | InterruptedException e) {
+            throw new SSHException("ssh 접근하였지만 도메인 정보 접근에 실패하였습니다.");
         } finally {
             if (channel != null) {
                 channel.disconnect();
@@ -123,10 +150,10 @@ public class SSHConnection {
             String responseString = responseStream.toString();
             log.info("response String = {}", responseString);
             if(!responseString.contains("True")){
-                throw new StudentException("존재하지 않는 도메인 정보입니다.");
+                throw new StudentException("중복되는 정보입니다.");
             }
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근하였지만 정보 수정에 실패하였습니다.");
+            throw new SSHException("ssh 접근하였지만 정보 생성에 실패하였습다.");
         } finally {
             if (channel != null) {
                 channel.disconnect();

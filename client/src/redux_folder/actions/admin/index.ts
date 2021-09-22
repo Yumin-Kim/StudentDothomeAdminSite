@@ -256,7 +256,7 @@ export const deleteToStudentInfoAction = createActionAxiosGetVerionToAPIPARMA(
 //일괄 학생 정보 삭제 API
 export const concurrentDeleteToStudentInfoAPI = async (
   studentIds: number[]
-) => {
+): Promise<I_AxiosDefaultDataFormat<I_AllStudentInfo_Adamin[]>> => {
   return await axios.delete(`/admin/studentinfo/students/${studentIds.join()}`);
 };
 

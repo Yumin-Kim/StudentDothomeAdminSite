@@ -4,10 +4,10 @@ import kr.ac.seowon.media.studentadminsite.exception.utilexception.UtilJdbcConne
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 public class JdbcRootPermition {
@@ -22,6 +22,30 @@ public class JdbcRootPermition {
         id = utilConfigure.getDatabaseId();
         pwd = utilConfigure.getDatabasePwd();
         Class.forName("com.mysql.cj.jdbc.Driver");
+    }
+
+    @SneakyThrows(UtilJdbcConnectionException.class)
+    public List<MysqlUserBean> selectDatabase() {
+        try (Connection connection = DriverManager.getConnection(url, id, pwd)) {
+            connection.setAutoCommit(false);
+            try (final Statement statement = connection.createStatement()) {
+                ResultSet resultSet = statement.executeQuery("select user from user where user like \"s%\"");
+                List<MysqlUserBean> mysqlBeanLists = new ArrayList<MysqlUserBean>();
+                while (resultSet.next()) {
+                    final MysqlUserBean mysqlUserBean = new MysqlUserBean();
+                    final String username = resultSet.getString("user");
+                    mysqlUserBean.setUser(username);
+                    mysqlBeanLists.add(mysqlUserBean);
+                }
+                return mysqlBeanLists;
+            } catch (SQLException e) {
+                connection.rollback();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            throw new UtilJdbcConnectionException("데이터 베이스 사용자 조회 에러가 발생하였습니다.", e.getSQLState(), e.getErrorCode());
+        }
+        return null;
     }
 
     @SneakyThrows(UtilJdbcConnectionException.class)

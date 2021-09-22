@@ -26,7 +26,8 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [text, setText] = useState([]);
-  const [text1, setText1] = useState([]);
+  const [text1, setText1] = useState<string[] | []>([]);
+  const [searchLiskCondValid, setSearchLiskCondValid] = useState("");
   const { sortingEqualCond, sortingSimilarCond } = useSelector(
     (state: ROOTSTATE) => state.admin
   );
@@ -108,7 +109,6 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
       });
     } else {
       console.log("splice");
-
       setText(prev => {
         prev.splice(value, 1);
         return prev;
@@ -120,44 +120,37 @@ const SortingForm: FC<SortingFormProps> = ({ getSoringCond, mode }) => {
     }
   };
   useEffect(() => {
-    console.log("useEffect text , text1");
+    const custom = text.reduce((prev, cur, index) => {
+      prev[cur] = text1[index];
+      return prev;
+    }, {} as any);
 
-    console.log(text, text1);
-  }, [text, text1]);
+    dispatch(similarConditionAction(custom));
+    dispatch(
+      searchSimliarV1CondAction.ACTION.REQUEST({
+        paggable: { page: 0, size: 10 },
+        search: custom,
+      })
+    );
+  }, [searchLiskCondValid]);
+  // 유사 조건으로 비교하는 로직 작성 onChange
   const onChangeSearchLike = (value: any) => {
-    console.log(text, text1);
+    setSearchLiskCondValid(value);
     const indexing = Number(value.target.id.match(/[0-9]/g)[0]);
-    console.log(value.target.value);
     if (value.target.value !== "") {
+      console.log("indexing", indexing);
       if (text1[indexing])
         setText1(prev => {
-          console.log("prev", prev);
           prev[indexing] = value.target.value;
-          console.log(prev[indexing]);
           return prev;
         });
       else {
         setText1(prev => [...prev, value.target.value]);
       }
-
-      const custom = text.reduce((prev, cur, index) => {
-        prev[cur] = text1[index];
-        return prev;
-      }, {} as any);
-      dispatch(similarConditionAction(custom));
-      dispatch(
-        searchSimliarV1CondAction.ACTION.REQUEST({
-          paggable: { page: 0, size: 10 },
-          search: custom,
-        })
-      );
     }
   };
 
   useEffect(() => {
-    console.log("useEffectMode");
-    console.log("form", form.getFieldInstance);
-    console.log("form", form.getFieldValue("sorting"));
     form.setFieldsValue({
       sorting: [],
     });
