@@ -67,11 +67,15 @@ public class AdminStudentObserveService {
         List<Integer> studentCodes = basicStudentDtos.stream()
                 .map(AdminObserveReq.BasicStudentDto::getStudentCode)
                 .collect(toList());
+
         Set<Integer> hashstudentCodes = basicStudentDtos.stream()
                 .map(AdminObserveReq.BasicStudentDto::getStudentCode)
                 .collect(toSet());
+
         if (studentCodes.size() != hashstudentCodes.size()) throw new AdminObserveException("중복 되는 학번이 존재합니다");
+
         List<Student> findByStudentCodes = studentRepository.findByStudentCodeIn(studentCodes);
+
         if (findByStudentCodes.size() != 0) {
             List<Integer> duplicateStudents = findByStudentCodes.stream()
                     .map(Student::getStudentCode)

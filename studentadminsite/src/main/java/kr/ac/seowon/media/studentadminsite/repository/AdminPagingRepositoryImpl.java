@@ -11,8 +11,6 @@ public class AdminPagingRepositoryImpl implements AdminPagingRepository {
 
     @PersistenceContext
     EntityManager em;
-
-
     @Override
     public List<Admin> findAllPagingV1(Pageable pageable) {
         return null;
