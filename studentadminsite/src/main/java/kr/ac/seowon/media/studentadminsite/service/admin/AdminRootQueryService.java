@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.service;
+package kr.ac.seowon.media.studentadminsite.service.admin;
 
 import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
@@ -20,42 +20,14 @@ import static org.springframework.util.StringUtils.hasText;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AdminRootService {
+public class AdminRootQueryService {
 
     private final AdminRepository adminRepository;
-
-    public AdminDao.BasicAdmin createAdmin(AdminReq.AdminDto adminDto) {
-        //TODO HashCode 생성 알고리즘 추가
-        //TODO admin password 암호화 하여 다시 삽입
-        Admin admin = adminDto.toEntity();
-        List<Admin> admins = (List<Admin>) adminRepository.findByName(admin.getName())
-                .map(data -> {
-                    if (hasText(data.getName())) {
-                        throw new AdminException("존재하는 이름입니다.");
-                    }
-                    return null;
-                })
-                .orElseGet(() -> adminRepository.findByHashCode(admin.getHashCode())
-                        .stream()
-                        .filter(admin1 -> admin1.getHashCode().equals(admin.getHashCode()))
-                        .collect(toList()));
-        if (admins.size() != 0) throw new AdminException("존재하는 HashCode입니다.");
-        Admin save = adminRepository.save(admin);
-        return new AdminDao.BasicAdmin(save);
-    }
 
     public AdminDao.BasicAdmin loginAdmin(AdminReq.AdminLoginDto adminLoginDto) {
         Admin findByAdmin = adminRepository.findByNameAndPassword(adminLoginDto.getName(), adminLoginDto.getPassword())
                 .orElseThrow(() -> new AdminException("아이디와 비밀번호를 존재하지 않습니다."));
         return new AdminDao.BasicAdmin(findByAdmin);
-    }
-
-
-    public AdminDao.BasicAdmin modifyAdminInfo(Integer adminId, AdminReq.AdminDto adminDto) {
-        Admin findAdmin = adminRepository.findById(adminId)
-                .orElseThrow(() -> new AdminException("존재하지 않는 admin 입니다."));
-        findAdmin.modifyEntity(adminDto);
-        return new AdminDao.BasicAdmin(findAdmin);
     }
 
     public AdminDao.BasicPagingAdmin findAllPagingV1(Pageable pageable) {

@@ -3,7 +3,7 @@ package kr.ac.seowon.media.studentadminsite.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
 import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
-import kr.ac.seowon.media.studentadminsite.service.AdminRootService;
+import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminRootInfoAPIControllerTest {
 
     @MockBean
-    AdminRootService adminRootService;
+    AdminRootQueryService adminRootService;
 
     @Autowired
     WebApplicationContext wac;

@@ -1,19 +1,17 @@
 package kr.ac.seowon.media.studentadminsite.service;
 
-import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.domain.SiteInfo;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
-import kr.ac.seowon.media.studentadminsite.exception.utilexception.SSHException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
+import kr.ac.seowon.media.studentadminsite.service.student.StudentService;
 import kr.ac.seowon.media.studentadminsite.utils.JdbcRootPermition;
 import kr.ac.seowon.media.studentadminsite.utils.SSHConnection;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,10 +19,6 @@ import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 import java.util.regex.Matcher;

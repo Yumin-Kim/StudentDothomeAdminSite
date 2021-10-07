@@ -5,7 +5,8 @@ import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
-import org.junit.jupiter.api.Disabled;
+import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService;
+import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +32,10 @@ class AdminRootServiceTest {
     AdminRepository adminRepository;
 
     @InjectMocks
-    AdminRootService adminRootService;
+    AdminRootQueryService adminRootService;
+
+    @InjectMocks
+    AdminRootCommandService adminRootCommandService;
 
     AdminReq.AdminDto adminDto = new AdminReq.AdminDto("admin", "asdasd", "0123123123", "password");
     Admin admin = Admin.createAdmin("name", "0123123123", "asdasd", "password");
@@ -48,7 +51,7 @@ class AdminRootServiceTest {
         given(adminRepository.findByHashCode(any()))
                 .willReturn(Optional.empty());
         //when
-        AdminDao.BasicAdmin createAdmin = adminRootService.createAdmin(adminDto);
+        AdminDao.BasicAdmin createAdmin = adminRootCommandService.createAdmin(adminDto);
         //then
         assertEquals(createAdmin.getName(), admin.getName());
         assertEquals(createAdmin.getHashCode(), admin.getHashCode());
@@ -60,13 +63,13 @@ class AdminRootServiceTest {
         //given
         given(adminRepository.findByName(any()))
                 .willReturn(Optional.of(admin));
-        assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
+        assertThrows(AdminException.class, () -> adminRootCommandService.createAdmin(adminDto));
         //when
         given(adminRepository.findByName(any()))
                 .willReturn(Optional.empty());
         given(adminRepository.findByHashCode(any()))
                 .willReturn(Optional.of(admin));
-        assertThrows(AdminException.class, () -> adminRootService.createAdmin(adminDto));
+        assertThrows(AdminException.class, () -> adminRootCommandService.createAdmin(adminDto));
         //then
     }
 
@@ -79,11 +82,11 @@ class AdminRootServiceTest {
                 .willReturn(Optional.of(admin))
                 .willReturn(Optional.empty());
         //when
-        AdminDao.BasicAdmin modifyAdminInfo = adminRootService.modifyAdminInfo(1, adminDto);
+        AdminDao.BasicAdmin modifyAdminInfo = adminRootCommandService.modifyAdminInfo(1, adminDto);
         //then
         assertEquals(modifyAdminInfo.getName(), "superUser");
         assertEquals(modifyAdminInfo.getHashCode(), "asdasd");
-        assertThrows(AdminException.class, () -> adminRootService.modifyAdminInfo(2, adminDto));
+        assertThrows(AdminException.class, () -> adminRootCommandService.modifyAdminInfo(2, adminDto));
     }
 
     @Test

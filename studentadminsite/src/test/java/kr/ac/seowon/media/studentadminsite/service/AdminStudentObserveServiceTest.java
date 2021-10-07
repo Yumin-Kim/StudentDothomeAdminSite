@@ -11,18 +11,16 @@ import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentExce
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
+import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminStudentObserveService;
 import kr.ac.seowon.media.studentadminsite.utils.JdbcRootPermition;
 import kr.ac.seowon.media.studentadminsite.utils.SSHConnection;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
 import java.util.List;
 import java.util.Optional;

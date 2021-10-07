@@ -2,24 +2,21 @@ package kr.ac.seowon.media.studentadminsite.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import kr.ac.seowon.media.studentadminsite.SessionFactory;
-import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
 import kr.ac.seowon.media.studentadminsite.dao.AdminObserveDao;
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.exception.CustomCollectionValidtion;
-import kr.ac.seowon.media.studentadminsite.service.AdminStudentObserveService;
+import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminObserveCommandService;
+import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminStudentObserveService;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -34,6 +31,7 @@ public class AdminStudentObserveAPIController {
     private final UtilConfigure utilConfigure;
     private final AdminStudentObserveService adminStudentObserveService;
     private final CustomCollectionValidtion concurrentInsertStudentsInfo;
+    private final AdminObserveCommandService adminObserveCommandService;
     private final SessionFactory sessionFactory;
 
     /**
@@ -95,7 +93,7 @@ public class AdminStudentObserveAPIController {
     public Res modifyStduentInfo(
             HttpServletRequest request,
             @Valid AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
-        StudentDao.BasicStudent basicStudent = adminStudentObserveService.modifyStudentInfo(modifyStudentDto);
+        StudentDao.BasicStudent basicStudent = adminObserveCommandService.modifyStudentInfo(modifyStudentDto);
         return Res.isOkWithData(basicStudent, "정보 수정 성공");
     }
 
@@ -108,7 +106,7 @@ public class AdminStudentObserveAPIController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        List<StudentDao.BasicStudent> basicStudents = adminStudentObserveService.modifyStudentsInfo(modifyStudentDtos);
+        List<StudentDao.BasicStudent> basicStudents = adminObserveCommandService.modifyStudentsInfo(modifyStudentDtos);
         return Res.isOkWithData(basicStudents, "정보 수정 성공");
     }
     //TODO 요청 받는 값 변경
@@ -119,7 +117,7 @@ public class AdminStudentObserveAPIController {
             @PathVariable("adminId") Integer adminId,
             @Valid @RequestBody AdminObserveReq.BasicStudentDto basicStudentDto
     ) {
-        adminStudentObserveService.insertStudentInfo(adminId, basicStudentDto);
+        adminObserveCommandService.insertStudentInfo(adminId, basicStudentDto);
         return Res.isOkByMessage("학생정보를 저장하였습니다.");
     }
 
@@ -132,7 +130,7 @@ public class AdminStudentObserveAPIController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        adminStudentObserveService.concurrentInsertStudentsInfo(adminId, basicStudentDtos);
+        adminObserveCommandService.concurrentInsertStudentsInfo(adminId, basicStudentDtos);
         return Res.isOkByMessage("동시에 학생 정보를 입력하였습니다.");
     }
 
@@ -140,14 +138,14 @@ public class AdminStudentObserveAPIController {
     @Deprecated
     @DeleteMapping("/student/{studentId}")
     public Res deleteStudentInfo(@PathVariable("studentId") Integer studentId) {
-        adminStudentObserveService.deleteStudentInfo(studentId);
+        adminObserveCommandService.deleteStudentInfo(studentId);
         return Res.isOkByMessage(studentId + " 의 정보를 삭제 하였습니다.");
     }
 
     //복수 정보 삭제
     @DeleteMapping("/students/{studentIds}")
     public Res deleteStudentInfos(@PathVariable("studentIds") List<Integer> studentIds) {
-        List<AdminObserveDao.AdminObserveStudentInfo>  adminObserveStudentInfos = adminStudentObserveService.deleteStudentsInfo(studentIds);
+        List<AdminObserveDao.AdminObserveStudentInfo>  adminObserveStudentInfos = adminObserveCommandService.deleteStudentsInfo(studentIds);
         return Res.isOkWithData(adminObserveStudentInfos,"정보 삭제 성공");
     }
 

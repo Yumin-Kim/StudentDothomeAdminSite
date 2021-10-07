@@ -4,7 +4,7 @@ import kr.ac.seowon.media.studentadminsite.SessionFactory;
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
-import kr.ac.seowon.media.studentadminsite.service.StudentService;
+import kr.ac.seowon.media.studentadminsite.service.student.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

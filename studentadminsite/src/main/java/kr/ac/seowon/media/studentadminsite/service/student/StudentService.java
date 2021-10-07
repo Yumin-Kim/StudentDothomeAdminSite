@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.service;
+package kr.ac.seowon.media.studentadminsite.service.student;
 
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
