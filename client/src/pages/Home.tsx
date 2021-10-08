@@ -34,7 +34,7 @@ const Home = () => {
               <Link to="/admin">서버 관리자 페이지</Link>
             </Button>
             <Button type="primary">
-              <Link to="/portfolio">서버 관리자 페이지</Link>
+              <Link to="/portfolio/valid">서버 관리자 페이지</Link>
             </Button>
           </Col>
           <Col span={8} />

@@ -26,12 +26,6 @@ const CheckStudentPage = () => {
     );
   }, []);
 
-  useEffect(() => {
-    if (integrationRequestMessage) {
-      message.info(integrationRequestMessage);
-    }
-  }, [integrationRequestMessage]);
-
   if (integrationSucessMessage) {
     return <Redirect to="/portfolio/create" />;
   }

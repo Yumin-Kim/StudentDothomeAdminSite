@@ -18,21 +18,33 @@ const studentPortfolioReducer = (
 ): StudentPortfolioStore => {
   switch (action.type) {
     case CHECK_STDUENT_INSCHOOL.REQUEST:
-    case CREATE_STUDENT_PORTFOLIO.REQUEST:
     case MODIFIED_STUDENT_PORTFOLIO.REQUEST:
       return {
         ...state,
         integrationRequestMessage: "정보 전송중...",
       };
+    case CREATE_STUDENT_PORTFOLIO.REQUEST:
+      return {
+        ...state,
+        integrationRequestMessage:
+          "입력하신 정보를 저장하기 위해 정보 전송중... ",
+      };
+
     case CHECK_STDUENT_INSCHOOL.SUCCESS:
       return {
         ...state,
         integrationSucessMessage: action.payload.message,
       };
+    case CREATE_STUDENT_PORTFOLIO.SUCCESS:
+      return {
+        ...state,
+        integrationSucessMessage: action.payload.message,
+      };
+    case CREATE_STUDENT_PORTFOLIO.FAILURE:
     case CHECK_STDUENT_INSCHOOL.FAILURE:
       return {
         ...state,
-        integrationErrorMessage: action.payload,
+        integrationErrorMessage: action.payload.message,
       };
     case RESET_STUDENT_PORTFOLIO_MESSAGE:
       return {

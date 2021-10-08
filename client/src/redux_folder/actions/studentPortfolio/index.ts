@@ -32,7 +32,7 @@ export const findBasicStudentPortfolioInfoAction =
 export const createStudentPortfolioAPI = async (
   formdata: FormData
 ): Promise<I_AxiosDefaultDataFormat<string>> => {
-  return await axios.post(`/portfolie/person`, formdata, {
+  return await axios.post(`/portfolio/person`, formdata, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };

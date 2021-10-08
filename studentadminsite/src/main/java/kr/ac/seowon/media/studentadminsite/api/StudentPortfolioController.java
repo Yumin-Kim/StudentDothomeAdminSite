@@ -47,7 +47,9 @@ public class StudentPortfolioController {
 
     @Value("${file.dir}")
     private String basicFileDir;
-
+    //TODO 이름 학번으로 조회
+    // 생성해야할때는 이름 학번 전송
+    // 생성 되어 있는 정보라면 테이블 정보 전송
     /**
      * 학번 조회용 api
      * 조회 결과 데이터가 있으면 메세지 전송 프론트는 메세지를 통해 수정할 수 있는 페이지 보여주게끔
