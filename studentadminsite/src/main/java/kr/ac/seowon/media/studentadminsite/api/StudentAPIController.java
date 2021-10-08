@@ -26,7 +26,7 @@ public class StudentAPIController {
     public Res findStudentCodeAndName(
             HttpServletRequest request,
             @Validated({StudentReq.FindStudentCode.class}) @ModelAttribute StudentReq.StudentDto studentDto) {
-        sessionFactory.validationSession(request,"student");
+        sessionFactory.validationSession(request, "student");
         StudentDao.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "학번 조회 결과 입니다.");
     }
@@ -39,7 +39,7 @@ public class StudentAPIController {
 
     @PostMapping("/login")
     public Res studentLogin(HttpServletRequest request, @Validated({StudentReq.FindStudentCode.class}) @RequestBody StudentReq.StudentDto studentDto) {
-        sessionFactory.makeSession(request,"student",studentDto);
+        sessionFactory.makeSession(request, "student", studentDto);
         StudentDao.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "로그인 성공");
     }
@@ -48,7 +48,7 @@ public class StudentAPIController {
     public Res studentLogout(
             HttpServletRequest request
     ) {
-        sessionFactory.removeSession(request,"student");
+        sessionFactory.removeSession(request, "student");
         return Res.isOkByMessage("로그아웃 성공");
     }
 
@@ -58,7 +58,7 @@ public class StudentAPIController {
         StudentReq.StudentDto studentDto = new StudentReq.StudentDto(allStudentDto);
         StudentReq.SiteInfoDto siteInfoDto = new StudentReq.SiteInfoDto(allStudentDto);
 
-        StudentDao.BasicStudent basicStudent = studentService.createStudent(studentDto,siteInfoDto);
+        StudentDao.BasicStudent basicStudent = studentService.createStudent(studentDto, siteInfoDto);
         return Res.isOkWithData(basicStudent, "계정 생성 성공");
     }
 
@@ -71,7 +71,7 @@ public class StudentAPIController {
         StudentReq.StudentDto studentDto = new StudentReq.StudentDto(modifyStudentDto);
         StudentReq.SiteInfoDto siteInfoDto = new StudentReq.SiteInfoDto(modifyStudentDto);
 
-        StudentDao.BasicStudent basicStudent = studentService.modifyStudentInfo(studentId, studentDto,siteInfoDto);
+        StudentDao.BasicStudent basicStudent = studentService.modifyStudentInfo(studentId, studentDto, siteInfoDto);
         return Res.isOkWithData(basicStudent, "정보 수정을 완료 했습니다.");
     }
 

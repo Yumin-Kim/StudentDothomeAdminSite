@@ -43,7 +43,7 @@ export const routeToMappingData: IRoutePathNameComponentToEle[] = [
   },
   {
     pathName: "admin",
-    categoryName: "어드민 로그인",
+    categoryName: "학교 서버 관리자 로그인",
 
     formTagInInputEl: [
       {
@@ -62,7 +62,7 @@ export const routeToMappingData: IRoutePathNameComponentToEle[] = [
   },
   {
     pathName: "find",
-    categoryName: "계정 확인!!",
+    categoryName: "학번과 이름을 입력해주세요",
     formTagInInputEl: [
       {
         name: "name",

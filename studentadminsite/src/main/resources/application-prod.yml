@@ -1,5 +1,9 @@
 server:
   port: 8080
+
+file:
+  dir: /var/www/html/2021/studentImages
+
 config:
   sshusername: "multiadmin"
   sshhost: "media.seowon.ac.kr"

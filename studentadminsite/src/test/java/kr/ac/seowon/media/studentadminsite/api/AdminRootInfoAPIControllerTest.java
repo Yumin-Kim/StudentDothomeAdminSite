@@ -3,6 +3,7 @@ package kr.ac.seowon.media.studentadminsite.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
 import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
+import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -35,6 +36,9 @@ class AdminRootInfoAPIControllerTest {
     @MockBean
     AdminRootQueryService adminRootService;
 
+    @MockBean
+    AdminRootCommandService adminRootCommandService;
+
     @Autowired
     WebApplicationContext wac;
 
@@ -58,7 +62,7 @@ class AdminRootInfoAPIControllerTest {
         //given
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto("name", "hashcode", "123123", "password");
         AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
-        given(adminRootService.createAdmin(any()))
+        given(adminRootCommandService.createAdmin(any()))
                 .willReturn(basicAdmin);
         //when
         mockMvc.perform(post("/api/admin/rootinfo")
@@ -79,7 +83,7 @@ class AdminRootInfoAPIControllerTest {
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto(null, "hashcode", "", "");
         AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
 
-        given(adminRootService.createAdmin(any()))
+        given(adminRootCommandService.createAdmin(any()))
                 .willReturn(basicAdmin);
         mockMvc.perform(post("/api/admin/rootinfo")
                 .contentType(MediaType.APPLICATION_JSON)

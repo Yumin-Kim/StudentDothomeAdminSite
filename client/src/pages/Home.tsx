@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { Button } from "antd";
+import { Button, Row, Col } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getCookieInfo } from "../redux_folder/actions/admin/index";
@@ -14,7 +14,6 @@ const Home = () => {
 
   return (
     <>
-      <h1>Hello</h1>
       <div
         style={{
           margin: "0 auto",
@@ -24,12 +23,22 @@ const Home = () => {
         {/* <Button block>
           <Link to="/make">계정 생성</Link>
         </Button> */}
-        <Button block>
-          <Link to="/find">계정 찾기</Link>
-        </Button>
-        <Button block>
-          <Link to="/admin">관리자 페이지</Link>
-        </Button>
+
+        <Row gutter={[8, 16]}>
+          <Col span={8} />
+          <Col span={8}>
+            <Button block>
+              <Link to="/find">학교 서버 계정 확인</Link>
+            </Button>
+            <Button block>
+              <Link to="/admin">서버 관리자 페이지</Link>
+            </Button>
+            <Button type="primary">
+              <Link to="/portfolio">서버 관리자 페이지</Link>
+            </Button>
+          </Col>
+          <Col span={8} />
+        </Row>
       </div>
     </>
   );

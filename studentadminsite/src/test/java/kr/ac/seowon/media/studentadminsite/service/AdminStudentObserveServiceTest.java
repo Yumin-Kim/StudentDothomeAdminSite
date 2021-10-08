@@ -11,6 +11,7 @@ import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentExce
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
+import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminObserveCommandService;
 import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminStudentObserveService;
 import kr.ac.seowon.media.studentadminsite.utils.JdbcRootPermition;
 import kr.ac.seowon.media.studentadminsite.utils.SSHConnection;
@@ -35,6 +36,9 @@ class AdminStudentObserveServiceTest {
 
     @InjectMocks
     AdminStudentObserveService adminStudentObserveService;
+
+    @InjectMocks
+    AdminObserveCommandService adminObserveCommandService;
 
     @Mock
     StudentRepository studentRepository;
@@ -66,9 +70,9 @@ class AdminStudentObserveServiceTest {
                 .willReturn(Optional.empty())
                 .willReturn(Optional.of(student));
         //when
-        adminStudentObserveService.insertStudentInfo(1, basicStudentDto);
+        adminObserveCommandService.insertStudentInfo(1, basicStudentDto);
         //then
-        assertThrows(AdminObserveException.class, () -> adminStudentObserveService.insertStudentInfo(2, basicStudentDto));
+        assertThrows(AdminObserveException.class, () -> adminObserveCommandService.insertStudentInfo(2, basicStudentDto));
     }
 
     @Test
@@ -93,11 +97,11 @@ class AdminStudentObserveServiceTest {
                 .willReturn(Lists.emptyList());
 
         //when
-        adminStudentObserveService.concurrentInsertStudentsInfo(1, List.of(basicStudentDto1,basicStudentDto2));
+        adminObserveCommandService.concurrentInsertStudentsInfo(1, List.of(basicStudentDto1,basicStudentDto2));
         //then
-        assertThrows(AdminObserveException.class, () -> adminStudentObserveService.concurrentInsertStudentsInfo(2, List.of(basicStudentDto1,basicStudentDto2)));
-        assertThrows(InsertDuplicateException.class, () -> adminStudentObserveService.concurrentInsertStudentsInfo(2, List.of(basicStudentDto1,basicStudentDto2)));
-        assertThrows(AdminObserveException.class, () -> adminStudentObserveService.concurrentInsertStudentsInfo(2, List.of(basicStudentDto3,basicStudentDto4)));
+        assertThrows(AdminObserveException.class, () -> adminObserveCommandService.concurrentInsertStudentsInfo(2, List.of(basicStudentDto1,basicStudentDto2)));
+        assertThrows(InsertDuplicateException.class, () -> adminObserveCommandService.concurrentInsertStudentsInfo(2, List.of(basicStudentDto1,basicStudentDto2)));
+        assertThrows(AdminObserveException.class, () -> adminObserveCommandService.concurrentInsertStudentsInfo(2, List.of(basicStudentDto3,basicStudentDto4)));
     }
 
     @Test
@@ -125,8 +129,8 @@ class AdminStudentObserveServiceTest {
             final JdbcRootPermition jdbcRootPermition = new JdbcRootPermition(utilConfigure);
             doNothing().when(jdbcRootPermition).deleteDatabase(any());
             doNothing().when(siteInfoRespository).delete(any());
-            assertThrows(StudentException.class, () -> adminStudentObserveService.deleteStudentsInfo(List.of(1, 2)));
-            adminStudentObserveService.deleteStudentsInfo(List.of(3));
+            assertThrows(StudentException.class, () -> adminObserveCommandService.deleteStudentsInfo(List.of(1, 2)));
+            adminObserveCommandService.deleteStudentsInfo(List.of(3));
         }
 
         // when

@@ -1,5 +1,9 @@
 server:
   port: 5050
+
+file:
+  dir: /home/oem/WebDir/2021studentImages/
+
 config:
   sshusername: "user"
   sshhost: "172.17.0.1"
@@ -19,7 +23,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       show-sql: true
     properties:
       hibernate.format_sql: true
