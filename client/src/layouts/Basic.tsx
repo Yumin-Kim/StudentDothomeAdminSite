@@ -16,6 +16,7 @@ import StudentCreateAdmin from "../pages/AdminPage/StudentCreateAdmin";
 import DeleteUtilInfoPage from "../pages/AdminPage/DeleteUtilInfoPage";
 import { useHistory } from "react-router";
 import CreatePortFolioPage from "../pages/StudentPortFolioPage/CreatePortFolioPage";
+import CheckStudentPage from "../pages/StudentPortFolioPage/CheckStudentPage";
 const { Header, Content, Footer } = Layout;
 
 const Basic = () => {
@@ -30,7 +31,7 @@ const Basic = () => {
       <ContentCustom>
         <Switch>
           <Route path="/" component={Home} exact={true} />
-          <Route path="/portfolio" component={CreatePortFolioPage} />
+          <Route path="/portfolio" component={CheckStudentPage} />
           <Route path="/student/create" component={CreateStudentPage} />
           <Route path="/student/main" component={MainStudentPage} />
           <Route path="/student/edit" component={EditStudentPage} />

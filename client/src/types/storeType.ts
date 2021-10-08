@@ -52,6 +52,12 @@ export interface UtilStore {
   originDomainConnectionSucessMessage: string | null; // 통신 후 에러 메세지
   originDomainConnectionErrorMessage: string | null; // 통신 중 메세지 표시
 }
+//졸업 작품 관리 store
+export interface StudentPortfolioStore {
+  integrationSucessMessage: string | null; // 통신 후 성공 메세지
+  integrationErrorMessage: string | null; // 통신 후 에러 메세지
+  integrationRequestMessage: string | null; // 통신 중 메세지 표시
+}
 
 export interface I_DefaultStudentInfo {
   name: string;
@@ -133,4 +139,13 @@ export interface I_UtilDatabase {
 export interface I_UtilDomain {
   domain: string;
   password: string;
+}
+/////////////////////////////////
+export interface I_PortFolioFormData {
+  name: string;
+  studentCode: string;
+  profileFile: string;
+  brochureFile: string;
+  youtubeLink: string;
+  description: string;
 }
