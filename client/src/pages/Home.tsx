@@ -27,14 +27,14 @@ const Home = () => {
         <Row gutter={[8, 16]}>
           <Col span={8} />
           <Col span={8}>
-            <Button block>
+            <Button type="default" block>
               <Link to="/find">학교 서버 계정 확인</Link>
             </Button>
-            <Button block>
+            <Button type="default" block>
               <Link to="/admin">서버 관리자 페이지</Link>
             </Button>
-            <Button type="primary">
-              <Link to="/portfolio/valid">서버 관리자 페이지</Link>
+            <Button type="default" block>
+              <Link to="/portfolio/valid">졸업 작품 업로드</Link>
             </Button>
           </Col>
           <Col span={8} />

@@ -59,8 +59,8 @@ public class StudentPortfolioController {
      */
     @GetMapping("/person/{studentCode}")
     @Transactional(readOnly = true)
-    public Res findPersonPortfolio(@PathVariable("studentCode") Integer studentCode) {
-        String comment = (String) studentPortfolioRepository.findByStudentCode(studentCode)
+    public Res findPersonPortfolio(@PathVariable("studentCode") Integer studentCode,@RequestParam("name") String name) {
+        String comment = (String) studentPortfolioRepository.findByStudentCodeAndName(studentCode, name)
                 .map(studentPortfolio -> {
                     if (studentPortfolio.getStudentCode() != null) {
                         throw new StudentException(ErrorCode.IS_STUDENT_DATA.getMessage());
@@ -69,6 +69,8 @@ public class StudentPortfolioController {
                 }).orElseGet(() -> "학생 정보를 생성해주세요");
         return Res.isOkByMessage(comment);
     }
+
+
 
     /**
      * 학생 정보 저장

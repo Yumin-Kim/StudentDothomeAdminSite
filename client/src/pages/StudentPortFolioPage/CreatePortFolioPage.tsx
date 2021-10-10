@@ -9,6 +9,9 @@ import { layout } from "../StudentPage/CreateStudentPage";
 import { tailLayout } from "../StudentPage/EditStudentPage";
 import { createStudentPortfolioAction } from "../../redux_folder/actions/studentPortfolio/index";
 import { Redirect } from "react-router";
+
+const { TextArea } = Input;
+
 // input 제공하며 form-data를 통해서 통신 할 수 있도록
 //이름 학번 유튜브 링크 소개글 프로필이미지 브로슈어이미지
 const normFile = (e: any) => {
@@ -32,14 +35,18 @@ const CreatePortFolioPage = () => {
   const onFinishForm = useCallback(values => {
     console.log(values);
     let formData = new FormData();
+    // const data = values.description.replace(/\\/, "HHHHH");
+    // console.log(values.description.replace(/ \ 134/g, "/"));
+
     formData.append("name", values.name);
     formData.append("studentCode", values.studentCode);
     formData.append("profileFile", values.profileFile[0].originFileObj);
     formData.append("brochureFile", values.brochureFile[0].originFileObj);
     formData.append("youtubeLink", values.youtubeLink);
     formData.append("description", values.description);
-    dispatch(createStudentPortfolioAction.ACTION.REQUEST(formData));
-    setFormEvnetCheck(true);
+
+    // dispatch(createStudentPortfolioAction.ACTION.REQUEST(formData));
+    // setFormEvnetCheck(true);
   }, []);
 
   useEffect(() => {
@@ -97,7 +104,7 @@ const CreatePortFolioPage = () => {
           label="소개글"
           rules={[{ required: true, message: "소개글을 입력해주세요" }]}
         >
-          <Input />
+          <TextArea />
         </Form.Item>
         <Form.Item
           name="profileFile"

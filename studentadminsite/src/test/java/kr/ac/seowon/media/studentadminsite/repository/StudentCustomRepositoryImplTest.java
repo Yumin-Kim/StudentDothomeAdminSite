@@ -12,14 +12,4 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class StudentCustomRepositoryImplTest {
 
-    @Test
-    @DisplayName("")
-    void condition_sort_where() throws Exception{
-        //given
-
-        //when
-
-        //then
-    }
-
 }
