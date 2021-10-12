@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.util.StringUtils.hasText;
+
 public class StudentPortFolioRes {
 
     @Getter
@@ -30,13 +32,20 @@ public class StudentPortFolioRes {
         private LocalDateTime lastModifiedAt;
         private String profileImageSrc;
         private String brochureImageSrc;
+        private String description;
+        private String youtubeLink;
 
         public StandardInfoDto(StudentPortfolio studentPortfolio) {
             name = studentPortfolio.getName();
             studentCode = studentPortfolio.getStudentCode();
             lastModifiedAt = studentPortfolio.getLastModifiedDate();
-            profileImageSrc = "/2021studentImages/" + studentPortfolio.getStudentCode().toString() + "_profile" + studentPortfolio.getProfileImageFormat();
-            brochureImageSrc = "/2021studentImages/" + studentPortfolio.getStudentCode().toString() + "_brochure" + studentPortfolio.getBrochureImageFormat();
+            description = studentPortfolio.getDescription();
+            youtubeLink = studentPortfolio.getYoutubeLink();
+            if (hasText(studentPortfolio.getBrochureImageFormat()) ){
+                brochureImageSrc = "/studentImages/" + studentPortfolio.getStudentCode().toString() + "_brochure" + studentPortfolio.getBrochureImageFormat();
+            }
+            if (hasText(studentPortfolio.getProfileImageFormat()))
+            profileImageSrc = "/studentImages/" + studentPortfolio.getStudentCode().toString() + "_profile" + studentPortfolio.getProfileImageFormat();
         }
     }
 

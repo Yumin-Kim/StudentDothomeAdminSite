@@ -54,6 +54,8 @@ export interface UtilStore {
 }
 //졸업 작품 관리 store
 export interface StudentPortfolioStore {
+  basicStudentInfo: I_DefaultStudentInfo | null; //로그인 및 계정 생성시
+  resultStudentPortFolio: I_RegisteredPortfolio | null; //등록 성공시 또는 수정 완료시
   integrationSucessMessage: string | null; // 통신 후 성공 메세지
   integrationErrorMessage: string | null; // 통신 후 에러 메세지
   integrationRequestMessage: string | null; // 통신 중 메세지 표시
@@ -148,4 +150,16 @@ export interface I_PortFolioFormData {
   brochureFile: string;
   youtubeLink: string;
   description: string;
+}
+
+export interface I_RegisteredPortfolio extends I_DefaultStudentInfo {
+  lastModifiedAt: string;
+  description: string | null;
+  profileImageSrc: string | null;
+  brochureImageSrc: string | null;
+  youtubeLink: string | null;
+}
+export interface I_DefaultBasicStudentPortfolioInfo
+  extends I_DefaultStudentInfo {
+  password: string;
 }

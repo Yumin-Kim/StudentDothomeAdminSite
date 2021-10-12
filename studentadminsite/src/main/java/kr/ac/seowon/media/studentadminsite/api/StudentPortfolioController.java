@@ -100,7 +100,7 @@ public class StudentPortfolioController {
     public Res findStudentPortFolieInfoAndLogin(@RequestBody StudentPortfolioReq.StudentPortFolieSignUpDto loginDto) {
         final StudentPortfolio studentPortfolio = studentPortfolioRepository.findByStudentCodeAndPassword(loginDto.getStudentCode(), loginDto.getPassword())
                 .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_ID_NOT_FOUND));
-        return Res.isOkWithData(new StudentPortFolioRes.BasicInfoDto(studentPortfolio.getName(), studentPortfolio.getStudentCode()), "로그인 성공!");
+        return Res.isOkWithData(new StudentPortFolioRes.StandardInfoDto(studentPortfolio), "로그인 성공!");
     }
 
 

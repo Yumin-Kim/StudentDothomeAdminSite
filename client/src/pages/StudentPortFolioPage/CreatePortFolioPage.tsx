@@ -28,6 +28,8 @@ const CreatePortFolioPage = () => {
     integrationErrorMessage,
     integrationRequestMessage,
     integrationSucessMessage,
+    resultStudentPortFolio,
+    basicStudentInfo,
   } = useSelector((state: ROOTSTATE) => state.studentPortfolio);
 
   const [formEvnetCheck, setFormEvnetCheck] = useState(false);
@@ -46,6 +48,11 @@ const CreatePortFolioPage = () => {
   }, []);
 
   useEffect(() => {
+    form.setFieldsValue({
+      name: resultStudentPortFolio?.name,
+      studentCode: resultStudentPortFolio?.studentCode,
+    });
+
     if (integrationRequestMessage) {
       message.info(integrationRequestMessage);
     }
@@ -58,7 +65,9 @@ const CreatePortFolioPage = () => {
   if (integrationSucessMessage && formEvnetCheck) {
     return <Redirect to="/portfolio/default" />;
   }
-
+  if (!resultStudentPortFolio) {
+    return <Redirect to="/portfolio/valid" />;
+  }
   return (
     <>
       <Form {...layout} form={form} onFinish={onFinishForm}>
@@ -67,7 +76,7 @@ const CreatePortFolioPage = () => {
           label="이름"
           rules={[{ required: true, message: "이름을 입력해주세요" }]}
         >
-          <Input />
+          <Input disabled />
         </Form.Item>
         <Form.Item
           label="학번 입력"
@@ -84,13 +93,25 @@ const CreatePortFolioPage = () => {
             }),
           ]}
         >
-          <Input type="number" />
+          <Input type="number" disabled />
         </Form.Item>
         <Form.Item
           name="youtubeLink"
           label="유튜브 주소"
           rules={[
             { required: true, message: "본인의 유튜브 주소를 입력해주세요" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || String(value).includes("embed")) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error(
+                    "유튜브 주소는 공유하기 >> 코드 안에 iframe 태그안 src만 입력 가능합니다."
+                  )
+                );
+              },
+            }),
           ]}
         >
           <Input />

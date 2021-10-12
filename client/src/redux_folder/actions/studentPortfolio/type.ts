@@ -3,8 +3,10 @@ import {
   createStudentPortfolioAction,
   modifyStudentPortfolioAction,
   resetStudentPortfolioMessageAcion,
+  loginStudentPortfolioAction,
 } from "./index";
 import { EntityAction } from "../../../types/action";
+import { createStudentPortfolioBasicInfoAcion } from "./index";
 //학생 정보 확인
 export const CHECK_STDUENT_INSCHOOL = {
   REQUEST: "REQUEST_CHECK_STDUENT_INSCHOOL",
@@ -48,6 +50,15 @@ export type T_CreateStudentPortfolioAction = EntityAction<
 export type T_ModifyStudentPortfolioActon = EntityAction<
   typeof modifyStudentPortfolioAction
 >;
+
+export type T_CreateStudentPortfolioBasicInfoAction = EntityAction<
+  typeof createStudentPortfolioBasicInfoAcion
+>;
+
+export type T_LoginStudentPortfolioAciton = EntityAction<
+  typeof loginStudentPortfolioAction
+>;
+
 export type T_ResetStudentPortfolioMessage = ReturnType<
   typeof resetStudentPortfolioMessageAcion
 >;
@@ -55,5 +66,7 @@ export type T_ResetStudentPortfolioMessage = ReturnType<
 export type STUDENT_PORTFOLIO_MERGE_ACIONS =
   | T_CheckStudentInSchoolAction
   | T_CreateStudentPortfolioAction
+  | T_LoginStudentPortfolioAciton
+  | T_CreateStudentPortfolioBasicInfoAction
   | T_ModifyStudentPortfolioActon
   | T_ResetStudentPortfolioMessage;

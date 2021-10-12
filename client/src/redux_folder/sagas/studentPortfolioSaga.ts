@@ -7,8 +7,19 @@ import {
   takeLatest,
 } from "@redux-saga/core/effects";
 import axios from "axios";
-import { T_ModifyStudentPortfolioActon } from "../actions/studentPortfolio/type";
-import { modifyStudentPortfolioAction } from "../actions/studentPortfolio/index";
+import { MODIFIED_STUDENT_PORTFOLIO } from "../actions/studentPortfolio/type";
+import {
+  T_ModifyStudentPortfolioActon,
+  CREATE_STUDENT_PORTFOLIO_BASIC_INFO,
+  LOGIN_STUDENT_PORTFOLIO,
+  T_LoginStudentPortfolioAciton,
+  T_CreateStudentPortfolioBasicInfoAction,
+} from "../actions/studentPortfolio/type";
+import {
+  modifyStudentPortfolioAction,
+  loginStudentPortfolioAction,
+  createStudentPortfolioBasicInfoAcion,
+} from "../actions/studentPortfolio/index";
 import {
   CHECK_STDUENT_INSCHOOL,
   T_CheckStudentInSchoolAction,
@@ -93,15 +104,72 @@ function* sagaMethodModifyStudentPortfolio(
 
 function* watchModifiyStudentPortofolio() {
   yield takeLatest(
-    CREATE_STUDENT_PORTFOLIO.REQUEST,
+    MODIFIED_STUDENT_PORTFOLIO.REQUEST,
     sagaMethodModifyStudentPortfolio
   );
 }
 
+function* sagaMethodLoginStudentPortfolio(
+  action: T_LoginStudentPortfolioAciton
+) {
+  try {
+    if (action.type === "REQUEST_LOGIN_STUDENT_PORTFOLIO") {
+      const { data } = yield call(
+        loginStudentPortfolioAction.API,
+        action.payload
+      );
+      yield put(loginStudentPortfolioAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      yield put(
+        loginStudentPortfolioAction.ACTION.FAILURE(error.response?.data)
+      );
+    }
+  }
+}
+
+function* watchLoginStudentPortofolio() {
+  yield takeLatest(
+    LOGIN_STUDENT_PORTFOLIO.REQUEST,
+    sagaMethodLoginStudentPortfolio
+  );
+}
+
+function* sagaMethodCreateStudentPortfolioBasicInfo(
+  action: T_CreateStudentPortfolioBasicInfoAction
+) {
+  try {
+    if (action.type === "REQUEST_CREATE_STUDENT_PORTFOLIO_BASIC_INFO") {
+      const { data } = yield call(
+        createStudentPortfolioBasicInfoAcion.API,
+        action.payload
+      );
+      yield put(createStudentPortfolioBasicInfoAcion.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      yield put(
+        createStudentPortfolioBasicInfoAcion.ACTION.FAILURE(
+          error.response?.data
+        )
+      );
+    }
+  }
+}
+
+function* watchCreateStudentPortofolioBasicInfo() {
+  yield takeLatest(
+    CREATE_STUDENT_PORTFOLIO_BASIC_INFO.REQUEST,
+    sagaMethodCreateStudentPortfolioBasicInfo
+  );
+}
 export default function* stduentPortfolioSaga() {
   yield all([
     fork(watchFindBasicStudentPortfolio),
     fork(watchCreateStudentPortofolio),
     fork(watchModifiyStudentPortofolio),
+    fork(watchLoginStudentPortofolio),
+    fork(watchCreateStudentPortofolioBasicInfo),
   ]);
 }

@@ -18,6 +18,7 @@ import CreatePortFolioPage from "../pages/StudentPortFolioPage/CreatePortFolioPa
 import CheckStudentPage from "../pages/StudentPortFolioPage/CheckStudentPage";
 import ModifiedPortFolioPage from "../pages/StudentPortFolioPage/ModifiedPortFolioPage";
 import DefaultPortfolioPage from "../pages/StudentPortFolioPage/DefaultPortfolioPage";
+import SignupStudentPage from "../pages/StudentPortFolioPage/SignupStudentPage";
 const { Header, Content, Footer } = Layout;
 
 const Basic = () => {
@@ -32,6 +33,7 @@ const Basic = () => {
       <ContentCustom>
         <Switch>
           <Route path="/" component={Home} exact={true} />
+          <Route path="/portfolio/signup" component={SignupStudentPage} />
           <Route path="/portfolio/valid" component={CheckStudentPage} />
           <Route path="/portfolio/default" component={DefaultPortfolioPage} />
           <Route path="/portfolio/create" component={CreatePortFolioPage} />

@@ -3,8 +3,12 @@ import { Button, Form, Input, message } from "antd";
 import { layout, tailLayout } from "../StudentPage/EditStudentPage";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTATE } from "../../redux_folder/reducers/root";
-import { findBasicStudentPortfolioInfoAction } from "../../redux_folder/actions/studentPortfolio/index";
+import {
+  findBasicStudentPortfolioInfoAction,
+  loginStudentPortfolioAction,
+} from "../../redux_folder/actions/studentPortfolio/index";
 import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
 
 //학번 이름 조회
 //조회 결과 시 존재하면 수정하는 장소로 이동
@@ -17,28 +21,34 @@ const CheckStudentPage = () => {
     integrationErrorMessage,
     integrationRequestMessage,
     integrationSucessMessage,
+    resultStudentPortFolio,
   } = useSelector((state: ROOTSTATE) => state.studentPortfolio);
 
   const onFinishForm = useCallback(value => {
-    console.log(value);
     dispatch(
-      findBasicStudentPortfolioInfoAction.ACTION.REQUEST(value.studentCode)
+      loginStudentPortfolioAction.ACTION.REQUEST({
+        password: value.password,
+        studentCode: value.studentCode,
+      })
     );
   }, []);
 
-  if (integrationSucessMessage) {
-    return <Redirect to="/portfolio/create" />;
-  }
-  if (integrationErrorMessage) {
+  useEffect(() => {
+    if (integrationErrorMessage) {
+      message.error(integrationErrorMessage);
+    }
+    // console.log(resultStudentPortFolio?.brochureImage);
+  }, [integrationErrorMessage, integrationSucessMessage]);
+  if (integrationSucessMessage && resultStudentPortFolio?.brochureImageSrc) {
     return <Redirect to="/portfolio/default" />;
+  }
+  if (integrationSucessMessage && !resultStudentPortFolio?.brochureImageSrc) {
+    return <Redirect to="/portfolio/create" />;
   }
 
   return (
     <>
       <Form {...layout} form={form} onFinish={onFinishForm}>
-        <Form.Item name="name" label="이름">
-          <Input />
-        </Form.Item>
         <Form.Item
           label="학번 입력"
           name="studentCode"
@@ -56,9 +66,26 @@ const CheckStudentPage = () => {
         >
           <Input type="number" />
         </Form.Item>
+
+        <Form.Item
+          name="password"
+          label="비밀 번호"
+          rules={[
+            {
+              required: true,
+              message: "비밀 번호를 입력해주세요",
+            },
+          ]}
+          hasFeedback
+        >
+          <Input.Password />
+        </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit">
-            조회
+            로그인
+          </Button>
+          <Button type="default">
+            <Link to="/portfolio/signup">회원 가입</Link>
           </Button>
         </Form.Item>
       </Form>
