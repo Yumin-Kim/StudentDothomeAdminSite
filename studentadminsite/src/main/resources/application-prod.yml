@@ -2,7 +2,7 @@ server:
   port: 8080
 
 file:
-  dir: /var/www/html/2021/studentImages
+  dir: /var/www/html/2021/studentImages/
 
 config:
   sshusername: "multiadmin"

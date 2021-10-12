@@ -35,18 +35,14 @@ const CreatePortFolioPage = () => {
   const onFinishForm = useCallback(values => {
     console.log(values);
     let formData = new FormData();
-    // const data = values.description.replace(/\\/, "HHHHH");
-    // console.log(values.description.replace(/ \ 134/g, "/"));
-
     formData.append("name", values.name);
     formData.append("studentCode", values.studentCode);
     formData.append("profileFile", values.profileFile[0].originFileObj);
     formData.append("brochureFile", values.brochureFile[0].originFileObj);
     formData.append("youtubeLink", values.youtubeLink);
     formData.append("description", values.description);
-
-    // dispatch(createStudentPortfolioAction.ACTION.REQUEST(formData));
-    // setFormEvnetCheck(true);
+    dispatch(createStudentPortfolioAction.ACTION.REQUEST(formData));
+    setFormEvnetCheck(true);
   }, []);
 
   useEffect(() => {
