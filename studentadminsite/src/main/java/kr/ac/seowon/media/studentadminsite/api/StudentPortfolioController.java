@@ -20,6 +20,7 @@ package kr.ac.seowon.media.studentadminsite.api;
 
 import kr.ac.seowon.media.studentadminsite.domain.StudentPortfolio;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
+import kr.ac.seowon.media.studentadminsite.dto.StudentPortFolioRes;
 import kr.ac.seowon.media.studentadminsite.dto.StudentPortfolioReq;
 import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
@@ -29,13 +30,13 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+
+import static org.springframework.util.StringUtils.hasText;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,9 +48,7 @@ public class StudentPortfolioController {
 
     @Value("${file.dir}")
     private String basicFileDir;
-    //TODO 이름 학번으로 조회
-    // 생성해야할때는 이름 학번 전송
-    // 생성 되어 있는 정보라면 테이블 정보 전송
+
     /**
      * 학번 조회용 api
      * 조회 결과 데이터가 있으면 메세지 전송 프론트는 메세지를 통해 수정할 수 있는 페이지 보여주게끔
@@ -58,18 +57,51 @@ public class StudentPortfolioController {
      * @return
      */
     @GetMapping("/person/{studentCode}")
+    @Deprecated
     @Transactional(readOnly = true)
     public Res findPersonPortfolio(@PathVariable("studentCode") Integer studentCode) {
         String comment = (String) studentPortfolioRepository.findByStudentCode(studentCode)
                 .map(studentPortfolio -> {
                     if (studentPortfolio.getStudentCode() != null) {
-                        throw new StudentException(ErrorCode.IS_STUDENT_DATA.getMessage());
+                        throw new StudentException(ErrorCode.STUDENT_HAS_DATA.getMessage());
                     }
                     return null;
                 }).orElseGet(() -> "학생 정보를 생성해주세요");
         return Res.isOkByMessage(comment);
     }
 
+    /**
+     * 학생 계정 생성
+     *
+     * @param signupDto 이름 학번 비밀번호 security 사용하지 않음
+     * @return basic하게 이름 학번만 전송
+     */
+    @PostMapping("/person/signup")
+    @Transactional
+    public Res createStudentBasicInfo(@RequestBody StudentPortfolioReq.StudentPortFolieSignUpDto signupDto) {
+        final StudentPortfolio studentPortfolio = studentPortfolioRepository.findByStudentCodeAndName(signupDto.getStudentCode(), signupDto.getName())
+                .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_FOUND));
+        if (hasText(studentPortfolio.getPassword())) {
+            return Res.isOkWithData(new StudentPortFolioRes.BasicInfoDto(studentPortfolio.getName(), studentPortfolio.getStudentCode()), "현재 비밀번호는 " + studentPortfolio.getPassword() + "입니다");
+        }
+        studentPortfolio.updatePassword(signupDto.getPassword());
+        return Res.isOkWithData(new StudentPortFolioRes.BasicInfoDto(studentPortfolio.getName(), studentPortfolio.getStudentCode()), "계정이 생성 되었습니다.");
+    }
+
+    /**
+     * 학생 로그인
+     * 학번 비밀번호만으로 로그인 여부 파악 security 사용하지 않음
+     *
+     * @param loginDto 학번 비밀번호
+     * @return
+     */
+    @PostMapping("/person/login")
+    @Transactional(readOnly = true)
+    public Res findStudentPortFolieInfoAndLogin(@RequestBody StudentPortfolioReq.StudentPortFolieSignUpDto loginDto) {
+        final StudentPortfolio studentPortfolio = studentPortfolioRepository.findByStudentCodeAndPassword(loginDto.getStudentCode(), loginDto.getPassword())
+                .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_ID_NOT_FOUND));
+        return Res.isOkWithData(new StudentPortFolioRes.BasicInfoDto(studentPortfolio.getName(), studentPortfolio.getStudentCode()), "로그인 성공!");
+    }
 
 
     /**
@@ -82,34 +114,24 @@ public class StudentPortfolioController {
     @PostMapping("/person")
     @Transactional
     public Res createPersonPortfolio(@ModelAttribute StudentPortfolioReq.StudentPortFolioDto studentPortFolioDto) {
-        StudentPortfolio studentPortfolio = (StudentPortfolio) studentPortfolioRepository.findByStudentCode(studentPortFolioDto.getStudentCode())
-                .map(findstudentPortfolio -> {
-                    if (findstudentPortfolio.getName() != null) {
-                        throw new StudentException(ErrorCode.STUDENTCODE_DUPLICATE_ERROR);
-                    }
-                    return null;
-                }).orElseGet(() -> {
-                    saveStudentImages(studentPortFolioDto,null);
-                    return studentPortFolioDto.toEntity();
-                });
-
+        StudentPortfolio studentPortfolio = (StudentPortfolio) studentPortfolioRepository.findByStudentCodeAndName(studentPortFolioDto.getStudentCode(), studentPortFolioDto.getName())
+                .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_FOUND));
+        saveStudentImages(studentPortFolioDto, null);
+        studentPortfolio.updateEntity(studentPortFolioDto);
         studentPortfolioRepository.save(studentPortfolio);
-
-        return Res.isOkByMessage("정보 저장 완료");
+        return Res.isOkWithData(new StudentPortFolioRes.StandardInfoDto(studentPortfolio), "등록이 완료 되었습니다.");
     }
 
-    /*
-    학생 정보 수정
-     */
     @PutMapping("/person/{studentCode}")
     @Transactional
     public Res modifyPersonPortfolio(
-            @PathVariable Integer studentCode, @ModelAttribute StudentPortfolioReq.StudentPortFolioDto studentPortFolioDto) {
+            @PathVariable Integer studentCode,
+            @ModelAttribute StudentPortfolioReq.StudentPortFolioDto studentPortFolioDto) {
         final StudentPortfolio studentPortfolio = studentPortfolioRepository.findByStudentCode(studentCode)
                 .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_FOUND));
         studentPortfolio.updateEntity(studentPortFolioDto);
-        saveStudentImages(studentPortFolioDto,studentCode);
-        return Res.isOkByMessage("정보 수정 완료 하였습니다.");
+        saveStudentImages(studentPortFolioDto, studentCode);
+        return Res.isOkWithData(new StudentPortFolioRes.StandardInfoDto(studentPortfolio), "정보 수정 완료 하였습니다.");
     }
 
 
@@ -118,8 +140,7 @@ public class StudentPortfolioController {
         return Res.isOkByMessage(e.getMessage());
     }
 
-
-    private void saveStudentImages(StudentPortfolioReq.StudentPortFolioDto studentPortFolioDto,Integer prevStudentCode ) {
+    private void saveStudentImages(StudentPortfolioReq.StudentPortFolioDto studentPortFolioDto, Integer prevStudentCode) {
         if (studentPortFolioDto.getBrochureFile() != null) {
             if (prevStudentCode != null) {
                 final File fileJPG = new File(basicFileDir + prevStudentCode.toString() + "_brochure.png");

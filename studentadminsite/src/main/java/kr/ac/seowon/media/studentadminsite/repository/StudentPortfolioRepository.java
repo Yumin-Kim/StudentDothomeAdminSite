@@ -10,4 +10,8 @@ public interface StudentPortfolioRepository extends JpaRepository<StudentPortfol
     Optional<StudentPortfolio> findByStudentCode(Integer studentCode);
 
     Optional<StudentPortfolio> findByStudentCodeAndName(Integer studentCode, String name);
+
+    Optional<StudentPortfolio> findByStudentCodeAndNameAndPassword(Integer studentCode, String name, String password);
+
+    Optional<StudentPortfolio> findByStudentCodeAndPassword(Integer studentCode, String password);
 }

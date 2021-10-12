@@ -15,9 +15,13 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-    STUDENT_NOT_FOUND("학생 정보가 존재하지 않습니다.",1),
+    STUDENT_NOT_FOUND("입력한 학생 정보를 다시 확인 해주세요",1),
     STUDENTCODE_DUPLICATE_ERROR("중복되는 학번을 입력하였습니다.",12),
-    IS_STUDENT_DATA("존재하는 학생입니다.",13),
+    STUDENT_HAS_DATA("존재하는 학생입니다.", 13),
+    STUDENT_ID_NOT_FOUND("비밀 번호 및 학번을 확인해주세요",14),
+    SSH_CONNECTION_ERROR(" SSH 연결 실패", 3),
+    JDBC_CONNECTION_ERROR("jdbc 연결 에러 발생", 40),
+    JDBC_COMMIT_ROLLBACK("jdbc commit 에러 발생하여 rollback이 발생",41),
     IMAGE_UPLOAD_ERROR("이미지 업로드 실패", 5);
     private String message;
     private Integer statusCode;

@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "student_portfolio")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudentPortfolio  extends  BaseEntity{
+public class StudentPortfolio extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -23,13 +23,14 @@ public class StudentPortfolio  extends  BaseEntity{
     private String name;
     @Column(unique = true)
     private Integer studentCode;
-    @Column(columnDefinition ="TEXT" )
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String youtubeLink;
     private String profileImageFormat;
     private String brochureImageFormat;
+    private String password;
 
-    protected StudentPortfolio(String name, Integer studentCode, String description, String youtubeLink,String profileImageFormat , String brochureImageFormat) {
+    protected StudentPortfolio(String name, Integer studentCode, String description, String youtubeLink, String profileImageFormat, String brochureImageFormat) {
         this.name = name;
         this.studentCode = studentCode;
         this.description = description;
@@ -38,8 +39,8 @@ public class StudentPortfolio  extends  BaseEntity{
         this.brochureImageFormat = brochureImageFormat;
     }
 
-    public static StudentPortfolio createEntity(String name, Integer studentCode, String youtubeLink, String description , String profileImageFormat , String brochureImageFormat) {
-        return new StudentPortfolio(name, studentCode, description, youtubeLink ,profileImageFormat, brochureImageFormat);
+    public static StudentPortfolio createEntity(String name, Integer studentCode, String youtubeLink, String description, String profileImageFormat, String brochureImageFormat) {
+        return new StudentPortfolio(name, studentCode, description, youtubeLink, profileImageFormat, brochureImageFormat);
     }
 
     public void updateEntity(StudentPortfolioReq.StudentPortFolioDto studentPortFolioDto) {
@@ -70,4 +71,9 @@ public class StudentPortfolio  extends  BaseEntity{
             }
         }
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
 }
