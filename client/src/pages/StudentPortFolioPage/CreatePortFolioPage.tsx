@@ -43,6 +43,8 @@ const CreatePortFolioPage = () => {
     formData.append("brochureFile", values.brochureFile[0].originFileObj);
     formData.append("youtubeLink", values.youtubeLink);
     formData.append("description", values.description);
+    formData.append("job", values.job);
+    formData.append("slogan", values.slogan);
     dispatch(createStudentPortfolioAction.ACTION.REQUEST(formData));
     setFormEvnetCheck(true);
   }, []);
@@ -96,6 +98,31 @@ const CreatePortFolioPage = () => {
           <Input type="number" disabled />
         </Form.Item>
         <Form.Item
+          name="slogan"
+          label="슬로건"
+          rules={[
+            {
+              required: true,
+              message: "슬로건을 입력해주세요",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="job"
+          label="직업"
+          rules={[
+            {
+              required: true,
+              message: "직업을 입력해주세요",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           name="youtubeLink"
           label="유튜브 주소"
           rules={[
@@ -116,6 +143,7 @@ const CreatePortFolioPage = () => {
         >
           <Input />
         </Form.Item>
+
         <Form.Item
           name="description"
           label="소개글"

@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 
+import static org.springframework.util.StringUtils.hasText;
+
 //이름 학번 글귀 유튜브 링크 팀장
 @Entity
 @Getter
@@ -29,6 +31,10 @@ public class StudentPortfolio extends BaseEntity {
     private String profileImageFormat;
     private String brochureImageFormat;
     private String password;
+    private String email;
+    private String phoneNumber;
+    private String slogan;
+    private String job;
 
     protected StudentPortfolio(String name, Integer studentCode, String description, String youtubeLink, String profileImageFormat, String brochureImageFormat) {
         this.name = name;
@@ -47,14 +53,26 @@ public class StudentPortfolio extends BaseEntity {
         if (studentPortFolioDto.getStudentCode() != null) {
             this.studentCode = studentPortFolioDto.getStudentCode();
         }
-        if (StringUtils.hasText(studentPortFolioDto.getDescription())) {
+        if (hasText(studentPortFolioDto.getDescription())) {
             this.description = studentPortFolioDto.getDescription();
         }
-        if (StringUtils.hasText(studentPortFolioDto.getName())) {
+        if (hasText(studentPortFolioDto.getName())) {
             this.name = studentPortFolioDto.getName();
         }
-        if (StringUtils.hasText(studentPortFolioDto.getYoutubeLink())) {
+        if (hasText(studentPortFolioDto.getYoutubeLink())) {
             this.youtubeLink = studentPortFolioDto.getYoutubeLink();
+        }
+        if (hasText(studentPortFolioDto.getJob())) {
+            this.job = studentPortFolioDto.getJob();
+        }
+        if (hasText(studentPortFolioDto.getEmail())) {
+            this.email = studentPortFolioDto.getEmail();
+        }
+        if (hasText(studentPortFolioDto.getPhoneNumber())) {
+            this.phoneNumber = studentPortFolioDto.getPhoneNumber();
+        }
+        if (hasText((studentPortFolioDto.getSlogan()))) {
+            this.slogan = studentPortFolioDto.getSlogan();
         }
         if (studentPortFolioDto.getBrochureFile() != null) {
             if (!studentPortFolioDto.getBrochureFile().isEmpty()) {
@@ -76,4 +94,11 @@ public class StudentPortfolio extends BaseEntity {
         this.password = password;
     }
 
+    public void updatePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
 }

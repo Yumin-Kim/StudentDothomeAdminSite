@@ -47,7 +47,7 @@ if($count){
     <!-- iframe을 활용하여 유튜브 단 유튜브 링크는  -->
     <!-- <div class="video-container"> -->
     <h3>개인 영상 </h3>
-    <iframe width="700" height="500" src="<?php echo $youtubeLink?>">
+    <iframe width="1280" height="720" src="<?php echo $youtubeLink?>">
 <!-- </div> -->
 </iframe>
 

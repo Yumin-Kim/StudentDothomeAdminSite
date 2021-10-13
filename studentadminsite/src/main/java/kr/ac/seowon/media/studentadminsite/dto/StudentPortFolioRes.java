@@ -34,6 +34,10 @@ public class StudentPortFolioRes {
         private String brochureImageSrc;
         private String description;
         private String youtubeLink;
+        private String email;
+        private String phoneNumber;
+        private String slogan;
+        private String job;
 
         public StandardInfoDto(StudentPortfolio studentPortfolio) {
             name = studentPortfolio.getName();
@@ -41,6 +45,11 @@ public class StudentPortFolioRes {
             lastModifiedAt = studentPortfolio.getLastModifiedDate();
             description = studentPortfolio.getDescription();
             youtubeLink = studentPortfolio.getYoutubeLink();
+            email = studentPortfolio.getEmail();
+            phoneNumber = studentPortfolio.getPhoneNumber();
+            slogan = studentPortfolio.getSlogan();
+            job = studentPortfolio.getJob();
+
             if (hasText(studentPortfolio.getBrochureImageFormat()) ){
                 brochureImageSrc = "/studentImages/" + studentPortfolio.getStudentCode().toString() + "_brochure" + studentPortfolio.getBrochureImageFormat();
             }

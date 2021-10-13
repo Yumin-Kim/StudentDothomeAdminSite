@@ -158,8 +158,18 @@ export interface I_RegisteredPortfolio extends I_DefaultStudentInfo {
   profileImageSrc: string | null;
   brochureImageSrc: string | null;
   youtubeLink: string | null;
+  slogan: string | null;
+  job: string | null;
+  phoneNumber: string | null;
+  email: String | null;
 }
 export interface I_DefaultBasicStudentPortfolioInfo
   extends I_DefaultStudentInfo {
   password: string;
+}
+
+export interface I_DefaultBasicStduentInfo
+  extends I_DefaultBasicStudentPortfolioInfo {
+  email: string;
+  phoneNumber: string;
 }

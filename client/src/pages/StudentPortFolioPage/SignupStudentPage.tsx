@@ -19,12 +19,24 @@ const SignupStudentPage = () => {
     basicStudentInfo,
   } = useSelector((state: ROOTSTATE) => state.studentPortfolio);
   const onFinishForm = useCallback(value => {
-    console.log(value);
+    const phoneNumber = [
+      value.phoneNumber.slice(0, 3),
+      "-",
+      value.phoneNumber.slice(3, 7),
+      "-",
+      value.phoneNumber.slice(7, value.phoneNumber.length),
+    ]
+      .join()
+      .replaceAll(",", "");
+    console.log(phoneNumber);
+
     dispatch(
       createStudentPortfolioBasicInfoAcion.ACTION.REQUEST({
         name: value.name,
         password: value.password,
         studentCode: parseInt(value.studentCode),
+        email: value.email,
+        phoneNumber,
       })
     );
   }, []);
@@ -85,6 +97,42 @@ const SignupStudentPage = () => {
         >
           <Input type="number" />
         </Form.Item>
+        <Form.Item
+          name="email"
+          label="E-mail"
+          rules={[
+            {
+              type: "email",
+              message: "이메일 형식에 맞지 않습니다.",
+            },
+            {
+              required: true,
+              message: "이메일을 입력해주세요",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="phoneNumber"
+          label="전화 번호"
+          rules={[
+            { required: true, message: "전화 번호를 입력하세요" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || String(value).length === 11) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("-제외 하고 11자리를 입력해주세요")
+                );
+              },
+            }),
+          ]}
+        >
+          <Input type="number" />
+        </Form.Item>
+
         <Form.Item
           name="password"
           label="Password"

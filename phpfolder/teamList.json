@@ -1,0 +1,17 @@
+// 팀
+// 개인 사진
+// 팀 영상
+// 팀 브로시어?
+{
+  "data": [
+    {
+      "name": "teamName",
+      "main_description": "team description",
+      "sub_description": "team sub descripion",
+      "slogan": "team Slogan",
+      "teamMembers": [
+        { "name": "member", "imageSrc": "imageSrC", "job": "job" }
+      ]
+    }
+  ]
+}

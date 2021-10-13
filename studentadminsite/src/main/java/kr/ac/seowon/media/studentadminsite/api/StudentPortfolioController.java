@@ -72,7 +72,6 @@ public class StudentPortfolioController {
 
     /**
      * 학생 계정 생성
-     *
      * @param signupDto 이름 학번 비밀번호 security 사용하지 않음
      * @return basic하게 이름 학번만 전송
      */
@@ -85,6 +84,8 @@ public class StudentPortfolioController {
             return Res.isOkWithData(new StudentPortFolioRes.BasicInfoDto(studentPortfolio.getName(), studentPortfolio.getStudentCode()), "현재 비밀번호는 " + studentPortfolio.getPassword() + "입니다");
         }
         studentPortfolio.updatePassword(signupDto.getPassword());
+        studentPortfolio.updatePhoneNumber(signupDto.getPhoneNumber());
+        studentPortfolio.updateEmail(signupDto.getEmail());
         return Res.isOkWithData(new StudentPortFolioRes.BasicInfoDto(studentPortfolio.getName(), studentPortfolio.getStudentCode()), "계정이 생성 되었습니다.");
     }
 
@@ -157,39 +158,52 @@ public class StudentPortfolioController {
                 final int brochureFormatIndex = brochureOriginalFilename.lastIndexOf('.');
                 final String brochureFileNameFormat = brochureOriginalFilename.substring(brochureFormatIndex);
                 try {
+                    log.info("정보 저장");
                     studentPortFolioDto.getBrochureFile().transferTo(new File(basicFileDir + studentPortFolioDto.getStudentCode().toString() + "_brochure" + brochureFileNameFormat));
+                    log.info("정보 저장 성공");
+
                 } catch (IOException e) {
-                    try {
-                        throw new FileUploadException(ErrorCode.IMAGE_UPLOAD_ERROR);
-                    } catch (FileUploadException ex) {
-                        ex.printStackTrace();
-                    }
+                    e.printStackTrace();
+
+                    //                    try {
+//                        throw new FileUploadException(ErrorCode.IMAGE_UPLOAD_ERROR);
+//                    } catch (FileUploadException ex) {
+//                        ex.printStackTrace();
+//                    }
                 }
             }
         }
         if (studentPortFolioDto.getProfileFile() != null) {
             if (!studentPortFolioDto.getProfileFile().isEmpty()) {
                 if (prevStudentCode != null) {
+                    log.info("정보 확인");
                     final File fileJPG = new File(basicFileDir + prevStudentCode.toString() + "_profile.png");
                     final File filePNG = new File(basicFileDir + prevStudentCode.toString() + "_profile.jpg");
+                    log.info("정보 삭제");
                     if (fileJPG.exists()) {
                         fileJPG.delete();
                     }
                     if (filePNG.exists()) {
                         filePNG.delete();
                     }
+                    log.info("정보 삭제 완료");
                 }
+
                 final String profileOriginalFilename = studentPortFolioDto.getProfileFile().getOriginalFilename();
                 final int profileFormatIndex = profileOriginalFilename.lastIndexOf('.');
                 final String profileFileNameFormat = profileOriginalFilename.substring(profileFormatIndex);
                 try {
+                    log.info("정보 저장");
                     studentPortFolioDto.getProfileFile().transferTo(new File(basicFileDir + studentPortFolioDto.getStudentCode().toString() + "_profile" + profileFileNameFormat));
+                    log.info("정보 저장 성공");
                 } catch (IOException e) {
-                    try {
-                        throw new FileUploadException(ErrorCode.IMAGE_UPLOAD_ERROR);
-                    } catch (FileUploadException ex) {
-                        ex.printStackTrace();
-                    }
+                    e.printStackTrace();
+                    //                    try {
+
+//                        throw new FileUploadException(ErrorCode.IMAGE_UPLOAD_ERROR);
+//                    } catch (FileUploadException ex) {
+//                        ex.printStackTrace();
+//                    }
                 }
             }
         }

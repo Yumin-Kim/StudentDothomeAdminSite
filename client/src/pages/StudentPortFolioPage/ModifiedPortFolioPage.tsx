@@ -8,6 +8,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { modifiyStudentPortfolioAPI } from "../../redux_folder/actions/studentPortfolio";
 import { modifyStudentPortfolioAction } from "../../redux_folder/actions/studentPortfolio/index";
 import { Redirect } from "react-router";
+import Text from "antd/lib/typography/Text";
 
 const { Title } = Typography;
 
@@ -46,6 +47,29 @@ const ModifiedPortFolioPage = () => {
       if (values.description) {
         formData.append("description", values.description);
       }
+      if (values.email) {
+        formData.append("email", values.email);
+      }
+      if (values.phoneNumber) {
+        const phoneNumber = [
+          values.phoneNumber.slice(0, 3),
+          "-",
+          values.phoneNumber.slice(3, 7),
+          "-",
+          values.phoneNumber.slice(7, values.phoneNumber.length),
+        ]
+          .join()
+          .replaceAll(",", "");
+
+        formData.append("phoneNumber", phoneNumber);
+      }
+      if (values.slogan) {
+        formData.append("slogan", values.slogan);
+      }
+      if (values.job) {
+        formData.append("job", values.job);
+      }
+
       for (var pair of formData.entries()) {
         validFormData = true;
       }
@@ -72,7 +96,65 @@ const ModifiedPortFolioPage = () => {
   return (
     <div>
       <Title level={3}>수정하기</Title>
+      <Text>수정할 정보만 입력해주세요</Text>
       <Form {...layout} form={form} onFinish={onFinishForm}>
+        <Form.Item
+          name="slogan"
+          label="슬로건"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="job"
+          label="직업"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          label="E-mail"
+          rules={[
+            {
+              type: "email",
+              message: "이메일 형식에 맞지 않습니다.",
+            },
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="phoneNumber"
+          label="전화 번호"
+          rules={[
+            { required: false },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || String(value).length === 11) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("-제외 하고 11자리를 입력해주세요")
+                );
+              },
+            }),
+          ]}
+        >
+          <Input type="number" />
+        </Form.Item>
+
         <Form.Item
           name="youtubeLink"
           label="유튜브 주소"
@@ -119,7 +201,7 @@ const ModifiedPortFolioPage = () => {
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit">
-            등록
+            수정
           </Button>
         </Form.Item>
       </Form>

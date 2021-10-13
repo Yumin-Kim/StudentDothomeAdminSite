@@ -15,7 +15,10 @@ import {
   I_DefaultStudentInfo,
 } from "../../../types/storeType";
 import { I_ModifyStudentData } from "../student/index";
-import { I_RegisteredPortfolio } from "../../../types/storeType";
+import {
+  I_RegisteredPortfolio,
+  I_DefaultBasicStduentInfo,
+} from "../../../types/storeType";
 import {
   RESET_STUDENT_PORTFOLIO_MESSAGE,
   LOGIN_STUDENT_PORTFOLIO,
@@ -28,7 +31,7 @@ axios.defaults.baseURL =
 
 // 학생 계정 생성
 export const createStudentPortfolioBasicInfoAPI = async (
-  params: I_DefaultBasicStudentPortfolioInfo
+  params: I_DefaultBasicStduentInfo
 ): Promise<I_AxiosDefaultDataFormat<I_DefaultStudentInfo>> => {
   return await axios.post(`/portfolio/person/signup`, params);
 };

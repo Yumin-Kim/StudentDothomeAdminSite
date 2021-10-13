@@ -18,9 +18,10 @@ public class StudentPortfolioReq {
 
     @Getter
     @Setter
-    @ToString
     public static class StudentPortFolieSignUpDto extends StudentPortFolioBasicInfoDto{
         private String password;
+        private String email;
+        private String phoneNumber;
     }
 
     @Getter
@@ -32,6 +33,10 @@ public class StudentPortfolioReq {
         private MultipartFile brochureFile;
         private String youtubeLink;
         private String description;
+        private String slogan;
+        private String phoneNumber;
+        private String email;
+        private String job;
 
         public StudentPortfolio toEntity() {
             return StudentPortfolio.createEntity(this.name, this.studentCode, this.youtubeLink, this.description,findImageFormat(profileFile),findImageFormat(brochureFile));
