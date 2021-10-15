@@ -19,6 +19,8 @@ public class AdminUtilPermitController {
 
     @GetMapping("/db")
     public Res getDatabasePermit() {
+
+
         JdbcRootPermition jdbcRootPermition = new JdbcRootPermition(utilConfigure);
         List<MysqlUserBean> hostingUserNames = jdbcRootPermition.selectDatabase();
         return Res.isOkWithData(hostingUserNames, "Database 정보 조회 성공");

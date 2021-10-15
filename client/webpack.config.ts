@@ -52,8 +52,23 @@ const config: Configuration = {
         exclude: path.join(__dirname, "node_modules"),
       },
       {
-        test: /\.css?$/,
-        use: ["style-loader", "css-loader"],
+        test: /\.(css|less)$/,
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+          },
+          {
+            loader: "less-loader",
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
+          },
+        ],
       },
     ],
   },

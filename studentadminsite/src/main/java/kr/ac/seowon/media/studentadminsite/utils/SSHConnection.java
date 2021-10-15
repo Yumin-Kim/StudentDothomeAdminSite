@@ -2,6 +2,7 @@ package kr.ac.seowon.media.studentadminsite.utils;
 
 import com.jcraft.jsch.*;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
+import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.utilexception.SSHException;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import lombok.SneakyThrows;
@@ -33,7 +34,7 @@ public class SSHConnection {
             log.info("open sftp channel");
             this.channel = session.openChannel("exec");
         } catch (JSchException e) {
-            throw new SSHException("ssh 연결에 실패 하셨습니다.");
+            throw new SSHException(ErrorCode.SSH_CONNECTION_ERROR);
         }
     }
 
@@ -66,9 +67,8 @@ public class SSHConnection {
                 Thread.sleep(100);
             }
             String responseString = responseStream.toString();
-            log.info("responseString = {}", responseString);
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근하였지만 정보 수정에 실패하였습니다.");
+            throw new SSHException(ErrorCode.SSH_CONNECTION_ERROR);
         } finally {
             if (channel != null) {
                 channel.disconnect();
@@ -97,10 +97,10 @@ public class SSHConnection {
             String responseString = responseStream.toString();
             log.info("response String = {}", responseString);
             if(!responseString.contains("Done")){
-                throw new StudentException("존재하지 않는 도를메인 정보입니다.");
+                throw new SSHException(ErrorCode.SSH_DUPLICATE_DOMAIN);
             }
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근하였지만 정보 삭제 실패하였습니다.");
+            throw new SSHException(ErrorCode.SSH_CONNECTION_ERROR);
         } finally {
             if (channel != null) {
                 channel.disconnect();
@@ -124,7 +124,7 @@ public class SSHConnection {
             String responseString = responseStream.toString();
             return Arrays.asList(responseString.split(" "));
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근하였지만 도메인 정보 접근에 실패하였습니다.");
+            throw new SSHException(ErrorCode.SSH_CONNECTION_ERROR);
         } finally {
             if (channel != null) {
                 channel.disconnect();
@@ -150,10 +150,10 @@ public class SSHConnection {
             String responseString = responseStream.toString();
             log.info("response String = {}", responseString);
             if(!responseString.contains("True")){
-                throw new StudentException("중복되는 정보입니다.");
+                throw new SSHException(ErrorCode.SSH_DUPLICATE_DOMAIN);
             }
         } catch (JSchException | InterruptedException e) {
-            throw new SSHException("ssh 접근하였지만 정보 생성에 실패하였습다.");
+            throw new SSHException(ErrorCode.SSH_CONTACT_DOMAIN);
         } finally {
             if (channel != null) {
                 channel.disconnect();

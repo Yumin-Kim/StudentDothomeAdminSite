@@ -19,12 +19,15 @@ import CheckStudentPage from "../pages/StudentPortFolioPage/CheckStudentPage";
 import ModifiedPortFolioPage from "../pages/StudentPortFolioPage/ModifiedPortFolioPage";
 import DefaultPortfolioPage from "../pages/StudentPortFolioPage/DefaultPortfolioPage";
 import SignupStudentPage from "../pages/StudentPortFolioPage/SignupStudentPage";
+import Header_Template from "./Header_Template";
+import { Nav00DataSource } from "./data.source";
 const { Header, Content, Footer } = Layout;
 
 const Basic = () => {
   const { prevHistory } = useSelector((state: ROOTSTATE) => state.student);
   return (
     <Layout>
+      <Header_Template id="Nav0_0" key="Nav0_0" dataSource={Nav00DataSource} />,
       <HeaderCustom>
         <Link to="/">Home</Link>
         {"      "}

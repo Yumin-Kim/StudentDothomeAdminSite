@@ -36,7 +36,7 @@ const ModifiedPortFolioPage = () => {
     let validFormData = false;
     if (resultStudentPortFolio?.studentCode) {
       if (values.profileFile) {
-        formData.append("profileFile", values.profileFile[0].originFileObj);
+        formData.append("n", values.profileFile[0].originFileObj);
       }
       if (values.brochureFile) {
         formData.append("brochureFile", values.brochureFile[0].originFileObj);

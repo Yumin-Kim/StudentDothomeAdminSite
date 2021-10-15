@@ -60,6 +60,8 @@ table {
 }
 
 `;
+
+import "./less/antMotionStyle.less";
 const store = configure();
 
 render(
