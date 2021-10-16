@@ -1,7 +1,8 @@
 import React from "react";
 import TweenOne from "rc-tween-one";
 import { Menu } from "antd";
-import { getChildrenToRender } from "./utils";
+import { getChildrenToRender } from "../dataSoruce/utils";
+import { Link } from "react-router-dom";
 const { Item, SubMenu } = Menu;
 
 class Header_Template extends React.Component<any, any> {
@@ -43,9 +44,9 @@ class Header_Template extends React.Component<any, any> {
             {subItem.map(($item, ii) => {
               const { children: childItem } = $item;
               const child = childItem.href ? (
-                <a {...childItem}>
+                <Link to={childItem.href}>
                   {childItem.children.map(getChildrenToRender)}
-                </a>
+                </Link>
               ) : (
                 <div {...childItem}>
                   {childItem.children.map(getChildrenToRender)}
@@ -62,9 +63,12 @@ class Header_Template extends React.Component<any, any> {
       }
       return (
         <Item key={item.name} {...itemProps}>
-          <a {...a} className={`header0-item-block ${a.className}`.trim()}>
+          <Link
+            to={a.href}
+            className={`header0-item-block ${a.className}`.trim()}
+          >
             {a.children.map(getChildrenToRender)}
-          </a>
+          </Link>
         </Item>
       );
     });
@@ -84,7 +88,9 @@ class Header_Template extends React.Component<any, any> {
             animation={{ x: -30, type: "from", ease: "easeOutQuad" }}
             {...dataSource.logo}
           >
-            <img width="100%" src={dataSource.logo.children} alt="img" />
+            <Link to="/">
+              <img width="100%" src={dataSource.logo.children} alt="img" />
+            </Link>
           </TweenOne>
           {isMobile && (
             <div

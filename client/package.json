@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/react-router-config": "^5.0.3",
     "@types/react-router-dom": "^5.1.8",
     "@types/styled-components": "^5.1.12",
     "antd": "^4.16.11",
@@ -20,6 +21,8 @@
     "immer": "^9.0.6",
     "lodash": "^4.17.21",
     "office-ui-fabric-react": "^7.175.2",
+    "rc-queue-anim": "^2.0.0",
+    "rc-scroll-anim": "^2.7.6",
     "rc-tween-one": "^2.7.3",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",

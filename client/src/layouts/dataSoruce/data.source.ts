@@ -13,7 +13,7 @@ export const Nav00DataSource = {
         name: "item0",
         className: "header0-item",
         children: {
-          href: "#",
+          href: "/find",
           children: [{ children: "개인 홈페이지 관리", name: "text" }],
         },
       },
@@ -21,7 +21,7 @@ export const Nav00DataSource = {
         name: "item1",
         className: "header0-item",
         children: {
-          href: "#",
+          href: "/admin",
           children: [{ children: "통합 페이지 관리", name: "text" }],
         },
       },
@@ -29,7 +29,7 @@ export const Nav00DataSource = {
         name: "item2",
         className: "header0-item",
         children: {
-          href: "#",
+          href: "/portfolio/valid",
           children: [{ children: "졸업 작품 업로드", name: "text" }],
         },
       },
@@ -54,9 +54,8 @@ export const Banner01DataSource = {
   },
   content: {
     className: "banner0-content",
-    children: "一个高效的页面动画解决方案",
+    children: "학부 서버 이용 사이트",
   },
-  button: { className: "banner0-button", children: "Learn More" },
 };
 export const Content00DataSource = {
   wrapper: { className: "home-page-wrapper content0-wrapper" },
@@ -64,7 +63,7 @@ export const Content00DataSource = {
   OverPack: { playScale: 0.3, className: "" },
   titleWrapper: {
     className: "title-wrapper",
-    children: [{ name: "title", children: "产品与服务" }],
+    children: [{ name: "title", children: "제공 되는 서비스" }],
   },
   childWrapper: {
     className: "content0-block-wrapper",
@@ -80,15 +79,26 @@ export const Content00DataSource = {
             {
               name: "image",
               className: "content0-block-icon",
-              children:
-                "https://zos.alipayobjects.com/rmsportal/WBnVOjtIlGWbzyQivuyq.png",
+              children: "https://cdn-icons-png.flaticon.com/512/841/841466.png",
             },
             {
               name: "title",
               className: "content0-block-title",
-              children: "一站式业务接入",
+              children: "개인 홈페이지 개설",
             },
-            { name: "content", children: "支付、结算、核算接入产品效率翻四倍" },
+            {
+              name: "content",
+              className: "banner0-content",
+              children: "PHP & MySQL를 활용한 홈페이지 개설 ",
+            },
+            {
+              name: "button",
+              children: {
+                className: "banner0-button",
+                children: "Learn More",
+                to: "/find",
+              },
+            },
           ],
         },
       },
@@ -104,16 +114,24 @@ export const Content00DataSource = {
               name: "image",
               className: "content0-block-icon",
               children:
-                "https://zos.alipayobjects.com/rmsportal/YPMsLQuCEXtuEkmXTTdk.png",
+                "http://media.seowon.ac.kr/2021/studentImages/upload-file.png",
             },
             {
               name: "title",
               className: "content0-block-title",
-              children: "一站式事中风险监控",
+              children: "년도별 졸업 작품 업로드",
             },
             {
               name: "content",
-              children: "在所有需求配置环节事前风险控制和质量控制能力",
+              children: "이미지 영상링크 정보를 입력",
+            },
+            {
+              name: "button",
+              children: {
+                className: "banner0-button",
+                children: "Learn More",
+                to: "/portfolio/valid",
+              },
             },
           ],
         },
@@ -130,16 +148,21 @@ export const Content00DataSource = {
               name: "image",
               className: "content0-block-icon",
               children:
-                "https://zos.alipayobjects.com/rmsportal/EkXWVvAaFJKCzhMmQYiX.png",
+                "http://media.seowon.ac.kr/2021/studentImages/application.png",
             },
             {
               name: "title",
               className: "content0-block-title",
-              children: "一站式数据运营",
+              children: "Web application Server 관리",
             },
             {
               name: "content",
-              children: "沉淀产品接入效率和运营小二工作效率数据",
+              children: "NodeJS , Spring , Django 서버 연동 ",
+            },
+            {
+              name: "content",
+              className: "content0-block-title",
+              children: "준비중...",
             },
           ],
         },
@@ -154,7 +177,11 @@ export const Content50DataSource = {
   titleWrapper: {
     className: "title-wrapper",
     children: [
-      { name: "title", children: "客户案例", className: "title-h1" },
+      {
+        name: "title",
+        children: "어떤 카테고리를 배치할지 생각하기?",
+        className: "title-h1",
+      },
       {
         name: "content",
         className: "title-content",
@@ -290,13 +317,13 @@ export const Content30DataSource = {
     children: [
       {
         name: "title",
-        children: "蚂蚁金融云提供专业的服务",
+        children: "이용서비스 소개",
         className: "title-h1",
       },
       {
         name: "content",
         className: "title-content",
-        children: "基于阿里云强大的基础资源",
+        children: "학생들이 편리하게 사용할 수 있는 기능 제공",
       },
     ],
   },
@@ -315,11 +342,10 @@ export const Content30DataSource = {
               "https://zos.alipayobjects.com/rmsportal/ScHBSdwpTkAHZkJ.png",
           },
           textWrapper: { className: "content3-text" },
-          title: { className: "content3-title", children: "企业资源管理" },
+          title: { className: "content3-title", children: "정적 사이트 제공" },
           content: {
             className: "content3-content",
-            children:
-              "云资源集中编排、弹性伸缩、持续发布和部署，高可用及容灾。",
+            children: "닷홈을 사용하지 않고 학부 서버를 활용",
           },
         },
       },
@@ -335,11 +361,10 @@ export const Content30DataSource = {
               "https://zos.alipayobjects.com/rmsportal/NKBELAOuuKbofDD.png",
           },
           textWrapper: { className: "content3-text" },
-          title: { className: "content3-title", children: "云安全" },
+          title: { className: "content3-title", children: "PHP&MySQL 사용" },
           content: {
             className: "content3-content",
-            children:
-              "按金融企业安全要求打造的完整云上安全体系，全方位保障金融应用及数据安全。",
+            children: "학부 수업시 사용하는 PHP 와 MySQL를 ..",
           },
         },
       },
@@ -355,11 +380,14 @@ export const Content30DataSource = {
               "https://zos.alipayobjects.com/rmsportal/xMSBjgxBhKfyMWX.png",
           },
           textWrapper: { className: "content3-text" },
-          title: { className: "content3-title", children: "云监控" },
+          title: {
+            className: "content3-title",
+            children: "학생 서버 개설간 관리 기능",
+          },
           content: {
             className: "content3-content",
             children:
-              "分布式云环境集中监控，统一资源及应用状态视图，智能分析及故障定位。",
+              "SSH를 활용하여 학생별 디렉토리 , MySQL 사용자 관리 기능 제공 및 졸업 휴학 여부에 따른 활성화",
           },
         },
       },
@@ -375,11 +403,14 @@ export const Content30DataSource = {
               "https://zos.alipayobjects.com/rmsportal/MNdlBNhmDBLuzqp.png",
           },
           textWrapper: { className: "content3-text" },
-          title: { className: "content3-title", children: "移动" },
+          title: {
+            className: "content3-title",
+            children: "WAS 배포",
+          },
           content: {
             className: "content3-content",
             children:
-              "一站式移动金融APP开发及全面监控；丰富可用组件，动态发布和故障热修复。",
+              "PHP가 아닌 Spring , NodeJS , Django 배포 및 모니터링 기능 제공 ",
           },
         },
       },
@@ -395,11 +426,13 @@ export const Content30DataSource = {
               "https://zos.alipayobjects.com/rmsportal/UsUmoBRyLvkIQeO.png",
           },
           textWrapper: { className: "content3-text" },
-          title: { className: "content3-title", children: "分布式中间件" },
+          title: {
+            className: "content3-title",
+            children: "업로드 및 업로드 정보 api 제공",
+          },
           content: {
             className: "content3-content",
-            children:
-              "金融级联机交易处理中间件，大规模分布式计算机，数万笔/秒级并发能力，严格保证交易数据统一性。",
+            children: "년도 별 졸업 작품 업로드 및 업로드 된 정보 API 제공",
           },
         },
       },
@@ -415,11 +448,14 @@ export const Content30DataSource = {
               "https://zos.alipayobjects.com/rmsportal/ipwaQLBLflRfUrg.png",
           },
           textWrapper: { className: "content3-text" },
-          title: { className: "content3-title", children: "大数据" },
+          title: {
+            className: "content3-title",
+            children: "데이터 베이스 관리",
+          },
           content: {
             className: "content3-content",
             children:
-              "一站式、全周期大数据协同工作平台，PB级数据处理、毫秒级数据分析工具。",
+              "phpmyadmin의 복잡한 기능을 제거하여 사용하는 기능만 사용하자",
           },
         },
       },
@@ -458,13 +494,12 @@ export const Footer10DataSource = {
         xs: 24,
         md: 6,
         className: "block",
-        title: { children: "产品" },
+        title: { children: "학생 카테고리" },
         childWrapper: {
           children: [
-            { name: "link0", href: "#", children: "产品更新记录" },
-            { name: "link1", href: "#", children: "API文档" },
-            { name: "link2", href: "#", children: "快速入门" },
-            { name: "link3", href: "#", children: "参考指南" },
+            { name: "link0", href: "#", children: "개인 홈페이지 관리" },
+            { name: "link1", href: "#", children: "졸업 작품 업로드" },
+            { name: "link2", href: "#", children: "WAS 관리" },
           ],
         },
       },
@@ -473,24 +508,10 @@ export const Footer10DataSource = {
         xs: 24,
         md: 6,
         className: "block",
-        title: { children: "关于" },
+        title: { children: "관리자 카테고리" },
         childWrapper: {
           children: [
-            { href: "#", name: "link0", children: "FAQ" },
-            { href: "#", name: "link1", children: "联系我们" },
-          ],
-        },
-      },
-      {
-        name: "block3",
-        xs: 24,
-        md: 6,
-        className: "block",
-        title: { children: "资源" },
-        childWrapper: {
-          children: [
-            { href: "#", name: "link0", children: "Ant Design" },
-            { href: "#", name: "link1", children: "Ant Motion" },
+            { href: "/admin", name: "link0", children: "통합 관리자 페이지" },
           ],
         },
       },

@@ -22,6 +22,7 @@ import {
   studentModifyStudentInfoAction,
   studentLoginInfoAction,
 } from "../redux_folder/actions/student/index";
+import { Content } from "antd/lib/layout/layout";
 const { Title } = Typography;
 interface IRouteInfo {
   stubing: typeof basicRoutePathName[number];
@@ -138,36 +139,45 @@ const MainInputPage = () => {
     }
   }
   // 페이지 전환 끝
-  return (
-    <>
-      <Title level={1}>{serilizeData?.categoryName}</Title>
-      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-        {" "}
-        {serilizeData?.formTagInInputEl.map((value, index) => (
-          <Form.Item
-            name={value.name}
-            label={value.label}
-            rules={[{ required: true }]}
+  if (stubing !== "portfolio")
+    return (
+      <>
+        <Content className="home-page wrapper content0">
+          <Form
+            {...layout}
+            form={form}
+            name="control-hooks"
+            onFinish={onFinish}
           >
-            <Input type={value.inputType} />
-          </Form.Item>
-        ))}
-        <Button type="primary" htmlType="submit">
-          제출
-        </Button>
-        {stubing === "admin" ? (
-          <Button>
-            <Link to="/makeadmin">관리자 계정 생성</Link>
-          </Button>
-        ) : null}
-        {stubing === "makeadmin" && (
-          <Button>
-            <Link to="/admin">이전 화면</Link>
-          </Button>
-        )}
-      </Form>
-    </>
-  );
+            {" "}
+            <Title level={2}>{serilizeData?.categoryName}</Title>
+            {serilizeData?.formTagInInputEl.map((value, index) => (
+              <Form.Item
+                name={value.name}
+                label={value.label}
+                rules={[{ required: true }]}
+              >
+                <Input type={value.inputType} />
+              </Form.Item>
+            ))}
+            <Button type="primary" htmlType="submit">
+              제출
+            </Button>
+            {stubing === "admin" ? (
+              <Button>
+                <Link to="/makeadmin">관리자 계정 생성</Link>
+              </Button>
+            ) : null}
+            {stubing === "makeadmin" && (
+              <Button>
+                <Link to="/admin">이전 화면</Link>
+              </Button>
+            )}
+          </Form>
+        </Content>
+      </>
+    );
+  else return <></>;
 };
 
 export default MainInputPage;

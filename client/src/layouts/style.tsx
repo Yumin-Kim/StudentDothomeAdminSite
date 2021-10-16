@@ -3,11 +3,15 @@ import styled from "styled-components";
 
 export const ContentCustom = styled(Content)`
   background-color: #fff;
-  padding: 24px;
-  margin: 0;
-  min-height: 280px;
 `;
 
 export const HeaderCustom = styled(Header)`
   background-color: #f0f2f5;
+`;
+
+export const ContentTemplateLayout = styled.div`
+  max-width: 1200px;
+  position: relative;
+  margin: auto;
+  will-change: transform;
 `;

@@ -1,4 +1,7 @@
 @banner0: banner0;
+.@{banner0}-button{
+  margin-top: 20px;
+}
 .@{banner0} {
   // 如果在第一屏且导航位置为 relative, 一屏为 height: calc(~"100vh - 64px");
   width: 100%;
@@ -6,7 +9,7 @@
   position: relative;
   text-align: center;
   border-color: #666;
-  background-image: url("https://zos.alipayobjects.com/rmsportal/gGlUMYGEIvjDOOw.jpg");
+  background-image: url("https://www.seowon.ac.kr/sites/seowon/atchmnfl_mngr/imageSlide/18/temp_1606960177601100.jpg");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -20,7 +23,7 @@
     font-size: 14px;
     color: @template-text-color-light;
     width: 550px;
-    >.queue-anim-leaving {
+    > .queue-anim-leaving {
       position: relative !important;
     }
   }
@@ -45,7 +48,8 @@
     box-shadow: 0 0 0 transparent;
     font-size: 16px;
     height: 40px;
-    transition: background .45s @ease-out, box-shadow .45s @ease-out;
+    margin-top: 10px;
+    transition: background 0.45s @ease-out, box-shadow 0.45s @ease-out;
     &:hover {
       color: #fff;
       border-color: #fff;

@@ -4,7 +4,16 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getCookieInfo } from "../redux_folder/actions/admin/index";
 import { getStudentCookieInfo } from "../redux_folder/actions/student/index";
-
+import Banner_Template from "../layouts/TemplateLayout/Banner_Template";
+import {
+  Banner01DataSource,
+  Content00DataSource,
+  Content30DataSource,
+  Content50DataSource,
+} from "../layouts/dataSoruce/data.source";
+import Content_Template01 from "../layouts/TemplateLayout/Content_Template01";
+import Content_Template02 from "../layouts/TemplateLayout/Content_Template02";
+import Content_Template03 from "../layouts/TemplateLayout/Content_Template03";
 const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -23,22 +32,27 @@ const Home = () => {
         {/* <Button block>
           <Link to="/make">계정 생성</Link>
         </Button> */}
-
-        <Row gutter={[8, 16]}>
-          <Col span={8} />
-          <Col span={8}>
-            <Button type="default" block>
-              <Link to="/find">학교 서버 계정 확인</Link>
-            </Button>
-            <Button type="default" block>
-              <Link to="/admin">서버 관리자 페이지</Link>
-            </Button>
-            <Button type="default" block>
-              <Link to="/portfolio/valid">졸업 작품 업로드</Link>
-            </Button>
-          </Col>
-          <Col span={8} />
-        </Row>
+        <Banner_Template
+          id="Banner0_1"
+          key="Banner0_1"
+          dataSource={Banner01DataSource}
+        />
+        <Content_Template01
+          id="Content0_0"
+          key="Content0_0"
+          dataSource={Content00DataSource}
+        />
+        <Content_Template02
+          id="Content3_0"
+          key="Content3_0"
+          dataSource={Content30DataSource}
+        />
+        <Content_Template03
+          id="Content5_0"
+          key="Content5_0"
+          dataSource={Content50DataSource}
+        />
+        ,
       </div>
     </>
   );
