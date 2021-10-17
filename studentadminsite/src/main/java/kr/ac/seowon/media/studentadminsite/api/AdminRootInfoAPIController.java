@@ -1,6 +1,5 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
-import kr.ac.seowon.media.studentadminsite.SessionFactory;
 import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
 import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
@@ -8,6 +7,7 @@ import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.SessionFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;

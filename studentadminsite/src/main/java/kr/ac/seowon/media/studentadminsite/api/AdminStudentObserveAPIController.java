@@ -1,7 +1,6 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import kr.ac.seowon.media.studentadminsite.SessionFactory;
 import kr.ac.seowon.media.studentadminsite.dao.AdminObserveDao;
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
@@ -12,6 +11,7 @@ import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminStudentObse
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.SessionFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -32,7 +32,6 @@ public class AdminStudentObserveAPIController {
     private final AdminStudentObserveService adminStudentObserveService;
     private final CustomCollectionValidtion concurrentInsertStudentsInfo;
     private final AdminObserveCommandService adminObserveCommandService;
-    private final SessionFactory sessionFactory;
 
     /**
      * 간단한 정렬은 가능하나 완벽하게는??

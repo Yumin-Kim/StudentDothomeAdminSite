@@ -1,12 +1,12 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
-import kr.ac.seowon.media.studentadminsite.SessionFactory;
 import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
 import kr.ac.seowon.media.studentadminsite.service.student.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.SessionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 public class StudentAPIController {
 
     private final StudentService studentService;
-    private final SessionFactory sessionFactory;
 
     @GetMapping
     public Res findStudentCodeAndName(
             HttpServletRequest request,
             @Validated({StudentReq.FindStudentCode.class}) @ModelAttribute StudentReq.StudentDto studentDto) {
-        sessionFactory.validationSession(request, "student");
         StudentDao.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "학번 조회 결과 입니다.");
     }
@@ -39,7 +37,6 @@ public class StudentAPIController {
 
     @PostMapping("/login")
     public Res studentLogin(HttpServletRequest request, @Validated({StudentReq.FindStudentCode.class}) @RequestBody StudentReq.StudentDto studentDto) {
-        sessionFactory.makeSession(request, "student", studentDto);
         StudentDao.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "로그인 성공");
     }
@@ -48,7 +45,6 @@ public class StudentAPIController {
     public Res studentLogout(
             HttpServletRequest request
     ) {
-        sessionFactory.removeSession(request, "student");
         return Res.isOkByMessage("로그아웃 성공");
     }
 
