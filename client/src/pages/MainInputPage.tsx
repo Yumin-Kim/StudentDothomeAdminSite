@@ -163,11 +163,11 @@ const MainInputPage = () => {
             <Button type="primary" htmlType="submit">
               제출
             </Button>
-            {stubing === "admin" ? (
+            {/* {stubing === "admin" ? (
               <Button>
                 <Link to="/makeadmin">관리자 계정 생성</Link>
               </Button>
-            ) : null}
+            ) : null} */}
             {stubing === "makeadmin" && (
               <Button>
                 <Link to="/admin">이전 화면</Link>

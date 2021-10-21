@@ -41,7 +41,7 @@ const config: Configuration = {
             //     "@babel/plugin-proposal-class-properties",
             //https://velog.io/@haebin/React-regeneratorRuntime-is-not-defined-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0
             "@babel/plugin-transform-runtime",
-            // "transform-remove-console",
+            "transform-remove-console",
           ],
           env: {
             development: {

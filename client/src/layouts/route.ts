@@ -11,6 +11,7 @@ import MainInputPage from "../pages/MainInputPage";
 import DeleteUtilInfoPage from "../pages/AdminPage/DeleteUtilInfoPage";
 import ModifyAdminPage from "../pages/AdminPage/ModifyAdminPage";
 import StudentCreateAdmin from "../pages/AdminPage/StudentCreateAdmin";
+import MainAdminPage from "../pages/AdminPage/MainAdminPage";
 
 export const routes = [
   {
@@ -51,7 +52,7 @@ export const routes = [
   },
   {
     path: "/admin/main",
-    component: MainStudentPage,
+    component: MainAdminPage,
   },
   {
     path: "/admin/create",
