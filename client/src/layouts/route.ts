@@ -12,11 +12,12 @@ import DeleteUtilInfoPage from "../pages/AdminPage/DeleteUtilInfoPage";
 import ModifyAdminPage from "../pages/AdminPage/ModifyAdminPage";
 import StudentCreateAdmin from "../pages/AdminPage/StudentCreateAdmin";
 import MainAdminPage from "../pages/AdminPage/MainAdminPage";
+import DefaultStudentPage from '../pages/StudentPage/DefaultStudentPage';
 
 export const routes = [
   {
-    path: "/portfolio/signup",
-    component: SignupStudentPage,
+    path: "",
+    component: ,
   },
   {
     path: "/portfolio/valid",
@@ -48,7 +49,7 @@ export const routes = [
   },
   {
     path: "/student/default",
-    component: CreateStudentPage,
+    component: DefaultStudentPage,
   },
   {
     path: "/admin/main",
