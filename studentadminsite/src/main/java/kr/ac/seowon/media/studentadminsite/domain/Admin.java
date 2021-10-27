@@ -17,7 +17,7 @@ import java.util.List;
 public class Admin extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_id")
     private Integer id;
     @Column(name = "name", nullable = false)

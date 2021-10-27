@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class SiteInfo extends  BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "site_info_id")
     private Integer id;
 

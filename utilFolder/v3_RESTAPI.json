@@ -1,0 +1,48 @@
+//RequestBody docker container
+{
+  "port": 8080,
+  "containerName": "container",
+  "dockerImage": "dockerImage",
+  "isRunning": true,
+  "uploadRemote": "/home/oem",
+  "hasDatabase": true,
+  "description":"Hello Hello Hello Hello Hello Hello ",
+  "option": {
+      "env" : "-DBUILD=prod -DBUILD=prod",
+      "volum":"/val/test",
+      "entrypoint":"-entrypoint asdf"
+  },
+  "command":"docker run -it -d --name test dockerImage:v1"
+}
+//RequestBody local NodeJS
+//dirLocation: baseURL => /Public/s20123123/ 
+//HTTP , SFTP , GIT ,  
+{
+    "deployMethod":"SFTP",
+    "githubLink":"http://localhost",
+    "dirLocation":"/work3"
+}
+/////////////////////////////////////////////
+{
+  "port": 8080,
+  "name": "nodejs",
+  "isUploading": true,
+  "isRunning": true,
+  "uploadRemote": "/home/oem",
+  "hasDatabase": true,
+  "description": "Hello"
+}
+{
+    "data":null,
+    "message":"업로드 성공하셨습니다."
+}
+//RequestBody  local Spring
+{
+  "port": 8080,
+  "name": "spring",
+  "isRunning": true,
+  "isUploading": true,
+  "hasDatabase": true, 
+  "uploadRemote":"/home/oem",
+  "description": "Hello"
+}

@@ -19,7 +19,7 @@ import static org.springframework.util.StringUtils.hasText;
 public class StudentPortfolio extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_portfolio_id")
     private Integer id;
     private String name;
