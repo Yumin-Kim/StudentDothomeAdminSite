@@ -1,7 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
+import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.exception.CustomCollectionValidtion;
 import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminStudentObserveService;
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;

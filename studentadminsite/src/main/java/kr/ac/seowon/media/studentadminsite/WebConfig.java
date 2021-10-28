@@ -4,6 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ *  Spring-boot web관련 설정
+ *  현재는 CORS 설정만 되어 있다.
+ */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Override

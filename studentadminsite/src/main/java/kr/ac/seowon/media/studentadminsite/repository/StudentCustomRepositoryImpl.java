@@ -9,7 +9,7 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
-import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
+import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

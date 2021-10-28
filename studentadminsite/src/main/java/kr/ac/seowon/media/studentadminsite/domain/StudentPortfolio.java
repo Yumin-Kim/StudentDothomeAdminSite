@@ -1,11 +1,9 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
-import kr.ac.seowon.media.studentadminsite.api.StudentPortfolioController;
-import kr.ac.seowon.media.studentadminsite.dto.StudentPortfolioReq;
+import kr.ac.seowon.media.studentadminsite.dto.studentportfolio.StudentPortfolioReq;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 

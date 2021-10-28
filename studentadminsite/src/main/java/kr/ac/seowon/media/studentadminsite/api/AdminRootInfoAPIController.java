@@ -1,7 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
-import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
-import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminDtoRes;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootQueryService;
@@ -29,7 +29,7 @@ public class AdminRootInfoAPIController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Res createAdmin(@Validated({AdminReq.createAdmin.class}) @RequestBody AdminReq.AdminDto adminDto) {
-        AdminDao.BasicAdmin admin = adminRootCommandService.createAdmin(adminDto);
+        AdminDtoRes.BasicAdmin admin = adminRootCommandService.createAdmin(adminDto);
         return Res.isOkWithData(admin, "admin 계정 생성을 성공하였습니다.");
     }
 
@@ -40,7 +40,7 @@ public class AdminRootInfoAPIController {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        AdminDao.BasicAdmin admin = adminRootQueryService.loginAdmin(adminLoginDto);
+        AdminDtoRes.BasicAdmin admin = adminRootQueryService.loginAdmin(adminLoginDto);
         return Res.isOkWithData(admin, "해당 계정으로 로그인을 성공하였습니다.");
     }
 
@@ -59,7 +59,7 @@ public class AdminRootInfoAPIController {
             HttpServletRequest request,
             @PathVariable("adminId") Integer adminId,
             @Validated({AdminReq.modifyAdmin.class}) @RequestBody AdminReq.AdminDto adminDto) {
-        AdminDao.BasicAdmin modifyAdminInfo = adminRootCommandService.modifyAdminInfo(adminId, adminDto);
+        AdminDtoRes.BasicAdmin modifyAdminInfo = adminRootCommandService.modifyAdminInfo(adminId, adminDto);
         return Res.isOkWithData(modifyAdminInfo, "관리자의 정보를 수정 완료 했습니다.");
     }
 
@@ -68,7 +68,7 @@ public class AdminRootInfoAPIController {
     public Res getAllPagingV1(
             HttpServletRequest request,
             Pageable pageable) {
-        AdminDao.BasicPagingAdmin basicPagingAdmin = adminRootQueryService.findAllPagingV1(pageable);
+        AdminDtoRes.BasicPagingAdmin basicPagingAdmin = adminRootQueryService.findAllPagingV1(pageable);
         return Res.isOkWithData(basicPagingAdmin, "총 관리자 조회 성공");
     }
 }

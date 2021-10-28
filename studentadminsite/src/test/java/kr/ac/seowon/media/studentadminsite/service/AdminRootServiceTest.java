@@ -1,8 +1,8 @@
 package kr.ac.seowon.media.studentadminsite.service;
 
-import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminDtoRes;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
-import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService;
@@ -51,7 +51,7 @@ class AdminRootServiceTest {
         given(adminRepository.findByHashCode(any()))
                 .willReturn(Optional.empty());
         //when
-        AdminDao.BasicAdmin createAdmin = adminRootCommandService.createAdmin(adminDto);
+        AdminDtoRes.BasicAdmin createAdmin = adminRootCommandService.createAdmin(adminDto);
         //then
         assertEquals(createAdmin.getName(), admin.getName());
         assertEquals(createAdmin.getHashCode(), admin.getHashCode());
@@ -82,7 +82,7 @@ class AdminRootServiceTest {
                 .willReturn(Optional.of(admin))
                 .willReturn(Optional.empty());
         //when
-        AdminDao.BasicAdmin modifyAdminInfo = adminRootCommandService.modifyAdminInfo(1, adminDto);
+        AdminDtoRes.BasicAdmin modifyAdminInfo = adminRootCommandService.modifyAdminInfo(1, adminDto);
         //then
         assertEquals(modifyAdminInfo.getName(), "superUser");
         assertEquals(modifyAdminInfo.getHashCode(), "asdasd");
@@ -104,7 +104,7 @@ class AdminRootServiceTest {
         given(adminRepository.findAll(pagingAdminParam))
                 .willReturn(adminPagingMock);
         //when
-        AdminDao.BasicPagingAdmin allPagingV1 = adminRootService.findAllPagingV1(pagingAdminParam);
+        AdminDtoRes.BasicPagingAdmin allPagingV1 = adminRootService.findAllPagingV1(pagingAdminParam);
         //then
     }
 

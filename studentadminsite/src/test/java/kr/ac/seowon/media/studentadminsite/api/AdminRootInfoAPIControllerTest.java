@@ -1,8 +1,8 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
-import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminDtoRes;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootQueryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +61,7 @@ class AdminRootInfoAPIControllerTest {
     void createAdmin_controller() throws Exception {
         //given
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto("name", "hashcode", "123123", "password");
-        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
+        AdminDtoRes.BasicAdmin basicAdmin = new AdminDtoRes.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
         given(adminRootCommandService.createAdmin(any()))
                 .willReturn(basicAdmin);
         //when
@@ -81,7 +81,7 @@ class AdminRootInfoAPIControllerTest {
     void createAdmin_controller_error() throws Exception {
         //given
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto(null, "hashcode", "", "");
-        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
+        AdminDtoRes.BasicAdmin basicAdmin = new AdminDtoRes.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
 
         given(adminRootCommandService.createAdmin(any()))
                 .willReturn(basicAdmin);
@@ -102,7 +102,7 @@ class AdminRootInfoAPIControllerTest {
     void loginAdmin_controller_validation() throws Exception{
         //given
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto("asd", "hashcode", "qwe", "qwe");
-        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
+        AdminDtoRes.BasicAdmin basicAdmin = new AdminDtoRes.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
 
         given(adminRootService.loginAdmin(any()))
                 .willReturn(basicAdmin);
@@ -125,7 +125,7 @@ class AdminRootInfoAPIControllerTest {
     void modifyAdmin_controller_validation() throws Exception{
         //given
         AdminReq.AdminDto adminDto = new AdminReq.AdminDto(null, null, null, null);
-        AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
+        AdminDtoRes.BasicAdmin basicAdmin = new AdminDtoRes.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
 
         given(adminRootService.loginAdmin(any()))
                 .willReturn(basicAdmin);
@@ -143,14 +143,14 @@ class AdminRootInfoAPIControllerTest {
     @DisplayName("admin 페이징")
     void findAllPagingAdmin_controller() throws Exception{
         //given
-        ArrayList<AdminDao.BasicAdmin> collect = new ArrayList<>();
+        ArrayList<AdminDtoRes.BasicAdmin> collect = new ArrayList<>();
         for (int i = 0 ; i < 20; i++) {
             AdminReq.AdminDto adminDto = new AdminReq.AdminDto("name"+i, "hashcode", "123123", "password");
-            AdminDao.BasicAdmin basicAdmin = new AdminDao.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
+            AdminDtoRes.BasicAdmin basicAdmin = new AdminDtoRes.BasicAdmin(any(),adminDto.getName(), adminDto.getHashCode(), adminDto.getPhoneNumber(),any());
 
             collect.add(basicAdmin);
         }
-        AdminDao.BasicPagingAdmin basicPagingAdmin = new AdminDao.BasicPagingAdmin(collect, 0, 5, 20, 100);
+        AdminDtoRes.BasicPagingAdmin basicPagingAdmin = new AdminDtoRes.BasicPagingAdmin(collect, 0, 5, 20, 100);
         given(adminRootService.findAllPagingV1(any()))
                 .willReturn(basicPagingAdmin);
         //when

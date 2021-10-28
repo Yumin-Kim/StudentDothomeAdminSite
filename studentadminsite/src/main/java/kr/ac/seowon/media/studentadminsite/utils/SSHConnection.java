@@ -1,10 +1,9 @@
 package kr.ac.seowon.media.studentadminsite.utils;
 
 import com.jcraft.jsch.*;
-import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
 import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.utilexception.SSHException;
-import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 

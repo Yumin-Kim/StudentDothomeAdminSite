@@ -1,9 +1,9 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import kr.ac.seowon.media.studentadminsite.dao.AdminObserveDao;
-import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
-import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
+import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveDtoRes;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentDtoRes;
+import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.exception.CustomCollectionValidtion;
 import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminObserveCommandService;
@@ -11,7 +11,6 @@ import kr.ac.seowon.media.studentadminsite.service.adminobserve.AdminStudentObse
 import kr.ac.seowon.media.studentadminsite.utils.UtilConfigure;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.SessionFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -41,7 +40,7 @@ public class AdminStudentObserveAPIController {
     @GetMapping
     public Res findStudentInfo(HttpServletRequest request, Pageable pageable
     ) {
-        AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.findAllStudentInfo(pageable);
+        AdminObserveDtoRes.FullInfo fullInfo = adminStudentObserveService.findAllStudentInfo(pageable);
         return Res.isOkWithData(fullInfo, "학생 정보 조회 성공");
     }
 
@@ -49,7 +48,7 @@ public class AdminStudentObserveAPIController {
     public Res findSelectStudentSiteInfo(
             HttpServletRequest request,
             @PathVariable("studentId") Integer studentId) {
-        StudentDao.StudentSiteInfo siteInfo = adminStudentObserveService.findSelectStudentSiteInfo(studentId);
+        StudentDtoRes.StudentSiteInfo siteInfo = adminStudentObserveService.findSelectStudentSiteInfo(studentId);
         return Res.isOkWithData(siteInfo, "학생 사이트 조회 성공");
     }
 
@@ -83,7 +82,7 @@ public class AdminStudentObserveAPIController {
 //            bindingResult.addError(fieldError);
 //            throw new BindException(bindingResult);
 //        }
-        AdminObserveDao.FullInfo fullInfo = adminStudentObserveService.searchStudentInfV1(onChange, searchCondition, pageable);
+        AdminObserveDtoRes.FullInfo fullInfo = adminStudentObserveService.searchStudentInfV1(onChange, searchCondition, pageable);
         return Res.isOkWithData(fullInfo, "조회 성공");
     }
 
@@ -92,7 +91,7 @@ public class AdminStudentObserveAPIController {
     public Res modifyStduentInfo(
             HttpServletRequest request,
             @Valid AdminObserveReq.AdminModifyStudentDto modifyStudentDto) {
-        StudentDao.BasicStudent basicStudent = adminObserveCommandService.modifyStudentInfo(modifyStudentDto);
+        StudentDtoRes.BasicStudent basicStudent = adminObserveCommandService.modifyStudentInfo(modifyStudentDto);
         return Res.isOkWithData(basicStudent, "정보 수정 성공");
     }
 
@@ -105,7 +104,7 @@ public class AdminStudentObserveAPIController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        List<StudentDao.BasicStudent> basicStudents = adminObserveCommandService.modifyStudentsInfo(modifyStudentDtos);
+        List<StudentDtoRes.BasicStudent> basicStudents = adminObserveCommandService.modifyStudentsInfo(modifyStudentDtos);
         return Res.isOkWithData(basicStudents, "정보 수정 성공");
     }
     //TODO 요청 받는 값 변경
@@ -144,7 +143,7 @@ public class AdminStudentObserveAPIController {
     //복수 정보 삭제
     @DeleteMapping("/students/{studentIds}")
     public Res deleteStudentInfos(@PathVariable("studentIds") List<Integer> studentIds) {
-        List<AdminObserveDao.AdminObserveStudentInfo>  adminObserveStudentInfos = adminObserveCommandService.deleteStudentsInfo(studentIds);
+        List<AdminObserveDtoRes.AdminObserveStudentInfo>  adminObserveStudentInfos = adminObserveCommandService.deleteStudentsInfo(studentIds);
         return Res.isOkWithData(adminObserveStudentInfos,"정보 삭제 성공");
     }
 

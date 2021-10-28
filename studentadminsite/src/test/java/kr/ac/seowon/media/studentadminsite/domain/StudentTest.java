@@ -1,27 +1,20 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.ac.seowon.media.studentadminsite.domain.QAdmin;
-import kr.ac.seowon.media.studentadminsite.domain.QStudent;
-import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
-import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
+import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
 import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
 import kr.ac.seowon.media.studentadminsite.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import static kr.ac.seowon.media.studentadminsite.domain.QAdmin.admin;
 import static kr.ac.seowon.media.studentadminsite.domain.QStudent.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -20,8 +20,8 @@ package kr.ac.seowon.media.studentadminsite.api;
 
 import kr.ac.seowon.media.studentadminsite.domain.StudentPortfolio;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
-import kr.ac.seowon.media.studentadminsite.dto.StudentPortFolioRes;
-import kr.ac.seowon.media.studentadminsite.dto.StudentPortfolioReq;
+import kr.ac.seowon.media.studentadminsite.dto.studentportfolio.StudentPortFolioRes;
+import kr.ac.seowon.media.studentadminsite.dto.studentportfolio.StudentPortfolioReq;
 import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import kr.ac.seowon.media.studentadminsite.exception.utilexception.FileUploadException;
@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasText;
 

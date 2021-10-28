@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.dto;
+package kr.ac.seowon.media.studentadminsite.dto.student;
 
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import lombok.*;

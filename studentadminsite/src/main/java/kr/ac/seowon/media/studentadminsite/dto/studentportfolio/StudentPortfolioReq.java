@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.dto;
+package kr.ac.seowon.media.studentadminsite.dto.studentportfolio;
 
 import kr.ac.seowon.media.studentadminsite.domain.StudentPortfolio;
 import lombok.Getter;

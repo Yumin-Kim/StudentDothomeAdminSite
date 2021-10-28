@@ -1,23 +1,23 @@
-package kr.ac.seowon.media.studentadminsite.dao;
+package kr.ac.seowon.media.studentadminsite.dto.adminobserve;
 
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.domain.SiteInfo;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentDtoRes;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminObserveDao {
+public class AdminObserveDtoRes {
 
     @Getter
     @Setter
     @AllArgsConstructor
     public static class FullInfo {
-        private List<AdminObserveDao.AdminObserveStudentInfo> infos = new ArrayList<>();
+        private List<AdminObserveDtoRes.AdminObserveStudentInfo> infos = new ArrayList<>();
         //util
         private Integer currentPage;
         private Integer totalPage;
@@ -36,7 +36,7 @@ public class AdminObserveDao {
         private String phoneNumber;
         private Boolean inSchool;
         private Boolean isDeleted;
-        private StudentDao.StudentSiteInfo siteInfo;
+        private StudentDtoRes.StudentSiteInfo siteInfo;
         private String adminName;
 
         public AdminObserveStudentInfo(Student student, SiteInfo siteInfo, Admin admin) {
@@ -51,7 +51,7 @@ public class AdminObserveDao {
                 adminName = admin.getName();
             }
             if (siteInfo != null) {
-                this.siteInfo = new StudentDao.StudentSiteInfo(siteInfo);
+                this.siteInfo = new StudentDtoRes.StudentSiteInfo(siteInfo);
             }
         }
     }

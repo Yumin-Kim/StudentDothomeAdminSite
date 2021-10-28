@@ -1,7 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
-import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
-import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
+import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

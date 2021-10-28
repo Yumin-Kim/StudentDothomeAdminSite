@@ -1,11 +1,11 @@
-package kr.ac.seowon.media.studentadminsite.dao;
+package kr.ac.seowon.media.studentadminsite.dto.student;
 
 import kr.ac.seowon.media.studentadminsite.domain.SiteInfo;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
 import lombok.Getter;
 import lombok.Setter;
 
-public class StudentDao {
+public class StudentDtoRes {
     @Getter
     @Setter
     public static class BasicStudent {

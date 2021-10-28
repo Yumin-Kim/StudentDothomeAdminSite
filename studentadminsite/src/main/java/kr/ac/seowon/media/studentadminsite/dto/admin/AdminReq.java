@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.dto;
+package kr.ac.seowon.media.studentadminsite.dto.admin;
 
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import lombok.*;

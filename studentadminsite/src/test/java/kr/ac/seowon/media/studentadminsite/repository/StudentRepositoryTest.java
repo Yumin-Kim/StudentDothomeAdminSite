@@ -8,8 +8,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.ac.seowon.media.studentadminsite.domain.*;
-import kr.ac.seowon.media.studentadminsite.dto.AdminObserveReq;
-import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
+import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -19,14 +19,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static kr.ac.seowon.media.studentadminsite.domain.QAdmin.admin;
 import static kr.ac.seowon.media.studentadminsite.domain.QSiteInfo.siteInfo;

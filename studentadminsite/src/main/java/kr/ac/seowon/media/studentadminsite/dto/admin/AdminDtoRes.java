@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.dao;
+package kr.ac.seowon.media.studentadminsite.dto.admin;
 
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import lombok.*;
@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.List;
 
 
-public class AdminDao {
+public class AdminDtoRes {
 
     @Getter
     @Setter

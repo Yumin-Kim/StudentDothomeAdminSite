@@ -1,10 +1,11 @@
 package kr.ac.seowon.media.studentadminsite.service.student;
 
-import kr.ac.seowon.media.studentadminsite.dao.StudentDao;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentDtoRes;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.domain.SiteInfo;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
-import kr.ac.seowon.media.studentadminsite.dto.StudentReq;
+import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
+import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentSiteInfoException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
@@ -30,13 +31,13 @@ public class StudentCommandService {
     private final SiteInfoRespository siteInfoRespository;
     private final UtilConfigure utilConfigure;
 
-    public StudentDao.BasicStudent createStudent(StudentReq.StudentDto studentDto, StudentReq.SiteInfoDto siteInfoDto) {
+    public StudentDtoRes.BasicStudent createStudent(StudentReq.StudentDto studentDto, StudentReq.SiteInfoDto siteInfoDto) {
         Admin admin = adminRepository.findByHashCode(studentDto.getHashCode())
-                .orElseThrow(() -> new StudentException("승인하지 않은 키입니다."));
+                .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_PERMISSION));
         studentRepository.findByStudentCodeAndName(studentDto.getStudentCode(), studentDto.getName())
                 .map(findStudent -> {
                     if (findStudent.getSiteInfo() != null) {
-                        throw new StudentException("현재 학생은 정보가 존재합니다.");
+                        throw new StudentException(ErrorCode.STUDENT_HAS_DATA);
                     }
                     return null;
                 })
@@ -47,13 +48,13 @@ public class StudentCommandService {
         Pattern compile = Pattern.compile("^[a-z]*$");
         Matcher matcher = compile.matcher(siteInfoDto.getDomainName());
         if (!matcher.matches())
-            throw new StudentSiteInfoException("domainName은 대문자 , 특수 문자 , 뛰어쓰기가 존재하면 안됩니다.");
-        if (student.getIsDeleted()) throw new StudentException("비활성화 계정입니다");
+            throw new StudentSiteInfoException(ErrorCode.STUDENT_NOT_CORRECT_DOMAIN);
+        if (student.getIsDeleted()) throw new StudentException(ErrorCode.STUDENT_ID_DISABLED);
         // TODO 수정 요함 >> 한 사용자가 여러 계정 생성 못하도록 막기
         SiteInfo createSiteInfo = (SiteInfo) siteInfoRespository.findByDomainName(siteInfoDto.getDomainName())
                 .map(siteInfo -> {
                     if (siteInfo.getDomainName() != null) {
-                        throw new StudentSiteInfoException("존재하는 도메인 입니다.");
+                        throw new StudentSiteInfoException(ErrorCode.SSH_DUPLICATE_DOMAIN);
                     }
                     return null;
                 })
@@ -68,18 +69,18 @@ public class StudentCommandService {
         jdbcRootPermition.createJDBCMysqlUser(createSiteInfo.getDatabaseName(),studentDto.getPassword());
         siteInfoRespository.save(createSiteInfo);
         student.modifyStudent(studentDto, admin, createSiteInfo);
-        return new StudentDao.BasicStudent(student);
+        return new StudentDtoRes.BasicStudent(student);
     }
 
-    public StudentDao.BasicStudent modifyStudentInfo(Integer studentId, StudentReq.StudentDto studentDto, StudentReq.SiteInfoDto siteInfoDto) {
+    public StudentDtoRes.BasicStudent modifyStudentInfo(Integer studentId, StudentReq.StudentDto studentDto, StudentReq.SiteInfoDto siteInfoDto) {
         Student student = studentRepository.findSiteInfoById(studentId)
-                .orElseThrow(() -> new StudentException("존재하지 않는 학생입니다."));
-        if (student.getSiteInfo() == null) throw new StudentException("아직 등록하지 않은 계정입니다.");
+                .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_FOUND));
+        if (student.getSiteInfo() == null) throw new StudentException(ErrorCode.STUDENT_INFO_NOT_REGISTER);
         if (siteInfoDto.getDomainName() != null || siteInfoDto.getDatabaseName() != null) {
             if (!student.getSiteInfo().getDomainName().equals(siteInfoDto.getOriginDomain()))
-                throw new StudentException("기존 도메인을 잘못 입력하셨습니다.");
+                throw new StudentException(ErrorCode.STUDENT_NOT_CORRECT_SITEINFO_DOMAIN);
             if (siteInfoDto.getDomainName().equals(siteInfoDto.getOriginDomain())) {
-                throw new StudentSiteInfoException("변경하려는 도메인이 동일합니다.");
+                throw new StudentSiteInfoException(ErrorCode.SSH_DUPLICATE_DOMAIN);
             }
             //ssh 접근하여 유저명 , 도메인 정보 수정
             SSHConnection sshConnection = new SSHConnection(utilConfigure);
@@ -89,12 +90,12 @@ public class StudentCommandService {
         }
         //student database 정보 수정
         student.modifyStudent(studentDto, null, null);
-        return new StudentDao.BasicStudent(student);
+        return new StudentDtoRes.BasicStudent(student);
     }
 
     private Student getStudent(StudentReq.StudentDto studentDto) {
         return studentRepository.findByStudentCodeAndName(studentDto.getStudentCode(), studentDto.getName())
-                .orElseThrow(() -> new StudentException("존재하지 않는 학생입니다."));
+                .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_FOUND));
     }
 
 

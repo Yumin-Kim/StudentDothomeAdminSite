@@ -1,8 +1,9 @@
 package kr.ac.seowon.media.studentadminsite.service.admin;
 
-import kr.ac.seowon.media.studentadminsite.dao.AdminDao;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminDtoRes;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
-import kr.ac.seowon.media.studentadminsite.dto.AdminReq;
+import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
+import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
 import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +30,12 @@ public class AdminRootCommandService {
      * @param adminDto
      * @return
      */
-    public AdminDao.BasicAdmin createAdmin(AdminReq.AdminDto adminDto) {
+    public AdminDtoRes.BasicAdmin createAdmin(AdminReq.AdminDto adminDto) {
         Admin admin = adminDto.toEntity();
         List<Admin> admins = (List<Admin>) adminRepository.findByName(admin.getName())
                 .map(data -> {
                     if (hasText(data.getName())) {
-                        throw new AdminException("존재하는 이름입니다.");
+                        throw new AdminException(ErrorCode.ADMIN_DUPLICATE_NAME);
                     }
                     return null;
                 })
@@ -42,16 +43,16 @@ public class AdminRootCommandService {
                         .stream()
                         .filter(admin1 -> admin1.getHashCode().equals(admin.getHashCode()))
                         .collect(toList()));
-        if (admins.size() != 0) throw new AdminException("존재하는 HashCode입니다.");
+        if (admins.size() != 0) throw new AdminException(ErrorCode.ADMIN_DUPLICATE_HASHCODE);
         Admin save = adminRepository.save(admin);
-        return new AdminDao.BasicAdmin(save);
+        return new AdminDtoRes.BasicAdmin(save);
     }
 
-    public AdminDao.BasicAdmin modifyAdminInfo(Integer adminId, AdminReq.AdminDto adminDto) {
+    public AdminDtoRes.BasicAdmin modifyAdminInfo(Integer adminId, AdminReq.AdminDto adminDto) {
         Admin findAdmin = adminRepository.findById(adminId)
-                .orElseThrow(() -> new AdminException("존재하지 않는 admin 입니다."));
+                .orElseThrow(() -> new AdminException(ErrorCode.ADMIN_NOT_FOUND));
         findAdmin.modifyEntity(adminDto);
-        return new AdminDao.BasicAdmin(findAdmin);
+        return new AdminDtoRes.BasicAdmin(findAdmin);
     }
 
 

@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.dto;
+package kr.ac.seowon.media.studentadminsite.dto.adminobserve;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
