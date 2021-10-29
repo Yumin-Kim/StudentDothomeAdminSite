@@ -36,7 +36,6 @@ public enum ErrorCode {
     JDBC_CONNECTION_ERROR("jdbc 연결 에러 발생", 40),
     JDBC_COMMIT_ROLLBACK("jdbc commit 에러 발생하여 rollback이 발생",41),
     IMAGE_UPLOAD_ERROR("이미지 업로드 실패", 5);
-    
     private String message;
     private Integer statusCode;
 

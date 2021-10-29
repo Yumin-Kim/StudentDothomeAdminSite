@@ -1,5 +1,8 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
+import kr.ac.seowon.media.studentadminsite.domain.wasDomain.DockerWasInfo;
+import kr.ac.seowon.media.studentadminsite.domain.wasDomain.IntegratedErrorLog;
+import kr.ac.seowon.media.studentadminsite.domain.wasDomain.LocalWasInfo;
 import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
 import lombok.AccessLevel;
@@ -7,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,6 +42,15 @@ public class Student extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
     private Admin admin;
+
+    @OneToMany(mappedBy = "student")
+    private List<LocalWasInfo> localWasInfos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student")
+    private List<DockerWasInfo> dockerWasInfos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student")
+    private List<IntegratedErrorLog> integratedErrorLogs = new ArrayList<>();
 
     public Student(String name, Integer studentCode,Boolean inSchool,Admin admin) {
         this.name = name;
