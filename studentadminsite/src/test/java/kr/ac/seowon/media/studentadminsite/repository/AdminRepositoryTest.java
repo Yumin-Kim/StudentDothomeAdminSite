@@ -2,6 +2,7 @@ package kr.ac.seowon.media.studentadminsite.repository;
 
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
+import kr.ac.seowon.media.studentadminsite.repository.admin.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;

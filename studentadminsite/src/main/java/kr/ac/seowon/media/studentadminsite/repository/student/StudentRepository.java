@@ -1,17 +1,13 @@
-package kr.ac.seowon.media.studentadminsite.repository;
+package kr.ac.seowon.media.studentadminsite.repository.student;
 
 import kr.ac.seowon.media.studentadminsite.domain.Student;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.DoubleStream;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> , StudentCustomRepository {
 

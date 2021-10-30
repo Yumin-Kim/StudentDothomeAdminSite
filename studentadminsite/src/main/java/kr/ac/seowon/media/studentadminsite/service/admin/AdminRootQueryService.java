@@ -5,7 +5,7 @@ import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
 import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
-import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
+import kr.ac.seowon.media.studentadminsite.repository.admin.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

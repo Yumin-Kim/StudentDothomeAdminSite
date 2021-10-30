@@ -1,10 +1,10 @@
-package kr.ac.seowon.media.studentadminsite.api;
+package kr.ac.seowon.media.studentadminsite.api.student;
 
 import kr.ac.seowon.media.studentadminsite.dto.student.StudentDtoRes;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
 import kr.ac.seowon.media.studentadminsite.service.student.StudentCommandService;
-import kr.ac.seowon.media.studentadminsite.service.student.StudentService;
+import kr.ac.seowon.media.studentadminsite.service.student.StudentQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,26 +19,26 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class StudentAPIController {
 
-    private final StudentService studentService;
+    private final StudentQueryService studentQueryService;
     private final StudentCommandService studentCommandService;
 
     @GetMapping
     public Res findStudentCodeAndName(
             HttpServletRequest request,
             @Validated({StudentReq.FindStudentCode.class}) @ModelAttribute StudentReq.StudentDto studentDto) {
-        StudentDtoRes.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
+        StudentDtoRes.BasicStudent basicStudent = studentQueryService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "학번 조회 결과 입니다.");
     }
 
     @GetMapping("/studentcode")
     public Res findStudentCode(@RequestParam("name") String name, @RequestParam("studentCode") Integer studentCode) {
-        StudentDtoRes.DefaultStudent basicStudent = studentService.findStudentCode(name, studentCode);
+        StudentDtoRes.DefaultStudent basicStudent = studentQueryService.findStudentCode(name, studentCode);
         return Res.isOkWithData(basicStudent, "학번 조회 성공");
     }
 
     @PostMapping("/login")
     public Res studentLogin(HttpServletRequest request, @Validated({StudentReq.FindStudentCode.class}) @RequestBody StudentReq.StudentDto studentDto) {
-        StudentDtoRes.BasicStudent basicStudent = studentService.findStudentCodeAndName(studentDto);
+        StudentDtoRes.BasicStudent basicStudent = studentQueryService.findStudentCodeAndName(studentDto);
         return Res.isOkWithData(basicStudent, "로그인 성공");
     }
 

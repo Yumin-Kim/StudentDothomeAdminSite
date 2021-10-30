@@ -2,6 +2,7 @@ package kr.ac.seowon.media.studentadminsite.dto.student;
 
 import kr.ac.seowon.media.studentadminsite.domain.SiteInfo;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,6 +68,25 @@ public class StudentDtoRes {
             if (siteInfo.getDatabaseName() != null) {
                 databaseName = siteInfo.getDatabaseName();
             }
+        }
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class StudentFullDto{
+        private String name;
+        private Integer studentCode;
+        private String domainName;
+        private String databaseName;
+        private String password;
+
+        public StudentFullDto(Student student) {
+            name = student.getName();
+            password = student.getPassword();
+            studentCode = student.getStudentCode();
+            domainName = student.getSiteInfo().getDomainName();
+            databaseName = student.getSiteInfo().getDatabaseName();
         }
     }
 

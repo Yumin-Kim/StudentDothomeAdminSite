@@ -1,10 +1,14 @@
 package kr.ac.seowon.media.studentadminsite.domain.wasDomain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Enumerated;
 
 
+@Getter
 public enum WASItem {
-    SPRING("java 애플리케이션", 1), NODEJS("NodeJS 애플리케이션", 2);
+    SPRING("HTTP", 1), NODEJS("NODEJS", 2);
 
     private String message;
     private Integer order;

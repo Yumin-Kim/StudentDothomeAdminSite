@@ -10,6 +10,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.ac.seowon.media.studentadminsite.domain.*;
 import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.dto.student.StudentReq;
+import kr.ac.seowon.media.studentadminsite.repository.admin.AdminRepository;
+import kr.ac.seowon.media.studentadminsite.repository.student.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;

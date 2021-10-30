@@ -4,7 +4,7 @@ import kr.ac.seowon.media.studentadminsite.dto.admin.AdminDtoRes;
 import kr.ac.seowon.media.studentadminsite.domain.Admin;
 import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
-import kr.ac.seowon.media.studentadminsite.repository.AdminRepository;
+import kr.ac.seowon.media.studentadminsite.repository.admin.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootQueryService;
 import org.junit.jupiter.api.DisplayName;

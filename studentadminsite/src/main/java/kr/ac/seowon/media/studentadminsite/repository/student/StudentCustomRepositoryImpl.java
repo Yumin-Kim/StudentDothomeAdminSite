@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.repository;
+package kr.ac.seowon.media.studentadminsite.repository.student;
 
 
 import com.querydsl.core.BooleanBuilder;

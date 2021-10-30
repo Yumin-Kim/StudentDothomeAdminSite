@@ -1,6 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.ac.seowon.media.studentadminsite.api.admin.AdminRootInfoAPIController;
 import kr.ac.seowon.media.studentadminsite.dto.admin.AdminDtoRes;
 import kr.ac.seowon.media.studentadminsite.dto.admin.AdminReq;
 import kr.ac.seowon.media.studentadminsite.service.admin.AdminRootCommandService;

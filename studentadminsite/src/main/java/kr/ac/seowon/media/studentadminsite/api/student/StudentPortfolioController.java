@@ -16,7 +16,7 @@
      */
 //조회후 데이터 베이스 확인하고 존재 여부만 알려줌
 
-package kr.ac.seowon.media.studentadminsite.api;
+package kr.ac.seowon.media.studentadminsite.api.student;
 
 import kr.ac.seowon.media.studentadminsite.domain.StudentPortfolio;
 import kr.ac.seowon.media.studentadminsite.dto.Res;
@@ -25,7 +25,7 @@ import kr.ac.seowon.media.studentadminsite.dto.studentportfolio.StudentPortfolio
 import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import kr.ac.seowon.media.studentadminsite.exception.utilexception.FileUploadException;
-import kr.ac.seowon.media.studentadminsite.repository.StudentPortfolioRepository;
+import kr.ac.seowon.media.studentadminsite.repository.student.StudentPortfolioRepository;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

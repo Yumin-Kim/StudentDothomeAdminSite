@@ -1,23 +1,15 @@
 package kr.ac.seowon.media.studentadminsite.domain;
 
-import kr.ac.seowon.media.studentadminsite.repository.SiteInfoRespository;
-import org.hibernate.exception.ConstraintViolationException;
-import org.junit.jupiter.api.Disabled;
+import kr.ac.seowon.media.studentadminsite.repository.student.SiteInfoRespository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Transactional

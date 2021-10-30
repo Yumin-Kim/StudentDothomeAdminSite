@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.repository;
+package kr.ac.seowon.media.studentadminsite.repository.student;
 
 import kr.ac.seowon.media.studentadminsite.domain.SiteInfo;
 import org.springframework.data.jpa.repository.JpaRepository;

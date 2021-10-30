@@ -1,4 +1,4 @@
-package kr.ac.seowon.media.studentadminsite.api;
+package kr.ac.seowon.media.studentadminsite.api.admin;
 
 import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.utils.JdbcRootPermition;

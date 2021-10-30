@@ -13,9 +13,14 @@ public class WASIntegratedInfo {
 
     @Column(unique = true,nullable = false)
     private Integer port;
+
+    @Column(unique = true , nullable = false)
+    private String applicationName;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private WASItem name;
+
     @Column(columnDefinition = "TEXT",nullable = false)
     private String description;
     private Boolean isRunning;

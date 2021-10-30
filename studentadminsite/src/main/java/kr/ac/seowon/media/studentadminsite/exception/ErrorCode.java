@@ -12,6 +12,7 @@ import lombok.Getter;
 // 3_ ssh
 // 4_ JDBC 에러
 // 5_ 유틸성
+
 @Getter
 public enum ErrorCode {
 
@@ -25,6 +26,8 @@ public enum ErrorCode {
     STUDENT_INFO_NOT_REGISTER("아직 사이트 정보를 등록하지 않은 계정입니다.", 17),
     STUDENT_NOT_CORRECT_SITEINFO_DOMAIN("기존 도메인을 잘못 입력하셨습니다.", 19),
     STUDENT_NOT_SITEINFO("현 조회 학생은 사이트 정보가 존재 하지 않습니다.", 111),
+    LOCAL_DUPLICATE_PORT("중복 되는 포트 입니다.", 121),
+    LOCAL_NOT_SELECT_DEPLOY_METHOD("Deploy 방식을 선택하지 않았습니다.", 122),
     ADMIN_NOT_FOUND("존재하지 않는 관리자 입니다.", 2),
     ADMIN_NOT_HAS_SITEINFO("선택한 학생은 사이트 정보가 존재하지 않습니다.", 21),
     ADMIN_NOT_FOUND_STUDENT("존재하지 않는 학생을 조회하였습니다.", 22),
