@@ -13,18 +13,31 @@
 # GIT sudo ./deployNodeJS.sh oem GIT test app.js https://github.com/Yumin-Kim/testNodeJS.git testNodeJS
 # SFTP,HTTP sudo ./deployNodeJS.sh oem SFTP app index.js sftpNodeJS
 
+# 문자열 배열로 담기 
+# parses=$(echo $result | tr " " "\n")
+# arr=()
+# for parse in $parses
+# do
+#         arr+=($parse)
+# done
+# echo "${arr[0]}"
+# echo "${arr[1]}"_Hello
+
+
 echo "1. 사용자_WAS 업로드 디렉토리 확인 : $1"
 echo "2. 배포 방식 : $2"
 echo "3. 등록할 애플리케이션 이름(pm2에 등록될 이름) : $3"
 echo "4. EndPoint JavaScript File : $4" 
 echo "5. 배포 방식에 따른 정보 => git 주소 ,SFTP 업로드한 디렉토리 , WAS 업로드 디렉토리 : $5"
-echo "6. GIT 업로드 시 필수 리포티토리 이름 : $6"
+echo "6. 사용자 데이터 베이스 이름 : $6"
+echo "7. GIT 업로드 시 필수 리포티토리 이름 : $7"
 
 SSHUserName=$1
 deployMethod=$2
 applicationName=$3
 endPointFile=$4
 uploadInfo=$5
+userDatabaseName=$6
 repositoryName=$6
 
 ## development
@@ -83,24 +96,8 @@ function uploadAndRunNodeJS(){
     echo "============================================"
     if [[ "$nodeJSResult" == *errored* ]]; then
         echo 'failure deploy'
-        # root 일시
-        # select후 배열 추가 코드
-        # result << select student_code , password from student
-        # result=$(mysql -u$user -p$password $db -e "select user from user;")
-        # parses=$(echo $result | tr " " "\n")
-        # arr=()
-        # for parse in $parses
-        # do
-        #         arr+=($parse)
-        # done
-        # echo "${arr[0]}"
-        # echo "${arr[1]}"_Hello
-        # 사용자 일시
-        
-        # Spring-boot에서 insert 쿼리 동작 후  
-        # update 쿼리 필요 사용자와 통합
-        echo $(mysql -u$user -p$password $db -e "select * from user;")
-        # mysql -u username -puserpass dbname -e "UPDATE mytable SET mycolumn = 'myvalue' WHERE id='myid'";
+        updateErrorLogToDatabase
+        #  부가적으로 에러 처리 필요
     else
         echo 'success deploy'
     fi
@@ -140,7 +137,29 @@ function filterDeployMethod(){
     uploadAndRunNodeJS  
 }
 
-
+function updateErrorLogToDatabase(){
+        $logFile=$(sudo cat /root/.pm2/logs/$applicationName-error.log )
+        integratedErrorLogId=$(mysql -u$user -p$password $db -e "SELECT l.local_was_info_id FROM integrated_error_log as l left join local_was_info as w on w.local_was_info_id = l.local_was_info_id where w.student_id=$stduentColumnId and w.created='$craetedDate';")
+        # root 일시
+        # select후 배열 추가 코드
+        # result << select student_code , password from student
+        mysql -u$user -p$password $db -e "update integrated_error_log set error_logs='$logFile' , last_modified = NOW() where ( integrated_error_log_id =$integratedErrorLogId );"
+        rootLogUpdateResultStatusCode=$?
+        # 결과에 따른 부가적인 
+        
+        # 사용자 일시(테이블 명은 waserrorlogs id(Integer_AutoIncrement),was_info_id(foreginKey),createdAt(DateTime),last_modified(DateTime),delete(DateTime),is_delete(boolean),error_logs(Text))
+        # Spring-boot  
+        # 테이블 생성 및 insert 쿼리 진행(wasid , 생성 날짜 입력)
+        # update 쿼리 필요 사용자와 통합
+        deployWasInfoId=$(mysql -u$user -p$password $db -e "select local_was_info_id from local_was_info left join  where student_id=$stduentColumnId and created='$createdDate';")
+        wait
+        userDeployErrorLogId=$(mysql -u$user -p$password $userDatabaseName -e "select id from waserrorlogs was_info_id = $deployWasInfoId;")
+        wait
+        mysql -u$user -p$password $userDatabaseName -e "update waserrorlogs set error_logs = '$logFile' , last_modified=NOW() WHERE (id ='$userDeployErrorLogId');"
+        wait
+        userLogUpdateResultStatusCode=$?
+    
+}
 
 cd $userpath
 # if [ -e "wasWorkspace" ]; then

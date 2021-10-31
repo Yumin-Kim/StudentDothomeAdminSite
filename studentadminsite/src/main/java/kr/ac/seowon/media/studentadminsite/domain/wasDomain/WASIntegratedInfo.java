@@ -1,5 +1,6 @@
 package kr.ac.seowon.media.studentadminsite.domain.wasDomain;
 
+import kr.ac.seowon.media.studentadminsite.domain.BaseEntity;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @Getter
-public class WASIntegratedInfo {
+public class WASIntegratedInfo extends BaseEntity {
 
     @Column(unique = true,nullable = false)
     private Integer port;

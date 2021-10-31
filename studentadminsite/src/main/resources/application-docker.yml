@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 5050
 config:
   sshusername: "user"
   sshhost: "172.17.0.1"
@@ -8,6 +8,9 @@ config:
   databaseUrl: "jdbc:mysql://localhost:3306/mysql"
   databaseId: "root"
   databasePwd: "test1234"
+
+file:
+  dir: /home/oem/WebDir/2021studentImages/
 
 spring:
   datasource:
