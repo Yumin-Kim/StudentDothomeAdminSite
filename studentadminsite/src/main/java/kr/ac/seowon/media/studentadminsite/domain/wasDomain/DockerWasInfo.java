@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "docker_was_info")
 public class DockerWasInfo extends WASIntegratedInfo {
 
@@ -34,5 +33,9 @@ public class DockerWasInfo extends WASIntegratedInfo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id" , nullable = false)
     private Student student;
+
+    protected DockerWasInfo(Integer port, WASItem name, String applicationName) {
+        super(port, name, applicationName);
+    }
 
 }

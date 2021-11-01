@@ -23,7 +23,6 @@
 # echo "${arr[0]}"
 # echo "${arr[1]}"_Hello
 
-
 echo "1. 사용자_WAS 업로드 디렉토리 확인 : $1"
 echo "2. 배포 방식 : $2"
 echo "3. 등록할 애플리케이션 이름(pm2에 등록될 이름) : $3"
@@ -46,10 +45,10 @@ rootDBuser=root
 password=test1234
 db=test01
 ## deploy Dir
-userpath=/home/$SSHUserName/Downloads
-workspace="test"
+# userpath=/home/$SSHUserName/Downloads
+# workspace="test"
 ## Node Enveirment path
-NVM_DIR=/home/oem/.nvm
+# NVM_DIR=/home/oem/.nvm
 
 # #production
 # # DB Connetion
@@ -57,10 +56,10 @@ NVM_DIR=/home/oem/.nvm
 # password=multi2021
 # db=studentDothome
 # # deploy Dir
-# userpath=/home/$1/Public
-# workspace="wasWorkspace"
+userpath=/home/$1/Public
+workspace="wasWorkspace"
 ## Node Enveirment path
-# NVM_DIR=/home/root/.nvm
+NVM_DIR=/root/.nvm
 
 # SSH 연결 후 NodeJS 실행할 수 있는 함수
 # 필요한 정보 endPoint , applicationName , directory Info
@@ -97,7 +96,6 @@ function uploadAndRunNodeJS(){
     if [[ "$nodeJSResult" == *errored* ]]; then
         echo 'failure deploy'
         updateErrorLogToDatabase
-        #  부가적으로 에러 처리 필요
     else
         echo 'success deploy'
     fi
@@ -162,7 +160,6 @@ function updateErrorLogToDatabase(){
 }
 
 cd $userpath
-# if [ -e "wasWorkspace" ]; then
 if [ -e $workspace ]; then
     cd $userpath/$workspace
     filterDeployMethod $deployMethod

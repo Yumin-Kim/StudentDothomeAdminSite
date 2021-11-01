@@ -28,6 +28,8 @@ public enum ErrorCode {
     STUDENT_NOT_SITEINFO("현 조회 학생은 사이트 정보가 존재 하지 않습니다.", 111),
     LOCAL_DUPLICATE_PORT("중복 되는 포트 입니다.", 121),
     LOCAL_NOT_SELECT_DEPLOY_METHOD("Deploy 방식을 선택하지 않았습니다.", 122),
+    LOCAL_DEPLOY_TEST_ERROR("배포를 위한 테스트에 오류가 발생하였습니다.", 123),
+    LOCAL_DEPLOY_NOTWRITE_ERROR_LOG("배포간 에러 로그가 작성되지 않았습니다.", 124),
     ADMIN_NOT_FOUND("존재하지 않는 관리자 입니다.", 2),
     ADMIN_NOT_HAS_SITEINFO("선택한 학생은 사이트 정보가 존재하지 않습니다.", 21),
     ADMIN_NOT_FOUND_STUDENT("존재하지 않는 학생을 조회하였습니다.", 22),
@@ -38,6 +40,7 @@ public enum ErrorCode {
     SSH_CONTACT_DOMAIN("도메인 접근 오류가 발생하였습니다.", 32),
     JDBC_CONNECTION_ERROR("jdbc 연결 에러 발생", 40),
     JDBC_COMMIT_ROLLBACK("jdbc commit 에러 발생하여 rollback이 발생",41),
+    JDBC_USER_DATABASE_INSERT_ERROR("UserDatabase 접근간 insert 에러 발생", 42),
     IMAGE_UPLOAD_ERROR("이미지 업로드 실패", 5);
     private String message;
     private Integer statusCode;

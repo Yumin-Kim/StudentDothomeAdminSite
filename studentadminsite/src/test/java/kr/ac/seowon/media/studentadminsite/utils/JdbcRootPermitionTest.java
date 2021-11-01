@@ -1,5 +1,7 @@
 package kr.ac.seowon.media.studentadminsite.utils;
 
+import kr.ac.seowon.media.studentadminsite.exception.ErrorCode;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.*;
@@ -23,20 +25,21 @@ class JdbcRootPermitionTest {
     Connection connection = null;
     Statement statement = null;
 
+
     @BeforeEach
-    void jdbcConnection() throws Exception{
+    void jdbcConnection() throws Exception {
         Class.forName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+        //Root
         connection = DriverManager.getConnection(url, id, pwd);
         statement = connection.createStatement();
         connection.setAutoCommit(false);
     }
 
-
     @Test
     @Order(2)
     void jdbcTest() throws Exception {
-        statement.execute("drop user "+dummyUser+"@'%'");
-        statement.execute("drop database "+dummyUser);
+        statement.execute("drop user " + dummyUser + "@'%'");
+        statement.execute("drop database " + dummyUser);
         statement.execute("FLUSH privileges");
         connection.commit();
     }
@@ -44,26 +47,17 @@ class JdbcRootPermitionTest {
     @Test
     @DisplayName("mysql 사용자 생성 테스트 코드")
     @Order(1)
-    void createMysqlUserJDBCConnection() throws Exception{
+    void createMysqlUserJDBCConnection() throws Exception {
         statement.execute("create user " + dummyUser + "@'%' identified by '" + password + "'");
         statement.execute("create database " + dummyUser);
         statement.execute("grant all privileges on " + dummyUser + ".* to " + dummyUser + "@'%';");
         statement.execute("FLUSH privileges");
-//        statement.execute("create user " + databaseName + "@'%' identified by '"+password+"'");
-//        statement.execute("create database " + databaseName);
-//        statement.execute("grant all privileges on " + databaseName + ".* to " + databaseName + "@'%';");
-//        statement.execute("FLUSH privileges");
-//        statement.execute("create table "+dummyUser+".member (id int auto_increment , username varchar(255) not null , password varchar(255) not null , primary key(id));");
-//        statement.executeUpdate("insert into "+dummyUser+".member(username , password ) values ('username1' , 'password' )");
         connection.commit();
     }
 
-
-
     @Test
     @DisplayName("현 사용자 확인 쿼리")
-    void dumpAndCreateMysqlUser() throws Exception{
-
+    void dumpAndCreateMysqlUser() throws Exception {
         ResultSet resultSet = statement.executeQuery("select user from user where user like \"s%\"");
         List<MysqlUserBean> arrayList = new ArrayList<MysqlUserBean>();
         while (resultSet.next()) {
@@ -73,11 +67,12 @@ class JdbcRootPermitionTest {
             arrayList.add(mysqlUserBean);
         }
         arrayList.stream()
-                .forEach(data-> System.out.println("data = " + data.getUser()));
+                .forEach(data -> System.out.println("data = " + data.getUser()));
     }
+
     @Test
     @DisplayName("사용자 생성 확인 삭제 통합 코드")
-    void integrationJDBCTest() throws Exception{
+    void integrationJDBCTest() throws Exception {
         // given
         String testUser = "javatestcode";
         statement.execute("create user " + testUser + "@'%' identified by '" + password + "'");
@@ -93,12 +88,12 @@ class JdbcRootPermitionTest {
             arrayList.add(mysqlUserBean);
         }
         arrayList.stream()
-                .forEach(data-> System.out.println("data = " + data.getUser()));
+                .forEach(data -> System.out.println("data = " + data.getUser()));
         final List<MysqlUserBean> collect = arrayList.stream()
                 .filter(data -> data.equals(testUser))
                 .collect(Collectors.toList());
-        statement.execute("drop user "+testUser+"@'%'");
-        statement.execute("drop database "+testUser);
+        statement.execute("drop user " + testUser + "@'%'");
+        statement.execute("drop database " + testUser);
         statement.execute("FLUSH privileges");
         connection.commit();
         final Statement statement1 = connection.createStatement();
@@ -112,26 +107,27 @@ class JdbcRootPermitionTest {
             arrayList1.add(mysqlUserBean);
         }
         arrayList1.stream()
-                .forEach(data-> System.out.println("data = " + data.getUser()));
+                .forEach(data -> System.out.println("data = " + data.getUser()));
     }
+
 
     @Test
     @DisplayName("사용자 일괄 저장후 일괄 삭제 테스트")
-    void JdbcRootPermitionTest() throws Exception{
-        // given
+    void JdbcRootPermitionTest() throws Exception {
+        // given/**/
         String dummyUser1 = "testaa";
         String dummyUser2 = "testbb";
-        statement.execute("create user "+dummyUser1+"@'%' identified by '"+password+"'");
+        statement.execute("create user " + dummyUser1 + "@'%' identified by '" + password + "'");
         statement.execute("create database " + dummyUser1);
         statement.execute("grant all privileges on " + dummyUser1 + ".* to " + dummyUser1 + "@'%';");
         statement.execute("FLUSH privileges");
-        statement.execute("create user "+dummyUser2+"@'%' identified by '"+password+"'");
+        statement.execute("create user " + dummyUser2 + "@'%' identified by '" + password + "'");
         statement.execute("create database " + dummyUser2);
         statement.execute("grant all privileges on " + dummyUser2 + ".* to " + dummyUser2 + "@'%';");
         statement.execute("FLUSH privileges");
 
-        List.of(dummyUser1,dummyUser2).stream()
-                .forEach(data-> {
+        List.of(dummyUser1, dummyUser2).stream()
+                .forEach(data -> {
                     try {
                         extracted(data);
                     } catch (SQLException e) {
@@ -139,15 +135,17 @@ class JdbcRootPermitionTest {
                     }
                 });
     }
+
     private void extracted(String dummyUser) throws SQLException {
-        statement.execute("drop user "+dummyUser+"@'%'");
-        statement.execute("drop database "+dummyUser);
+        statement.execute("drop user " + dummyUser + "@'%'");
+        statement.execute("drop database " + dummyUser);
         statement.execute("FLUSH privileges");
         connection.commit();
     }
+
     @Getter
     @Setter
-    public static class MysqlUserBean{
+    public static class MysqlUserBean {
         private String user;
 
         public String getUser() {

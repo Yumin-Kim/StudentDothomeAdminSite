@@ -6,6 +6,7 @@ import kr.ac.seowon.media.studentadminsite.dto.Res;
 import kr.ac.seowon.media.studentadminsite.exception.controllerexception.AdminObserveException;
 import kr.ac.seowon.media.studentadminsite.exception.controllerexception.InsertDuplicateException;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.AdminException;
+import kr.ac.seowon.media.studentadminsite.exception.domainexception.LocalWasException;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentException;
 import kr.ac.seowon.media.studentadminsite.exception.domainexception.StudentSiteInfoException;
 import kr.ac.seowon.media.studentadminsite.exception.utilexception.SSHException;
@@ -44,7 +45,6 @@ public class ExceptionAdvice {
     //TODO Exception 코드 재수정하여 Return
     @ExceptionHandler({UtilJdbcConnectionException.class})
     public Res jdbcException(SQLException e) {
-
         return Res.isErrorByMessage(e.getMessage(), HttpStatus.BAD_REQUEST.toString());
     }
 
@@ -54,7 +54,7 @@ public class ExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({StudentException.class, AdminException.class, AdminObserveException.class, StudentSiteInfoException.class})
+    @ExceptionHandler({StudentException.class, LocalWasException.class, AdminException.class, AdminObserveException.class, StudentSiteInfoException.class})
     public Res dataNotFoundException(Exception error) {
         return Res.isErrorByMessage(error.getMessage(), HttpStatus.BAD_REQUEST.name());
     }
@@ -68,6 +68,11 @@ public class ExceptionAdvice {
         return Res.isErrorWthData(errorList, "입력한 학생이 중복되었습니다.", HttpStatus.BAD_REQUEST.name());
     }
 
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler({LocalWasException.class})
+//    public Res localWasDeployException(Exception e) {
+//
+//    }
 
     //TODO ReponseEntity를 통해서 리턴
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -3,6 +3,7 @@ package kr.ac.seowon.media.studentadminsite.domain.wasDomain;
 import kr.ac.seowon.media.studentadminsite.domain.BaseEntity;
 import kr.ac.seowon.media.studentadminsite.domain.Student;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +19,7 @@ public class IntegratedErrorLog extends BaseEntity {
     @Column(name = "integrated_error_log_id")
     private Integer id;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String errorLogs;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -32,4 +33,18 @@ public class IntegratedErrorLog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "student_id")
     private Student student;
+
+    @Builder
+    protected IntegratedErrorLog(String errorLogs,Student student) {
+        this.errorLogs = errorLogs;
+        this.student = student;
+    }
+
+    public static IntegratedErrorLog createEntity(String errorLogs,Student student) {
+        return new IntegratedErrorLog(errorLogs, student);
+    }
+
+    public void updateLocalWasLog(LocalWasInfo localWasInfo){
+        this.localWasInfo = localWasInfo;
+    }
 }
