@@ -29,6 +29,7 @@ public enum ErrorCode {
     LOCAL_DUPLICATE_PORT("중복 되는 포트 입니다.", 121),
     LOCAL_NOT_SELECT_DEPLOY_METHOD("Deploy 방식을 선택하지 않았습니다.", 122),
     LOCAL_DEPLOY_TEST_ERROR("배포를 위한 테스트에 오류가 발생하였습니다.", 123),
+    LOCAL_DEPLOY_TEST_SSH_CONNECT("배포 테스트 진행 시도 간 SSH 오류 발생", 124),
     LOCAL_DEPLOY_NOTWRITE_ERROR_LOG("배포간 에러 로그가 작성되지 않았습니다.", 124),
     ADMIN_NOT_FOUND("존재하지 않는 관리자 입니다.", 2),
     ADMIN_NOT_HAS_SITEINFO("선택한 학생은 사이트 정보가 존재하지 않습니다.", 21),

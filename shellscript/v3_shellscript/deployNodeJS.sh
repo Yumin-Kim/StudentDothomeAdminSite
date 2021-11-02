@@ -8,7 +8,7 @@
 ### sudo 명령어를 통해서 진행했기 때문에 npx pm2 list를 root 권한으로 확인해야확인이 가능하다.
 
 #### pm2로 동일한 포트를 
-
+## 전역에 pm2 설치 필요
 # local test Code
 # GIT sudo ./deployNodeJS.sh oem GIT test app.js https://github.com/Yumin-Kim/testNodeJS.git testNodeJS
 # SFTP,HTTP sudo ./deployNodeJS.sh oem SFTP app index.js sftpNodeJS
@@ -22,22 +22,22 @@
 # done
 # echo "${arr[0]}"
 # echo "${arr[1]}"_Hello
-
-echo "1. 사용자_WAS 업로드 디렉토리 확인 : $1"
-echo "2. 배포 방식 : $2"
-echo "3. 등록할 애플리케이션 이름(pm2에 등록될 이름) : $3"
-echo "4. EndPoint JavaScript File : $4" 
-echo "5. 배포 방식에 따른 정보 => git 주소 ,SFTP 업로드한 디렉토리 , WAS 업로드 디렉토리 : $5"
-echo "6. 사용자 데이터 베이스 이름 : $6"
-echo "7. GIT 업로드 시 필수 리포티토리 이름 : $7"
-
-SSHUserName=$1
-deployMethod=$2
-applicationName=$3
-endPointFile=$4
-uploadInfo=$5
-userDatabaseName=$6
-repositoryName=$6
+echo " 0. 사용자 id : $1"
+echo "1. 사용자_WAS 업로드 디렉토리 확인 : $2"
+echo "2. 배포 방식 : $3"
+echo "3. 등록할 애플리케이션 이름(pm2에 등록될 이름) : $4"
+echo "4. EndPoint JavaScript File : $5" 
+echo "5. 배포 방식에 따른 정보 => git 주소 ,SFTP 업로드한 디렉토리 , WAS 업로드 디렉토리 : $6"
+echo "6. 사용자 데이터 베이스 이름 : $7"
+echo "7. GIT 업로드 시 필수 리포티토리 이름 : $8"
+stduentColumnId=$1
+SSHUserName=$2
+deployMethod=$3
+applicationName=$4
+endPointFile=$5
+uploadInfo=$6
+userDatabaseName=$7
+repositoryName=$8
 
 ## development
 ## DB Connetion
@@ -56,7 +56,7 @@ db=test01
 # password=multi2021
 # db=studentDothome
 # # deploy Dir
-userpath=/home/$1/Public
+userpath=/home/$SSHUserName/Public
 workspace="wasWorkspace"
 ## Node Enveirment path
 NVM_DIR=/root/.nvm
@@ -73,19 +73,22 @@ function uploadAndRunNodeJS(){
     # root에 설치 해야지 편함
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    nvmEnvirment=$?
     nvm use 14
-    if [ -e "node_modules" ]; then
-        sudo npm i pm2
+    if [ -d "node_modules" ]; then
+        echo 'Not install npm'    
+        # npm i pm2
         npx pm2 start $endPointFile --name $applicationName
         wait
     else 
-        sudo npm i
+        echo 'install npm'    
+        npm i
         wait
-        sudo npm i pm2
+        npm i pm2
         wait
         echo $? 
         # pm2로 변경 필요
-        runNodeJs=$(npx pm2 start $endPointFile --name $applicationName) 
+        npx pm2 start $endPointFile --name $applicationName 
         wait
     fi
     # 결과는 즉시 확인할 수 없기때문에 1~5초 정도 delay후 정보 제공
@@ -108,8 +111,18 @@ function uploadAndRunNodeJS(){
     wait
 }
 
+# 업로드 폴더가 존재 여부 파악 존재 X => 1
+function ValidationDirectory(){
+    if [ ! -d $uploadInfo ]; then
+        echo 1
+    else
+        echo 0
+    fi
+}
+
 function filterDeployMethod(){
     method=$1
+    directoryValidationResult=$(ValidationDirectory)
     if [ "SFTP" == $method ]; then
         sudo chmod -R 777 $uploadInfo/*
         cd $uploadInfo
@@ -132,16 +145,35 @@ function filterDeployMethod(){
             cd $repositoryName
         fi
     fi
-    uploadAndRunNodeJS  
+    if [ $directoryValidationResult -eq 0 ]; then
+        uploadAndRunNodeJS  
+    else
+        echo "Failure not found deployDirectory"
+    fi    
+
 }
 
 function updateErrorLogToDatabase(){
-        $logFile=$(sudo cat /root/.pm2/logs/$applicationName-error.log )
-        integratedErrorLogId=$(mysql -u$user -p$password $db -e "SELECT l.local_was_info_id FROM integrated_error_log as l left join local_was_info as w on w.local_was_info_id = l.local_was_info_id where w.student_id=$stduentColumnId and w.created='$craetedDate';")
+        logFile=$(sudo cat /root/.pm2/logs/$applicationName-error.log)
+        # integratedErrorLogId=$(mysql -u$user -p$password $db -e "SELECT l.local_was_info_id FROM integrated_error_log as l left join local_was_info as w on w.local_was_info_id = l.local_was_info_id where w.student_id=$stduentColumnId and w.created='$craetedDate';")
+        integratedErrorLogId=$(mysql -u$rootDBuser -p$password $db -e "select l.integrated_error_log_id from integrated_error_log as l left join local_was_info as wasinfo on wasinfo.local_was_info_id = l.local_was_info_id where wasinfo.student_id = $stduentColumnId and wasinfo.created = (select MAX(created) from local_was_info);")
+        wait
+        echo $integratedErrorLogId
+        parses=$(echo $integratedErrorLogId | tr " " "\n")
+        arr=()
+        for parse in $parses
+        do
+                arr+=($parse)
+        done
+        echo "${arr[1]}"
+        parse=${logFile//,//#}
+        echo $parse
         # root 일시
         # select후 배열 추가 코드
         # result << select student_code , password from student
-        mysql -u$user -p$password $db -e "update integrated_error_log set error_logs='$logFile' , last_modified = NOW() where ( integrated_error_log_id =$integratedErrorLogId );"
+        # mysql -u$rootDBuser -p$password $db -e "update integrated_error_log set error_logs='$logFile' , last_modified = NOW() where ( integrated_error_log_id =$integratedErrorLogId );"
+        # mysql -u$rootDBuser -p$password $db -e "update integrated_error_log set error_logs='$logFile' , last_modified = NOW() where (integrated_error_log_id=$integratedErrorLogId);"
+        mysql -u$rootDBuser -p$password $db -e "update integrated_error_log set integrated_error_log.error_logs='$parse' , integrated_error_log.last_modified=NOW() where (integrated_error_log.integrated_error_log_id = ${arr[1]});"
         rootLogUpdateResultStatusCode=$?
         # 결과에 따른 부가적인 
         
@@ -149,18 +181,19 @@ function updateErrorLogToDatabase(){
         # Spring-boot  
         # 테이블 생성 및 insert 쿼리 진행(wasid , 생성 날짜 입력)
         # update 쿼리 필요 사용자와 통합
-        deployWasInfoId=$(mysql -u$user -p$password $db -e "select local_was_info_id from local_was_info left join  where student_id=$stduentColumnId and created='$createdDate';")
+        # deployWasInfoId=$(mysql -u$user -p$password $db -e "select local_was_info_id from local_was_info left join  where student_id=$stduentColumnId and created='$createdDate';")
+        deployWasInfoId=$(mysql -u$rootDBuser -p$password $db -e "select local_was_info.local_was_info_id from local_was_info where student_id=$stduentColumnId and created= (select MAX(created) from local_was_info);")
         wait
-        userDeployErrorLogId=$(mysql -u$user -p$password $userDatabaseName -e "select id from waserrorlogs was_info_id = $deployWasInfoId;")
+        userDeployErrorLogId=$(mysql -u$rootDBuser -p$password $userDatabaseName -e "select id from waserrorlogs was_info_id = $deployWasInfoId;")
         wait
-        mysql -u$user -p$password $userDatabaseName -e "update waserrorlogs set error_logs = '$logFile' , last_modified=NOW() WHERE (id ='$userDeployErrorLogId');"
+        mysql -u$rootDBuser -p$password $userDatabaseName -e "update waserrorlogs set error_logs = '$logFile' , last_modified=NOW() WHERE (id ='$userDeployErrorLogId');"
         wait
         userLogUpdateResultStatusCode=$?
     
 }
 
 cd $userpath
-if [ -e $workspace ]; then
+if [ -d $workspace ]; then
     cd $userpath/$workspace
     filterDeployMethod $deployMethod
 else 

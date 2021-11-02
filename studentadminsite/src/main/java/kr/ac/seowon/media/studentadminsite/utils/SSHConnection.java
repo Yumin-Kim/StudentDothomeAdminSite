@@ -189,7 +189,7 @@ public class SSHConnection {
             String responseString = responseStream.toString();
             log.info("response String = {}", responseString);
             if(!responseString.contains("success")){
-                throw new SSHException(ErrorCode.SSH_DUPLICATE_DOMAIN);
+                throw new SSHException(ErrorCode.LOCAL_DEPLOY_TEST_SSH_CONNECT);
             }
             return true;
         } catch (JSchException | InterruptedException e) {
