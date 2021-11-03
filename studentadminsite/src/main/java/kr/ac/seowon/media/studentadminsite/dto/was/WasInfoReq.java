@@ -4,6 +4,7 @@ import kr.ac.seowon.media.studentadminsite.domain.wasDomain.DeployMethod;
 import kr.ac.seowon.media.studentadminsite.domain.wasDomain.WASItem;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Max;
@@ -68,6 +69,7 @@ public class WasInfoReq {
 
     @Getter
     @Setter
+    @ToString
     public static class LocalTestDto {
 //        @NotBlank
         private DeployMethod deployMethod;

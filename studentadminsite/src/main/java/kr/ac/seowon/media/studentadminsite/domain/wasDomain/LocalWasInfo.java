@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.concurrent.atomic.LongAccumulator;
 
 @Entity
 @Getter
@@ -29,12 +30,12 @@ public class LocalWasInfo extends WASIntegratedInfo {
     private IntegratedErrorLog integratedErrorLog;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id",nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
     @Builder
-    protected LocalWasInfo(Integer port , WASItem name , DeployMethod deployMethod, String githubLink, String dirLocation,  Student student,String applicationName) {
-        super(port ,name,applicationName);
+    protected LocalWasInfo(Integer port, WASItem name, DeployMethod deployMethod, String githubLink, String dirLocation, Student student, String applicationName) {
+        super(port, name, applicationName);
         this.deployMethod = deployMethod;
         this.githubLink = githubLink;
         this.dirLocation = dirLocation;
@@ -45,7 +46,7 @@ public class LocalWasInfo extends WASIntegratedInfo {
         super(port, name, applicationName);
     }
 
-    public static LocalWasInfo createEntitiy(Student student, Integer port, WASItem name, DeployMethod deployMethod, String applicationName, String dirLocation) {
+    public static LocalWasInfo createEntity(Student student, Integer port, WASItem name, DeployMethod deployMethod, String applicationName, String dirLocation) {
         return LocalWasInfo.builder()
                 .deployMethod(deployMethod)
                 .name(name)
@@ -57,7 +58,15 @@ public class LocalWasInfo extends WASIntegratedInfo {
     }
 
 
-    public static LocalWasInfo createEntitiy(Student student, Integer port, WASItem name, DeployMethod deployMethod, String applicationName, String dirLocation, String githubLink) {
-        return null;
+    public static LocalWasInfo createEntity(Student student, Integer port, WASItem name, DeployMethod deployMethod, String applicationName, String dirLocation, String githubLink) {
+        return LocalWasInfo.builder()
+                .dirLocation(dirLocation)
+                .applicationName(applicationName)
+                .student(student)
+                .port(port)
+                .deployMethod(deployMethod)
+                .name(name)
+                .githubLink(githubLink)
+                .build();
     }
 }

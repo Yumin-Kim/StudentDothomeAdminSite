@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 
 @Service
 @RequiredArgsConstructor
@@ -52,25 +50,27 @@ public class LocalWasCommandService {
         WasInfoRes.LocalWasTestResultRes result= null;
         if (localTestDto.getName().equals(WASItem.NODEJS)) {
             final Student student = getStudent(studentInfo);
-            LocalWasInfo localWasInfo = null;
+            LocalWasInfo localWasInfo;
             switch (localTestDto.getDeployMethod()) {
                 case GIT:
-                    localWasInfo = LocalWasInfo.createEntitiy(student, localTestDto.getPort(),localTestDto.getName(), localTestDto.getDeployMethod(), localTestDto.getApplicationName(),  localTestDto.getDirLocation(), localTestDto.getGithubLink());
+                    localWasInfo = LocalWasInfo.createEntity(student, localTestDto.getPort(),localTestDto.getName(), localTestDto.getDeployMethod(), localTestDto.getApplicationName(),  localTestDto.getDirLocation(), localTestDto.getGithubLink());
                     break;
                 case HTTP:
                     //파일 업로드 동작할 수 있게 로직 필요
-                    localWasInfo = LocalWasInfo.createEntitiy(student, localTestDto.getPort(),localTestDto.getName(),localTestDto.getDeployMethod(),localTestDto.getApplicationName(),localTestDto.getDirLocation());
+                    localWasInfo = LocalWasInfo.createEntity(student, localTestDto.getPort(),localTestDto.getName(),localTestDto.getDeployMethod(),localTestDto.getApplicationName(),localTestDto.getDirLocation());
                     break;
                 case SFTP:
-                    localWasInfo = LocalWasInfo.createEntitiy(student, localTestDto.getPort(),localTestDto.getName(),localTestDto.getDeployMethod(),localTestDto.getApplicationName(),localTestDto.getDirLocation());
+                    localWasInfo = LocalWasInfo.createEntity(student, localTestDto.getPort(),localTestDto.getName(),localTestDto.getDeployMethod(),localTestDto.getApplicationName(),localTestDto.getDirLocation());
                     break;
+                default:
+                    throw new LocalWasException(ErrorCode.LOCAL_DEPLOY_TEST_ERROR);
             }
             String userDatabaseUrl = "jdbc:mysql://localhost:3306/"+student.getSiteInfo().getDatabaseName();
             LocalWasInfo saveLocalWasInfo = insertLocalInfo(student, localWasInfo);
             userDataBaseJDBC.registerErrorLogTable(new UserDatabaseErrorLog.UserConnectDto(saveLocalWasInfo.getId(), userDatabaseUrl));
             sshConnection = new SSHConnection(utilConfigure);
             // 쉘 스크립트 동작 할 수 있게
-            Boolean connectWaValidation = sshConnection.connectWas(localTestDto, studentInfo.getDomainName(), studentInfo.getDatabaseName());
+            Boolean connectWaValidation = sshConnection.connectWas(localTestDto,student.getId(), studentInfo.getDomainName(), studentInfo.getDatabaseName());
             if (connectWaValidation) {
                 result = new WasInfoRes.LocalWasTestResultRes(saveLocalWasInfo);
             }else{
@@ -105,6 +105,11 @@ public class LocalWasCommandService {
         return saveLocalWasInfo;
     }
 
+    /**
+     * 저장시 최소 정보만 저장하기
+     * @param saveLocalWasInfo
+     * @return
+     */
     @Transactional(readOnly = true)
     private IntegratedErrorLog getIntegratedErrorLog(LocalWasInfo saveLocalWasInfo) {
         IntegratedErrorLog integratedErrorLog = integratedErrorLogRepository.findJoinWasId(saveLocalWasInfo.getId())

@@ -169,11 +169,12 @@ public class SSHConnection {
 
     //WAS 배포 기능
     //Git 사용했는지??
-    public Boolean connectWas(WasInfoReq.LocalTestDto localTestDto, String domainName , String databaseName){
+    public Boolean connectWas(WasInfoReq.LocalTestDto localTestDto, Integer studentId ,String domainName , String databaseName){
         log.info("connectWas");
+        log.info("{}",localTestDto.toString());
         try {
             ChannelExec channelExec = (ChannelExec) channel;
-            String shellCommand = "sudo ./deployNodeJS.sh " + domainName + " " + localTestDto.getDeployMethod() + " " + localTestDto.getApplicationName() + " " + localTestDto.getEndPointJS();
+            String shellCommand = "sudo ./deployNodeJS.sh " +studentId.toString()+ " " + domainName + " " + localTestDto.getDeployMethod() + " " + localTestDto.getApplicationName() + " " + localTestDto.getEndPointJS();
             if (hasText(localTestDto.getGithubLink())) {
                 shellCommand += " " + localTestDto.getGithubLink() + " " + databaseName + " " + localTestDto.getDirLocation();
             }else{

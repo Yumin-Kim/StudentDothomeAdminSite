@@ -9,17 +9,12 @@ import kr.ac.seowon.media.studentadminsite.domain.wasDomain.WASItem;
 import kr.ac.seowon.media.studentadminsite.dto.adminobserve.AdminObserveReq;
 import kr.ac.seowon.media.studentadminsite.repository.admin.AdminRepository;
 import kr.ac.seowon.media.studentadminsite.repository.student.StudentRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -42,7 +37,7 @@ class IntegratedErrorLogRepositoryTest {
         Student student1 = Student.createStudent(basicStudentDto1, admin);
         adminRepository.save(admin);
         Student a = studentRepository.save(student1);
-        final LocalWasInfo localWasInfo = LocalWasInfo.createEntitiy(student1, 1010, WASItem.NODEJS, DeployMethod.GIT, "test", "test");
+        final LocalWasInfo localWasInfo = LocalWasInfo.createEntity(student1, 1010, WASItem.NODEJS, DeployMethod.GIT, "test", "test");
         final LocalWasInfo save = localWasInfoRepository.save(localWasInfo);
         final IntegratedErrorLog error_log = IntegratedErrorLog.createEntity("Error Log", student1);
         error_log.updateLocalWasLog(save);

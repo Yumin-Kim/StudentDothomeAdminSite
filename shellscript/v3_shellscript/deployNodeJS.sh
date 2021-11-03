@@ -22,14 +22,15 @@
 # done
 # echo "${arr[0]}"
 # echo "${arr[1]}"_Hello
-echo " 0. 사용자 id : $1"
-echo "1. 사용자_WAS 업로드 디렉토리 확인 : $2"
-echo "2. 배포 방식 : $3"
-echo "3. 등록할 애플리케이션 이름(pm2에 등록될 이름) : $4"
-echo "4. EndPoint JavaScript File : $5" 
-echo "5. 배포 방식에 따른 정보 => git 주소 ,SFTP 업로드한 디렉토리 , WAS 업로드 디렉토리 : $6"
-echo "6. 사용자 데이터 베이스 이름 : $7"
-echo "7. GIT 업로드 시 필수 리포티토리 이름 : $8"
+echo "1. 사용자 id : $1"
+echo "2. 사용자_WAS 업로드 디렉토리 확인 : $2"
+echo "3. 배포 방식 : $3"
+echo "4. 등록할 애플리케이션 이름(pm2에 등록될 이름) : $4"
+echo "5. EndPoint JavaScript File : $5" 
+echo "6. 배포 방식에 따른 정보 => git 주소 ,SFTP 업로드한 디렉토리 , WAS 업로드 디렉토리 : $6"
+echo "7. 사용자 데이터 베이스 이름 : $7"
+echo "8. GIT 업로드 시 필수 리포티토리 이름 : $8"
+
 stduentColumnId=$1
 SSHUserName=$2
 deployMethod=$3
@@ -87,10 +88,10 @@ function uploadAndRunNodeJS(){
         npm i pm2
         wait
         echo $? 
-        # pm2로 변경 필요
         npx pm2 start $endPointFile --name $applicationName 
         wait
     fi
+    
     # 결과는 즉시 확인할 수 없기때문에 1~5초 정도 delay후 정보 제공
     sleep 2s
     nodeJSResult=$(npx pm2 show $applicationName)
@@ -165,15 +166,14 @@ function updateErrorLogToDatabase(){
         do
                 arr+=($parse)
         done
-        echo "${arr[1]}"
-        parse=${logFile//,//#}
-        echo $parse
+        parse=${logFile//,// }
+        parse1=${parse//"'"/ }
         # root 일시
         # select후 배열 추가 코드
         # result << select student_code , password from student
         # mysql -u$rootDBuser -p$password $db -e "update integrated_error_log set error_logs='$logFile' , last_modified = NOW() where ( integrated_error_log_id =$integratedErrorLogId );"
         # mysql -u$rootDBuser -p$password $db -e "update integrated_error_log set error_logs='$logFile' , last_modified = NOW() where (integrated_error_log_id=$integratedErrorLogId);"
-        mysql -u$rootDBuser -p$password $db -e "update integrated_error_log set integrated_error_log.error_logs='$parse' , integrated_error_log.last_modified=NOW() where (integrated_error_log.integrated_error_log_id = ${arr[1]});"
+        mysql -u$rootDBuser -p$password $db -e "update integrated_error_log set integrated_error_log.error_logs='$parse1' , integrated_error_log.last_modified=NOW() where (integrated_error_log.integrated_error_log_id = ${arr[1]});"
         rootLogUpdateResultStatusCode=$?
         # 결과에 따른 부가적인 
         
@@ -183,10 +183,26 @@ function updateErrorLogToDatabase(){
         # update 쿼리 필요 사용자와 통합
         # deployWasInfoId=$(mysql -u$user -p$password $db -e "select local_was_info_id from local_was_info left join  where student_id=$stduentColumnId and created='$createdDate';")
         deployWasInfoId=$(mysql -u$rootDBuser -p$password $db -e "select local_was_info.local_was_info_id from local_was_info where student_id=$stduentColumnId and created= (select MAX(created) from local_was_info);")
+        echo $deployWasInfoId
+
+        parses=$(echo $deployWasInfoId | tr " " "\n")
+        arr=()
+        for parse in $parses
+        do
+                arr+=($parse)
+        done
         wait
-        userDeployErrorLogId=$(mysql -u$rootDBuser -p$password $userDatabaseName -e "select id from waserrorlogs was_info_id = $deployWasInfoId;")
+        echo  ${arr[1]}
+        userDeployErrorLogId=$(mysql -u$rootDBuser -p$password $userDatabaseName -e "select id from was_error_logs where was_error_logs.was_info_id = ${arr[1]};")
+        echo $userDeployErrorLogId
+        parses=$(echo $userDeployErrorLogId | tr " " "\n")
+        arr=()
+        for parse in $parses
+        do
+                arr+=($parse)
+        done
         wait
-        mysql -u$rootDBuser -p$password $userDatabaseName -e "update waserrorlogs set error_logs = '$logFile' , last_modified=NOW() WHERE (id ='$userDeployErrorLogId');"
+        mysql -u$rootDBuser -p$password $userDatabaseName -e "update was_error_logs set was_error_logs.error_logs = '$parse1' , last_modified=NOW() WHERE (id =${arr[1]});"
         wait
         userLogUpdateResultStatusCode=$?
     
@@ -202,4 +218,5 @@ else
     cd $userpath/$workspace
     filterDeployMethod $deployMethod
 fi
+
 
