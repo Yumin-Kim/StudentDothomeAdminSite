@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>졸업 업로드 사이트_자료 업로드 기본 페이지</title>
+  </head>
+  <body>
+    <h1>자료 업로드 Default 페이지</h1>
+    <div>
+      <form id="form">
+        <div>
+          <label>1분 스프치</label>
+          <input type="text" name="speechLink" id="speechLink" /><br />
+        </div>
+        <div>
+          <label>유튜브 링크 스프치</label>
+          <input type="text" id="youtubeLink" name="youtubeLink" /><br />
+        </div>
+
+        <label>자신 설명글</label>
+        <textarea
+          name="description"
+          id="description"
+          rows="5"
+          cols="33"
+        ></textarea
+        ><br />
+        <label>이미지 업로드_프로필</label><br />
+        <!-- <input type="file" name="imageFile" class="inputFile" />-->
+        <input type="button" value="이미지 추가 등록" id="imageButton" />
+        <br />
+        <div id="formList"></div>
+        <input type="submit" value="등록" />
+      </form>
+    </div>
+
+    <script>
+      const imageUploadMappingLabels = ["프로필", "백그라운드"];
+      const imageUploadData = ["profile", "backgroundImage"];
+      document.getElementById("imageButton").addEventListener("click", () => {
+        const form = document.getElementById("formList");
+        const fileUploadInputBox = document.getElementsByClassName("inputFile");
+        if (fileUploadInputBox.length === imageUploadData.length) {
+          alert("더이사 업로드할 자료가 없습니다.");
+        } else {
+          console.log(fileUploadInputBox.length);
+          const input = document.createElement("input");
+          const label = document.createElement("label");
+          label.innerHTML = imageUploadMappingLabels[fileUploadInputBox.length];
+          input.setAttribute("type", "file");
+          input.setAttribute("id", imageUploadData[fileUploadInputBox.length]);
+          input.setAttribute("class", "inputFile");
+          form.appendChild(label);
+          form.appendChild(input);
+          form.appendChild(document.createElement("br"));
+        }
+      });
+      let formData = new FormData();
+      document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const createformData = createFormDataFunc(
+          document.getElementById("formList")
+        );
+        // console.log(document.getElementById("profile").files[0]);
+        if (!createformData) {
+          alert("이미지를 더 추가해서 등록해주세요");
+        }
+        const xhr = new XMLHttpRequest();
+          alert("업로드중... 알림창이 뜨기전까지 기다려 주세요");
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === xhr.DONE) {
+            if (xhr.status === 200 || xhr.status === 201) {
+              console.log(JSON.parse(xhr.responseText));
+            } else {
+              alert("업로드 실패");
+            }
+          }
+        };
+        xhr.open("POST", "/register");
+        xhr.send(formData);
+      });
+
+      function createFormDataFunc(dom) {
+        formData.append(
+          "speechLink",
+          document.getElementById("speechLink").value
+        );
+        formData.append(
+          "youtubeLink",
+          document.getElementById("youtubeLink").value
+        );
+        formData.append(
+          "description",
+          document.getElementById("description").value
+        );
+        const arr = Array.from(dom.children).filter(
+          params => params.tagName === "INPUT"
+        );
+        imageUploadData.map(params => {
+          formData.append(params, document.getElementById(params).files[0]);
+          console.log(params);
+          console.log(document.getElementById(params).files[0]);
+        });
+        if (arr.length == imageUploadData.length) {
+          return true;
+        } else {
+          return false;
+        }
+        // form
+      }
+    </script>
+  </body>
+</html>

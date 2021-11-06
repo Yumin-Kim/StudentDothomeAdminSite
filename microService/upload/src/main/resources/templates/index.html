@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TemplateSite</title>
+</head>
+<body>
+<h1>Template Site</h1>
+</div>
+<h2 th:if = "${user != null}">[[${user}]] 업로드</h2>
+<h2 th:if = "${user == null}">
+    <input type="button" value="로그인" onclick="location.href='/login'">
+</h2>
+<div th:if = "${user != null}">
+    <input type="button" value="로그아웃" onclick="location.href='/logout'">
+    <p>학번 :[[*{info.studentCode}]]</p>
+    <a href="/register">자료 업로드</a><br>
+    <a href="/modified">자료 업로드 수정</a><br>
+</div>
+</body>
+</html>
