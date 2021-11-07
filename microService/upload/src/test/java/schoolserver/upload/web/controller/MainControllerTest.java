@@ -21,12 +21,6 @@ class MainControllerTest {
         final PortFolioForm portFolioForm = new PortFolioForm();
         portFolioForm.setSpeechLink("asd");
         // when
-        final Object invoke = getMainApp.invoke(portFolioForm);
-        System.out.println(invoke);
-//        Arrays.stream(portFolioForm.getClass().getDeclaredMethods()).forEach(a->{
-//            final String name = a.getName();
-//            System.out.println("name = " + name);
-//        });
         final String s = portFolioForm.toString();
         final Field[] declaredFields = portFolioForm.getClass().getDeclaredFields();
         final List<String> collect = Arrays.stream(declaredFields)
@@ -35,12 +29,17 @@ class MainControllerTest {
                 .collect(Collectors.toList());
         for (String s1 : collect) {
             System.out.println("s1 = " + s1);
-            portFolioForm.getClass().getDeclaredMethod("get+"s1.to);
-
+            final Method declaredMethod = portFolioForm.getClass().getDeclaredMethod("get" + upperCaseFirst(s1));
+            final Object invoke1 = declaredMethod.invoke(portFolioForm);
+            System.out.println("invoke1 = " + invoke1);
         }
-        System.out.println("aClass = " + declaredFields);
-        System.out.println("portFolioForm = " + s);
+
         // then
+    }
+    private String upperCaseFirst(String val) {
+        char[] arr = val.toCharArray();
+        arr[0] = Character.toUpperCase(arr[0]);
+        return new String(arr);
     }
 
 }

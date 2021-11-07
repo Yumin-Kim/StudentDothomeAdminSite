@@ -1,0 +1,188 @@
+/* reset */
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+html {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  border: 0;
+  /* 이미지의 박스 크기가 작아졌을 때 동일하게 작아지게 하기 위하여 - 반응형 */
+  max-width: 100%; 
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+button {
+  overflow: visible;
+  display: inline-block;
+  margin: 0;
+  font-size: inherit;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  font-weight: inherit;
+}
+button,
+select {
+  text-transform: none;
+}
+ul,li{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+span,img,i{
+  vertical-align: middle;
+}
+
+/* blind */
+.blind,
+legend,
+table caption{
+  position: absolute;
+  clip: rect(1px 1px 1px 1px);
+  /* for Internet Explorer */
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+.maincolor {
+  color: #0b7c56;
+}
+
+/* main index */
+.section_m_prj .container-fluid .moreBtn .section-masthead__wrapper-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.section_mMprj .container .filter .filter__item{
+  font-size: calc(20 * 1px) !important;
+}
+.m_aside1 .counter__number {
+  color: var(--color-light-1);
+}
+
+.m_aside1  .counter__label {
+  margin-top: 5px;
+  color: var(--color-light-4);
+  line-height: 1.5;
+  font-size: calc(14 * 1px);
+}
+.section_m_media .circle-button_link .circle-button__inner .svg-circle {
+    border: none;
+    background-color: var(--color-main) !important;
+}
+
+/* 개인 작업 - page-inner-work */
+.section_profile {
+
+}
+.section_back .img_scale {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  left: 30%;
+}
+.section_profile .paragraph {
+  font-size: calc(10 * 2px) !important;
+  /*font-weight: 800 !important;*/
+  /*font-size: calc(10 * 1px);*/
+}
+.section_profile .paragraph_name {
+  font-size: calc(30 * 2px) !important;
+  font-weight: 800 !important;
+  line-height: 1;
+}
+.section_profile .small-caps_sub {
+  font-size: calc(10 * 2px) !important;
+  /*font-weight: 800 !important;*/
+  /*font-size: calc(10 * 1px);*/
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--color-gray-1);
+}
+.section_profile .small-caps_sub_2 {
+  font-size: calc(30 * 1px) !important;
+}
+/*.section_back .section-masthead__header_absolute{
+  left: 30% !important;
+}*/
+/*.grid__item:hover .figure-image__wrapper-img_2 {
+  transform: scale(0.9) !important;
+}*/
+.section_inner_work .section_w_3 .hover-zoom:hover:not(:focus) .hover-zoom__zoom {
+  transform: scale(1) !important;
+}
+.section_inner_work .section_w_3 .hover-zoom:hover:not(:focus) .hover-zoom__inner {
+  transform: scale(0.98) !important;
+}
+.section_inner_work .section_w_3 .figure-image__wrapper-img {
+  transform: scale(1) !important;
+}
+
+
+/* 학부소개 - media-contents */
+.section_media .hover-zoom:hover:not(:focus) .hover-zoom__zoom {
+  transform: scale(1.03) !important;
+}
+
+.section_media .hover-zoom:hover:not(:focus) .hover-zoom__inner {
+  transform: scale(0.9) !important;
+}
+
+/* 졸전소개 -master-key */
+.section_exhibit .section-content__text p{
+  font-size: 1.1em !important;
+} 
+.section_committee .section-content__text p{
+  font-size: 1.5em !important;
+}
+
+@media screen and (max-width: 767px) {
+
+}
+
+@media screen and (min-width: 2560px) {
+  .counter__number {
+    /*font-size: calc(104 * 1px);*/
+  }
+}

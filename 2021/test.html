@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <div>
+    <div>Hewllo</div>
+  </div>
+  <hr />
+  <div id="hello"></div>
+  <script>
+    const mainGridDummyData = [
+      {
+        name: "최규민",
+        //2021StudentImages/201610309_main.jpg
+        mainImage: "main.jpg",
+        mainDescription: "최규민 / 기획자 / NH콕뱅크",
+        studentCode: 201611600,
+        jobName: "productManager",
+      },
+      {
+        name: "최규민",
+        //2021StudentImages/201610309_main.jpg
+        mainImage: "main.jpg",
+        mainDescription: "최규민 / 기획자 / NH콕뱅크",
+        studentCode: 201611600,
+        jobName: "productManager",
+      },
+    ];
+    (function createDom(mainGridDummyData) {
+      const divParent = document.createElement("div");
+      const divChild = document.createElement("div");
+      divChild.innerHTML = ``;
+      divParent.prepend(divChild);
+      document.getElementById("hello").appendChild(divParent);
+    })();
+
+    //요구 조건 졸전위들 먼저 보이고
+
+    const createDivTabBox = ({
+      jobName,
+      studentCode,
+      mainImage,
+      mainDesscripion,
+    }) => `<div
+                  class="
+                    grid__item
+                    grid__item_desktop-4
+                    grid__item_tablet-6
+                    grid__item_mobile-12
+                    grid__item_fluid-3
+                    grid__item_fluid-3-fancy
+                    js-grid__item
+                    category-${jobName}
+                  "
+                >
+                  <div class="section-grid__item">
+                    <div class="figure-image section-image">
+                      <a
+                        class="hover-zoom figure-image__link"
+                        data-arts-cursor="data-arts-cursor"
+                        data-arts-cursor-scale="1.6"
+                        data-arts-cursor-icon="keyboard_arrow_right"
+                        data-arts-cursor-hide-native="true"
+                        href="page-inner-work.html"
+                        target="_self"
+                      >
+                        <div class="hover-zoom__inner">
+                          <div class="hover-zoom__zoom">
+                            <div class="figure-image__wrapper-img">
+                              <div class="lazy">
+                                <img
+                                  data-src="./studentImages/${studentCode}_${mainImage}"
+                                  src="#"
+                                  alt=""
+                                  width="840"
+                                  height="525"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="
+                            figure-image__caption
+                            section-image__caption
+                            hover-zoom__caption
+                            text-left
+                            section-image__caption-horizontal
+                          "
+                        >
+                          <div class="figure-image__wrapper-caption paragraph">
+                            ${mainDesscripion}
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>`;
+    //tab 동적 생성
+    (function appendJobListTabBox() {
+      //ajax통신
+      //php sql 후 배열저장
+      const mainGridDummyData = [
+        {
+          //2021StudentImages/201610309_main.jpg
+          mainImage: "main.jpg",
+          mainDesscripion: "최규민 / 기획자 / NH콕뱅크",
+          studentCode: 201611600,
+          jobName: "productManager",
+        },
+        {
+          //2021StudentImages/201610309_main.jpg
+          mainImage: "main.jpg",
+          mainDesscripion: "최규민 / 기획자 / NH콕뱅크",
+          studentCode: 201611600,
+          jobName: "productManager",
+        },
+      ];
+      const createTabBoxs = mainGridDummyData.reduce((prev, cur, idx) => {
+        prev += createDivTabBox(cur);
+        return prev;
+      }, "");
+      console.log(createTabBoxs);
+      const duummyDiv = document.createElement("div");
+      duummyDiv.innerHTML = createTabBoxs;
+      document.getElementById("hello").appendChild(duummyDiv);
+    })();
+  </script>
+</html>

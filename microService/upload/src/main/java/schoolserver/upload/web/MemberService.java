@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import schoolserver.upload.web.dto.DefaultStudentInfo;
+import schoolserver.upload.web.dto.PortFolioForm;
 import schoolserver.upload.web.exception.ErrorCode;
 import schoolserver.upload.web.exception.StudentException;
 
@@ -35,10 +37,22 @@ public class MemberService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String studentCode) throws UsernameNotFoundException {
-        log.info("studentCode =  {}", studentCode);
         final StudentPortfolio studentPortfolio = studentPortfolioRepository.findByStudentCode(Integer.parseInt(studentCode))
                 .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_FOUND));
         return new UserLoginSuccessDto(studentPortfolio);
     }
 
+    @Transactional
+    public Boolean registerPortfolio(String insertImageFormatData, PortFolioForm portFolioForm, DefaultStudentInfo studentInfo) {
+        final StudentPortfolio studentPortfolio = studentPortfolioRepository.findByNameAndStudentCode(studentInfo.getName(), studentInfo.getStudentCode())
+                .orElseThrow(() -> new StudentException(ErrorCode.STUDENT_NOT_FOUND));
+        studentPortfolio.updatePortfolio(
+                portFolioForm.getYoutubeLink(),
+                portFolioForm.getSpeechLink(),
+                portFolioForm.getDescription(),
+                insertImageFormatData,
+                portFolioForm.getJob(),
+                portFolioForm.getMainDescription());
+        return true;
+    }
 }
