@@ -47,12 +47,6 @@ const Home = () => {
           key="Content3_0"
           dataSource={Content30DataSource}
         />
-        <Content_Template03
-          id="Content5_0"
-          key="Content5_0"
-          dataSource={Content50DataSource}
-        />
-        ,
       </div>
     </>
   );

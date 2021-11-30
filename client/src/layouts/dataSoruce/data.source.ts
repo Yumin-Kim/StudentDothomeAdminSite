@@ -4,7 +4,7 @@ export const Nav00DataSource = {
   page: { className: "home-page" },
   logo: {
     className: "header0-logo",
-    children: "https://os.alipayobjects.com/rmsportal/mlcYmsRilwraoAe.svg",
+    children: "http://media.seowon.ac.kr/2021/studentImages/logo.png",
   },
   Menu: {
     className: "header0-menu",
@@ -50,7 +50,7 @@ export const Banner01DataSource = {
   textWrapper: { className: "banner0-text-wrapper" },
   title: {
     className: "banner0-title",
-    children: "https://zos.alipayobjects.com/rmsportal/HqnZZjBjWRbjyMr.png",
+    children: "http://media.seowon.ac.kr/2021/studentImages/bannerLogo.png",
   },
   content: {
     className: "banner0-content",
@@ -339,7 +339,7 @@ export const Content30DataSource = {
           icon: {
             className: "content3-icon",
             children:
-              "https://zos.alipayobjects.com/rmsportal/ScHBSdwpTkAHZkJ.png",
+              "http://media.seowon.ac.kr/2021/studentImages/uploadFile.png",
           },
           textWrapper: { className: "content3-text" },
           title: { className: "content3-title", children: "정적 사이트 제공" },
@@ -358,7 +358,7 @@ export const Content30DataSource = {
           icon: {
             className: "content3-icon",
             children:
-              "https://zos.alipayobjects.com/rmsportal/NKBELAOuuKbofDD.png",
+              "http://media.seowon.ac.kr/2021/studentImages/setting.png",
           },
           textWrapper: { className: "content3-text" },
           title: { className: "content3-title", children: "PHP&MySQL 사용" },
@@ -377,7 +377,7 @@ export const Content30DataSource = {
           icon: {
             className: "content3-icon",
             children:
-              "https://zos.alipayobjects.com/rmsportal/xMSBjgxBhKfyMWX.png",
+              "http://media.seowon.ac.kr/2021/studentImages/webSite.png",
           },
           textWrapper: { className: "content3-text" },
           title: {
@@ -400,7 +400,7 @@ export const Content30DataSource = {
           icon: {
             className: "content3-icon",
             children:
-              "https://zos.alipayobjects.com/rmsportal/MNdlBNhmDBLuzqp.png",
+              "http://media.seowon.ac.kr/2021/studentImages/wasImage.png",
           },
           textWrapper: { className: "content3-text" },
           title: {
@@ -423,7 +423,7 @@ export const Content30DataSource = {
           icon: {
             className: "content3-icon",
             children:
-              "https://zos.alipayobjects.com/rmsportal/UsUmoBRyLvkIQeO.png",
+              "http://media.seowon.ac.kr/2021/studentImages/uploadapi.png",
           },
           textWrapper: { className: "content3-text" },
           title: {
@@ -445,7 +445,7 @@ export const Content30DataSource = {
           icon: {
             className: "content3-icon",
             children:
-              "https://zos.alipayobjects.com/rmsportal/ipwaQLBLflRfUrg.png",
+              "http://media.seowon.ac.kr/2021/studentImages/database.png",
           },
           textWrapper: { className: "content3-text" },
           title: {
@@ -476,15 +476,14 @@ export const Footer10DataSource = {
         className: "block",
         title: {
           className: "logo",
-          children:
-            "https://zos.alipayobjects.com/rmsportal/qqaimmXZVSwAhpL.svg",
+          children: "http://media.seowon.ac.kr/2021/studentImages/logo.png",
         },
         childWrapper: {
           className: "slogan",
           children: [
             {
               name: "content0",
-              children: "Animation specification and components of Ant Design.",
+              children: "",
             },
           ],
         },

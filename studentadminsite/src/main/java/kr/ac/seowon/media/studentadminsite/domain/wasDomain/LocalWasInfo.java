@@ -57,7 +57,6 @@ public class LocalWasInfo extends WASIntegratedInfo {
                 .build();
     }
 
-
     public static LocalWasInfo createEntity(Student student, Integer port, WASItem name, DeployMethod deployMethod, String applicationName, String dirLocation, String githubLink) {
         return LocalWasInfo.builder()
                 .dirLocation(dirLocation)

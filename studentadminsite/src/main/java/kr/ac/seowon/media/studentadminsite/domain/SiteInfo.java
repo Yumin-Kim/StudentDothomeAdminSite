@@ -35,7 +35,6 @@ public class SiteInfo extends  BaseEntity {
         return new SiteInfo(domainName, databaseName);
     }
 
-
     public void modifySiteInfo(StudentReq.SiteInfoDto siteInfoDto) {
         if (siteInfoDto.getDomainName() != null) {
             domainName = siteInfoDto.getDomainName();
